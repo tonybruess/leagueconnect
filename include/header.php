@@ -1,3 +1,7 @@
+<?php
+require_once('./config.php');
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,5 +12,5 @@
 <body>
 <div id="main">
 	<div id="head">
-		<h1>Web League</h1>
+		<h1><?php echo Config::LeagueName ?></h1>
 	</div>
