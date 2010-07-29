@@ -3,11 +3,9 @@ session_start();
 header("Cache-control: private");
 include("include/mysql.php");
 if(!$_GET['token'] || !$_GET['username']){
-die("Incorrect information submitted.");
+	die("Incorrect information submitted.");
 } else {
 	
-	// TODO: Add some error handling/reporting
-
 function validate_token($token, $username, $groups = array(), $checkIP = true)
 {
   if (isset($token, $username) && strlen($token) > 0 && strlen($username) > 0)
@@ -68,19 +66,19 @@ function validate_token($token, $username, $groups = array(), $checkIP = true)
   } 
 } 
 
-    $fuser = $_GET['username'];
-    $ftoken = $_GET['token']; 
-	$q = mysql_query("SELECT name FROM groups");
-	$grouparray = array();
-	while($group = mysql_fetch_assoc($q)){
-		array_push($grouparray,$group['name']);
-	}
-	$result = validate_token($_GET['token'], $_GET['username'], $grouparray);
-	if(count($result['groups']) > 0) { 
-		$_SESSION['callsign'] = $fuser;
-		$_SESSION['bzid'] = $result['bzid'];
-		$_SESSION['pass'] = $ftoken;
-		$_SESSION['groups'] = $result['groups'];
+$fuser = $_GET['username'];
+$ftoken = $_GET['token']; 
+$q = mysql_query("SELECT name FROM groups");
+$grouparray = array();
+while($group = mysql_fetch_assoc($q)){
+	array_push($grouparray,$group['name']);
+}
+$result = validate_token($_GET['token'], $_GET['username'], $grouparray);
+if(count($result['groups']) > 0) { 
+	$_SESSION['callsign'] = $fuser;
+	$_SESSION['bzid'] = $result['bzid'];
+	$_SESSION['pass'] = $ftoken;
+	$_SESSION['groups'] = $result['groups'];
 		$bzid = $result['bzid'];
 		$ts = time();
 		foreach($result['groups'] as $group){
