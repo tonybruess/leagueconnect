@@ -3,7 +3,8 @@ if(!hasPerm(8)){
 	require_once("include/noperm.php");
 	require_once("include/footer.php");
 	die();
-}		
+}
+if(!$_GET['i']){
 ?>
 		<h2>User Manager</h2>
 		<p>Users:</p>
@@ -22,3 +23,13 @@ if(!hasPerm(8)){
 		}
 		?>
 		</table>
+<?php } else {
+	$id = sanitize($_GET['i']);
+	$user = mysql_fetch_array(mysql_query("SELECT * FROM players WHERE `id`='$id'"));
+	?>
+	<h2>Managing <?php echo $user['name']; ?></h2>
+	<form>
+	Name: <input type="text" name="name" value="<?php echo $user['name']; ?>"><br>
+	BZID: <input type="text" name="name" value="<?php echo $user['bzid']; ?>"><br>
+	</form>
+<?php } ?>
