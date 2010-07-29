@@ -1,6 +1,6 @@
 	<div id="menu">
 		<ul>
-			<?php if($_SESSION['callsign']){ ?>
+			<?php if(isset($_SESSION['callsign'])){ ?>
 			<li><a href="index.php"<?php if($page == 'index') echo ' class="active"';?>>Home</a></li>
 			<li><a href="?p=mail"<?php if($page == 'mail') echo ' class="active"';?>>Mail</a></li>
 			<?php } else { ?>
@@ -13,7 +13,7 @@
 			<li><a href="?p=help"<?php if($page == 'help') echo ' class="active"';?>>Help</a></li>
 			<li><a href="?p=contact"<?php if($page == 'contact') echo ' class="active"';?>>Contact</a></li>
 			<li><a href="?p=bans"<?php if($page == 'bans') echo ' class="active"';?>>Bans</a></li>
-			<?php if($_SESSION['callsign']){ ?>
+			<?php if(isset($_SESSION['callsign'])){ ?>
 			<li><a href="?p=logout"<?php if($page == 'logout') echo ' class="active"';?>>Logout</a></li>
 			<?php } ?>	
 		</ul>
