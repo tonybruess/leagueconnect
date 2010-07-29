@@ -119,3 +119,10 @@ h2 {
 #body p {
 	font-family: Georgia, "Times New Roman", Times, serif;
 }
+
+table tr.rowEven {
+ background-color: #E0E0E0;
+}
+table tr.rowOdd {
+ background-color: #D1D1D1; 
+}
