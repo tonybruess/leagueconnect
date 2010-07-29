@@ -7,7 +7,7 @@
 				<p>Please <a href="index.php">login</a> before attempting to access this page</p>
 			<?php } else { if($_GET['error'] == "2") {  ?>
 				<h3>Logout Successful</h3>
-				<p>You have successfully logged out. Would you like to <a href="index.php">login</a> again?</p>
+				<p>You have successfully logged out. Would you like to <a href="./">login</a> again?</p>
 			<?php } else { if($_GET['error'] == "3") {  ?>
 				<h3>No Permission</h3>
 				<p>Your account has been temporarily disabled by an administrator. Please contact <?php echo $sitedata['email'] ?> for more information</p>

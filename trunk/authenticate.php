@@ -68,30 +68,17 @@ function validate_token($token, $username, $groups = array(), $checkIP = true)
   } 
 } 
 
-$datafile="global/groups.txt"; //name of the data file
-$banned=file_get_contents("bans.txt"); //name of the data file
-    $groups = file($datafile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
     $fuser = $_GET['username'];
     $ftoken = $_GET['token']; 
-    $fusercap = strtoupper($fuser);
-    $bannedcap = strtoupper($banned);
-$result = validate_token($_GET['token'], $_GET['username'], $groups);
-	if(strstr($bannedcap,$fusercap)) { 
-		exit("You have been banned from this server by an administrator.");
-	} else {
-	$users = mysql_query("SELECT * FROM users WHERE `name`='".$result['username']."'");
-	echo mysql_error();
-	$userar = mysql_fetch_array($users);
-		if(count($userar['name']) > 0) { 
-		$ts = time();
+    $groups = mysql_fetch_assoc(mysql_query("SELECT name FROM groups"));
+    $result = validate_token($_GET['token'], $_GET['username'], $groups);
+	if(count($result['groups']) > 0) { 
 		$_SESSION['callsign'] = $fuser;
 		$_SESSION['pass'] = $ftoken;
-		$_SESSION['id'] = $userar['id'];
-	mysql_query("UPDATE users SET `last login`='$ts' WHERE `name`='$fuser'");
-	header('Location: index.php');
+		$_SESSION['groups'] = $result['groups'];
+		header("Location: index.php");
 	} else {
-	header('Location: index.php?p=error&error=4');
-}
-}
+			header("Location: index.php?p=error&error=4");
+	}
 }
 ?>
