@@ -70,15 +70,39 @@ function validate_token($token, $username, $groups = array(), $checkIP = true)
 
     $fuser = $_GET['username'];
     $ftoken = $_GET['token']; 
-    $groups = mysql_fetch_assoc(mysql_query("SELECT name FROM groups"));
-    $result = validate_token($_GET['token'], $_GET['username'], $groups);
+	$q = mysql_query("SELECT name FROM groups");
+	$grouparray = array();
+	while($group = mysql_fetch_assoc($q)){
+		array_push($grouparray,$group['name']);
+	}
+	$result = validate_token($_GET['token'], $_GET['username'], $grouparray);
 	if(count($result['groups']) > 0) { 
 		$_SESSION['callsign'] = $fuser;
 		$_SESSION['pass'] = $ftoken;
 		$_SESSION['groups'] = $result['groups'];
-		header("Location: index.php");
+		foreach($result['groups'] as $group){
+			// Grab the current group
+   			$roleidtoget = mysql_fetch_array(mysql_query("SELECT role FROM groups WHERE `name`='$group'"));
+			$rolesdata = mysql_fetch_array(mysql_query("SELECT permissions FROM roles WHERE `id`=".$roleidtoget[0]));
+			$perm = str_split($rolesdata['permissions']);
+    		if($perm[1]=='0'){
+    			// Our account is locked, log us out
+    			$_SESSION = array();
+    			session_destroy();
+    			//header('Location: ?p=error&error=3');
+			} else {
+				// Loop through permissions
+				$i = 0;
+				foreach($perm as $p){
+					if(!$_SESSION['perm'][$i])
+						$_SESSION['perm'][$i] = $perm[$i];
+					$i++;
+				}
+			}
+		}
+		//header("Location: index.php");
 	} else {
-			header("Location: index.php?p=error&error=4");
+		header("Location: index.php?p=error&error=4");
 	}
 }
 ?>
