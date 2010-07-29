@@ -4,9 +4,17 @@
  */
 
 // MySQL Connection Settings
-define('SQL_SERVER', 'localhost');
-define('SQL_USER', 'leagueconnect');
-define('SQL_PASS', 'leagueconnect');
-define('SQL_DB', 'leagueconnect');
+class MySQLSettings
+{
+    const Server = 'localhost';
+    const User = 'root';
+    const Password = '';
+    const Database = 'WebLeague';
+}
+
+class Config
+{
+    const LeagueName = 'WebLeague';
+}
 
 ?>
