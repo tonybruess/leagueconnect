@@ -113,8 +113,7 @@ h2 {
 	border-bottom: black solid 1px; 
 }
 #body p:first-letter {
-	font-size: 40px;
-	color: green;
+	font-size: 20px;
 }
 #body p {
 	font-family: Georgia, "Times New Roman", Times, serif;
