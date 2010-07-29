@@ -1,5 +1,6 @@
 body {
 	background-color: silver;
+	font-family: "Lucida Grande", Arial, Geneva, sans-serif;
 }
 #main {
 }
@@ -29,6 +30,14 @@ body {
 	border-radius: 16px;
 	height: auto;
 	width: 800px;
+}
+tr {
+	background-color: #C1C1C1;
+	font-size: 14px
+}
+th {
+	background-color: #D1D1D1;
+	font-size: 16px;
 }
 #body a {
 	color: grey;

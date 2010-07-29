@@ -5,8 +5,8 @@
 
 // MySQL Connection Settings
 define('SQL_SERVER', 'localhost');
-define('SQL_USER', 'leagueconnect');
-define('SQL_PASS', 'leagueconnect');
-define('SQL_DB', 'leagueconnect');
+define('SQL_USER', 'root');
+define('SQL_PASS', '');
+define('SQL_DB', 'WebLeague');
 
 ?>
