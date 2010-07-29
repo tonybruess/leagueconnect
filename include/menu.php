@@ -15,7 +15,7 @@
 			<?php } ?>		
 		</ul>
 	</div>
-	<?php if(!$_SESSION['perm'][1]){ ?>
+	<?php if($_SESSION['perm'][1]){ ?>
 	<div id="admin">
 		<ul>
 			<li><a href="index.php" class="active">Home</a></li>
