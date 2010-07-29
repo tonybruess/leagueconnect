@@ -1,6 +1,6 @@
 <?php
 
-require("../config.php"); // Connection settings
+require("./config.php"); // Connection settings
 
 // Connect to MySQL server
 mysql_connect(SQL_SERVER,SQL_USER,SQL_PASS) or die("Error: ".mysql_error()); // Connecting to the server
