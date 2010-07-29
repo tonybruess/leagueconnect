@@ -1,5 +1,6 @@
 <?php
 define (CODE_VERSION, "0.01");
+require_once("include/common.php");
 require_once("include/session.php");
 $name = $_SESSION['callsign'];
 require_once("include/mysql.php");

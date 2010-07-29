@@ -18,7 +18,7 @@
 			<?php } ?>	
 		</ul>
 	</div>
-	<?php if($_SESSION['perm'][1]){ ?>
+	<?php if(hasPerm(1)){ ?>
 	<div id="admin">
 		<ul>
 			<li><a href="#">Enter Match</a></li>
