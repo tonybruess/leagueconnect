@@ -89,7 +89,7 @@ function validate_token($token, $username, $groups = array(), $checkIP = true)
     			// Our account is locked, log us out
     			$_SESSION = array();
     			session_destroy();
-    			//header('Location: ?p=error&error=3');
+    			header('Location: ?p=error&error=3');
 			} else {
 				// Loop through permissions
 				$i = 0;
@@ -100,7 +100,7 @@ function validate_token($token, $username, $groups = array(), $checkIP = true)
 				}
 			}
 		}
-		//header("Location: index.php");
+		header("Location: index.php");
 	} else {
 		header("Location: index.php?p=error&error=4");
 	}
