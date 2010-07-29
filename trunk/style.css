@@ -1,0 +1,120 @@
+body {
+	background-color: silver;
+}
+#main {
+}
+#head {
+	background-color: black;
+	font-family: "Gill Sans", sans-serif;
+	margin-left: auto;
+	margin-bottom: 30px;
+	margin-right: auto;
+	margin-top: 30px;
+	padding: 30px;
+	height: 100px;
+	width: 800px;
+	-webkit-border-radius: 16px;
+	-moz-border-radius: 16px;
+	border-radius: 16px;
+}
+#body {
+	background-color: #D1D1D1;
+	padding: 30px;
+	margin-bottom: 30px;
+	margin-top: 30px;
+	margin-right: auto;
+	margin-left: auto;
+	-webkit-border-radius: 16px;
+	-moz-border-radius: 16px;
+	border-radius: 16px;
+	height: auto;
+	width: 800px;
+}
+#body a {
+	color: grey;
+	text-decoration: none;
+}
+#body a:hover {
+	color: red;
+	text-decoration: none;
+}
+#footer {
+	background-color: #D1D1D1;
+	height: 25px;
+	width: 860px;
+	margin: auto;
+	padding: 0px;
+	text-align: center;
+	line-height: 2em;
+	margin-bottom: 30px;
+	font-size: 13px;
+	font-family: Georgia, "Times New Roman", Times, serif;
+	-webkit-border-radius: 16px;
+	-moz-border-radius: 16px;
+	border-radius: 16px;
+}
+#menu, #admin {
+	color: black;
+	margin: auto;
+	margin-top: -60px;
+	height: 30px;
+	width: 600px;
+	font-family: fantasy;
+	background-color: #d1d1d1;
+	-webkit-border-top-left-radius: 16px;
+	-moz-border-radius-topleft: 16px;
+	border-top-left-radius: 16px;
+	-webkit-border-top-right-radius: 16px;
+	-moz-border-radius-topright: 16px;
+	border-top-right-radius: 16px;
+}
+#admin {
+	margin-top: -5px;
+	-webkit-border-radius: 0px;
+	-mox-border-radius: 0px;
+	border-radius: 0px;
+	-webkit-border-bottom-left-radius: 16px;
+	-moz-border-radius-bottomleft: 16px;
+	border-bottom-left-radius: 16px;
+	-webkit-border-bottom-right-radius: 16px;
+	-moz-border-radius-bottomright: 16px;
+	border-bottom-right-radius: 16px;
+}
+#menu ul, #admin ul {
+	padding-top: 5px;
+	padding-left: 5px;
+	text-align: center;
+	width: 578px;
+	margin: 0px;
+}
+#menu li, #admin li {
+	margin-left: 10px;
+	display: inline;	
+}
+#menu li a, #admin li a {
+	color: black;	
+	text-decoration: none;
+}
+#menu li a.active, #admin li a.active  {
+	color: red;
+}
+#menu li a:hover, #admin li a:hover {
+	color: grey;
+}
+h1 {
+	margin: 0px;
+	font-size: 50px;
+	text-align: center;
+	color: #cccccc;
+}
+h2 {
+	font-family: Georgia, "Times New Roman", Times, serif;
+	border-bottom: black solid 1px; 
+}
+#body p:first-letter {
+	font-size: 40px;
+	color: green;
+}
+#body p {
+	font-family: Georgia, "Times New Roman", Times, serif;
+}
