@@ -6,7 +6,21 @@ if(!hasPerm(8)){
 }		
 ?>
 		<h2>User Manager</h2>
-		<p>Current Users:</p>
-		<table>
+		<p>Users:</p>
+		<table cellpadding="5">
 		<tr>
-		<td>Name</td>
+		<th>Name</td>
+		<th>BZID</td>
+		<th>Last Login</td>
+		</tr>
+		<?php
+		$q = mysql_query("SELECT * FROM players");
+		while($row = mysql_fetch_assoc($q)){
+			echo "<tr>\n";
+			echo '<td>'.$row['name']."</td>\n";
+			echo '<td>'.$row['bzid']."</td>\n";
+			echo '<td>'.date("m-d-Y g:i:s",$row['lastlogin'])."</td>\n";
+			echo "</tr>\n";
+		}
+		?>
+		</table>
