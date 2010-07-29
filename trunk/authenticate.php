@@ -78,8 +78,11 @@ function validate_token($token, $username, $groups = array(), $checkIP = true)
 	$result = validate_token($_GET['token'], $_GET['username'], $grouparray);
 	if(count($result['groups']) > 0) { 
 		$_SESSION['callsign'] = $fuser;
+		$_SESSION['bzid'] = $result['bzid'];
 		$_SESSION['pass'] = $ftoken;
 		$_SESSION['groups'] = $result['groups'];
+		$bzid = $result['bzid'];
+		$ts = time();
 		foreach($result['groups'] as $group){
 			// Grab the current group
    			$roleidtoget = mysql_fetch_array(mysql_query("SELECT role FROM groups WHERE `name`='$group'"));
@@ -99,6 +102,18 @@ function validate_token($token, $username, $groups = array(), $checkIP = true)
 					$i++;
 				}
 			}
+		}
+		// Do we have this user?
+		$q = mysql_query("SELECT * FROM players WHERE `bzid`='$bzid'");
+		$user = mysql_fetch_assoc($q);
+		if($user){
+			// Update last login because we have them
+			mysql_query("UPDATE players SET `lastlogin`='$ts',`name`='$fuser'");
+			echo mysql_error();
+		} else {
+			// Add them as a new user
+			mysql_query("INSERT INTO players (`name`,`bzid`,`firstlogin`,`lastlogin`) VALUES ('$fuser','$bzid','$ts','$ts')");
+			echo mysql_error();
 		}
 		header("Location: index.php");
 	} else {
