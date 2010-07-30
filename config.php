@@ -7,9 +7,9 @@
 class MySQLSettings
 {
     const Server = 'localhost';
-    const User = 'root';
-    const Password = '';
-    const Database = 'WebLeague';
+    const User = 'leagueconnect';
+    const Password = 'leagueconnect';
+    const Database = 'leagueconnect';
 }
 
 class Config
