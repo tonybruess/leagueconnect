@@ -1,17 +1,56 @@
 <?php
 
-require_once("./config.php"); // Connection settings
+/* 
+ * MySQL class to work with the MySQL database.
+ */
 
-// Connect to MySQL server
-mysql_connect(MySQLSettings::Server, MySQLSettings::User, MySQLSettings::Password) or die("Error: ".mysql_error()); // Connecting to the server
-mysql_select_db(MySQLSettings::Database) or die("Error: ".mysql_error()); // Connecting to the database
+require_once('./config.php');
 
-function sanitize($str) {
-	if (function_exists("mysql_real_escape_string")) {
-		$str = mysql_real_escape_string($str) ;
-	} else {
-		$str = addslashes($str) ;
-	}
-	return $str ;
+class MySQL
+{
+    const Server = MySQLSettings::Server;
+    const User = MySQLSettings::User;
+    const Password = MySQLSettings::Password;
+    const Database = MySQLSettings::Database;
+    
+    public static $Connected = false;
+    public static $ConnectionError = '';
+    
+    /* bool */ public static function Connect()
+    {
+        if(!mysql_connect(self::Server, self::User, self::Password))
+        {
+            self::$ConnectionError = mysql_error();
+            return false;
+        }
+        
+        if(!mysql_select_db(self::Database))
+        {
+            self::$ConnectionError = mysql_error();
+            return false;
+        }
+        
+        return true;
+    }
+    
+    /* string */ public static function Sanitize($str)
+    {
+        if(function_exists('mysql_real_escape_string'))
+        {
+            $str = mysql_real_escape_string($str);
+        }
+        else
+        {
+            $str = addslashes($str);
+        }
+        
+        return $str;
+    }
 }
+
+if(!MySQL::Connect())
+{
+    die(MySQL::$ConnectionError);
+}
+
 ?>
