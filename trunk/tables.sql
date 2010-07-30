@@ -16,19 +16,19 @@ create table players (
     `newnews` INT,
     `newmatch` INT,
     `comment` TEXT,
-    `firstlogin` INT,
-    `lastlogin` INT,
-    `country` INT,
-    `state` INT,
+    `firstlogin` TIMESTAMP,
+    `lastlogin` TIMESTAMP,
+    `country` VARCHAR(100),
+    `state` VARCHAR(100),
     `email` VARCHAR(100),
     `aim` VARCHAR(100),
     `msn` VARCHAR(100),
     `jabber` VARCHAR(100),
     `altNicks` TEXT,
     `ircnick` VARCHAR(100),
-    `pubemail` INT,
-    `banned` BOOL,
-    `deleted` BOOL
+    `pubemail` VARCHAR(100),
+    `banned` BOOLEAN,
+    `deleted` BOOLEAN
 );
 
 create table roles (
@@ -44,17 +44,18 @@ create table settings (
 
 create table teams (
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `Name` VARCHAR(128),
+    `name` VARCHAR(128),
     `created` INT,
     `leader` INT,
-	`cloeaders` TEXT,
+    `cloeaders` TEXT,
     `activity` INT,
     `rank` INT,
     `logourl` VARCHAR(128),
     `description` TEXT,
     `closed` INT,
-    `inactive` BOOL,
-    `deleted` BOOL);
+    `inactive` BOOLEAN,
+    `deleted` BOOLEAN
+);
 
 create table messages (
     `id` NOT NULL AUTO_INCREMENT PRIMARY KEY ,
@@ -65,7 +66,7 @@ create table messages (
     `read` BOOL NOT NULL DEFAULT '0',
     `from_deleted` BOOL NOT NULL DEFAULT '0',
     `to_deleted` BOOL NOT NULL DEFAULT '0',
-    `created` DATETIME NOT NULL
+    `created` TIMESTAMP NOT NULL
  );
 
 -- basic setup
