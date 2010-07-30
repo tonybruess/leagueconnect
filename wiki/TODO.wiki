@@ -2,15 +2,15 @@ Overall:
 	Create user profile on first login. Make them fill out there stuff before using the site
 User Permissions:
 	User permissions should be setup as follows. Each number should be done through out the site using the hasPerm function and only letting users see what they should.
-	1: Login
-	2: Read/Send Mail
-	3: Administer News
-	4: Administer Matches
-	5: Administer Teams
-	6: Administer Bans
-	7: Administer Pages
-	8: Administer Users
-	9: Administer Logs
+  *1: Login
+  *2: Read/Send Mail
+  *3: Administer News
+  *4: Administer Matches
+  *5: Administer Teams
+  *6: Administer Bans
+  *7: Administer Pages
+  *8: Administer Users
+  *9: Administer Logs
 Mail:
 	Right now I have a framework written for the mail system. I'll put that out there soon.
 News:
