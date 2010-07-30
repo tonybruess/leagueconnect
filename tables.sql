@@ -12,8 +12,8 @@ create table players (
     `bzid` INT UNSIGNED, -- BZFlag callsign unique identifier
     `team` INT UNSIGNED, -- ID of the team this player is a member of
     `comment` TEXT, -- Comment?
-    `firstlogin` TIMESTAMP, -- Time when the player first logged in
-    `lastlogin` TIMESTAMP,  -- Time when the player last logged in
+    `firstlogin` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Time when the player first logged in
+    `lastlogin` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Time when the player last logged in
     `country` VARCHAR(50), -- Country of residence
     `location` VARCHAR(100),   -- Location of residence
     `email` VARCHAR(320), -- Email address
@@ -62,7 +62,7 @@ create table messages (
     `read` BOOLEAN NOT NULL DEFAULT FALSE, -- TRUE if read, FALSE otherwise
     `from_deleted` BOOLEAN NOT NULL DEFAULT FALSE, -- TRUE if the player who sent the message deleted it, FALSE otherwise
     `to_deleted` BOOLEAN NOT NULL DEFAULT FALSE, -- TRUE if the player who received the message deleted it, FALSE otherwise
-    `created` INT NOT NULL -- Time the message was created
+    `created` TIMESTAMP NOT NULL -- Time the message was created
  );
 
 -- basic setup

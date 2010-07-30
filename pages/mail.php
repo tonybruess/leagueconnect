@@ -136,7 +136,7 @@ if(!isset($_GET['op']) || $_GET['op'] == 'new') {
         </tr>
         <tr>
             <td>Date:</td>
-            <td><?php echo strftime("%a, %B %e, %G at %I:%M %p", $message['created']); ?></td>
+            <td><?php echo strftime("%a, %B %e, %G at %I:%M %p", strtotime($message['created'])); ?></td>
         </tr>
         <tr>
             <td>Subject:</td>

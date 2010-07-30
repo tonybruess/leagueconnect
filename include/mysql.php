@@ -79,6 +79,53 @@ class MySQL
 
     private static /* array */ $PlayerInfoCache = array();
 
+    /* void */ public static function AddPlayer($name, $bzid)
+    {
+        self::CheckConnection();
+
+        $name = self::Sanitize($name);
+        $bzid = self::Sanitize($bzid);
+
+        mysql_query("INSERT INTO players (`name`, `bzid`) VALUES ('$name', '$bzid')");
+    }
+
+    /* void */ public static function PlayerLogin($name, $bzid)
+    {
+        self::CheckConnection();
+
+        $name = self::Sanitize($name);
+        $bzid = self::Sanitize($bzid);
+
+        mysql_query("UPDATE players SET `name`='$name', `lastlogin`=NOW() WHERE `bzid`='$bzid'");
+    }
+
+    /* unsigned int */ public static function GetPlayerIDByBZID($bzid)
+    {
+        self::CheckConnection();
+
+        $bzid = self::Sanitize($bzid);
+
+        $result = mysql_query("SELECT id FROM players WHERE `bzid`='$bzid'");
+
+        if(mysql_count_rows($result) == 0)
+        {
+            return 0;
+        }
+        else
+        {
+            return mysql_fetch_assoc($result)['id'];
+        }
+    }
+
+    /* bool */ public static function PlayerExists($bzid)
+    {
+        self::CheckConnection();
+
+        $bzid = self::Sanitize($bzid);
+
+        return mysql_count_rows(mysql_query("SELECT id FROM players WHERE `bzid`='$bzid'")) != 0;
+    }
+
     /* Player */ public static function GetPlayerInfo($id)
     {
         self::CheckConnection();
@@ -93,7 +140,7 @@ class MySQL
         }
 
         $row = mysql_fetch_array($result);
-        $PlayerInfoCache[$id] = $row;
+        self::$PlayerInfoCache[$id] = $row;
 
         $player = new Player();
         $player->FromSQLRow($row);
@@ -107,7 +154,7 @@ class MySQL
 
         $id = self::Sanitize($id);
         $row = $player->ToSQLRow();
-        $cached = $PlayerInfoCache[$id];
+        $cached = self::$PlayerInfoCache[$id];
         $sqlParts = array();
 
         foreach($row as $key=>$val)
@@ -122,7 +169,7 @@ class MySQL
 
         mysql_query("UPDATE `players` SET $sql WHERE `id`=$id LIMIT 1");
 
-        $PlayerInfoCache[$id] = $row;
+        self::$PlayerInfoCache[$id] = $row;
     }
 }
 

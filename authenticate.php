@@ -40,9 +40,9 @@ if (!$_GET['token'] || !$_GET['username']) {
 } else {
     $fuser = $_GET['username'];
     $ftoken = $_GET['token'];
-    $q = mysql_query("SELECT name FROM groups");
+    $sql = mysql_query("SELECT name FROM groups");
     $grouparray = array();
-    while ($group = mysql_fetch_assoc($q)) {
+    while ($group = mysql_fetch_assoc($sql)) {
         array_push($grouparray, $group['name']);
     }
     $result = validate_token($_GET['token'], $_GET['username'], $grouparray);
@@ -73,21 +73,23 @@ if (!$_GET['token'] || !$_GET['username']) {
             }
         }
         // Do we have this user?
-        $q = mysql_query("SELECT * FROM players WHERE `bzid`='$bzid'");
-        $user = mysql_fetch_assoc($q);
-        if ($user) {
-            // Update last login because we have them
-            mysql_query("UPDATE players SET `lastlogin`= NOW(), `name`='$fuser' WHERE `bzid`='$bzid'");
-            echo mysql_error();
-        } else {
-            // Add them as a new user
-            mysql_query("INSERT INTO players (`name`,`bzid`,`firstlogin`,`lastlogin`) VALUES ('$fuser','$bzid',NOW(),NOW())");
-            echo mysql_error();
+        if(MySQL::PlayerExists($bzid))
+        {
+            // Update login data
+            MySQL::PlayerLogin($fuser, $bzid);
         }
-        // Set User ID
-        $_SESSION['userid'] = $user['id'];
+        else
+        {
+            // Add player to database
+            MySQL::AddPlayer($fuser, $bzid);
+        }
+
+        // Set Player ID
+        $_SESSION['player'] = MySQL::GetPlayerIDByBZID($bzid);
         header("Location: index.php");
-    } else {
+    }
+    else
+    {
         header("Location: index.php?p=error&error=4");
     }
 }
