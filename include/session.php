@@ -6,11 +6,11 @@ header("Cache-control: private");
 
 if(isset($_SESSION['callsign']))
 {
-    CurrentUser::$Name = $_SESSION['callsign'];
+    CurrentPlayer::$Name = $_SESSION['callsign'];
 }
 
 if(isset($_SESSION['userid']))
 {
-    CurrentUser::$UserID = $_SESSION['userid'];
+    CurrentPlayer::$ID = $_SESSION['userid'];
 }
 ?>
