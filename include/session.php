@@ -12,6 +12,7 @@ if(isset($_SESSION['callsign']))
 if(isset($_SESSION['userid']))
 {
     $userid = $_SESSION['userid'];
+    CurrentUser::$UserID = $_SESSION['userid'];
 }
 else
 {
