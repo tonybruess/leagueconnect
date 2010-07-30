@@ -30,11 +30,12 @@ class MySQL
             return false;
         }
 
+/*
         if(!mysql_query('set time_zone = utc;'))
         {
             die('Server Owner: Run "mysql_tzinfo_to_sql /usr/share/zoneinfo|mysql -u root -p" on your server to enable setting the timezone to UTC.');
         }
-        
+*/        
         return true;
     }
     
