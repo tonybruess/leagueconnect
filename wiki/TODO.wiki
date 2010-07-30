@@ -1,0 +1,41 @@
+Overall:
+	Create user profile on first login. Make them fill out there stuff before using the site
+User Permissions:
+	User permissions should be setup as follows. Each number should be done through out the site using the hasPerm function and only letting users see what they should.
+	1: Login
+	2: Read/Send Mail
+	3: Administer News
+	4: Administer Matches
+	5: Administer Teams
+	6: Administer Bans
+	7: Administer Pages
+	8: Administer Users
+	9: Administer Logs
+Mail:
+	Right now I have a framework written for the mail system. I'll put that out there soon.
+News:
+	Add the newslist
+	Allow anyone to view it
+	Players with permission 10 can add new items, edit items, and delete old ones
+	Create News SQL Table
+Matches:
+	Create Match SQL Table
+	Players with permission 4 can add, modify and delete matches
+	Add formula for calculating match +/- points
+Teams:
+	Create Teams SQL Table
+	Players with permission 5 can add, modify, and delete teams for other users
+	All users can create, modify, and delete teams they own
+Players:
+	Create Players SQL Table
+	List all players here
+	Allow users to edit their profile
+Pages:
+	Create Pages SQL Table
+	Allow addition and deletion of pages
+	Allow modification of pages
+	Add syntax for pages editor
+User Manager:
+	Show all users, last login, 
+Team Manager:
+Site Manager:
