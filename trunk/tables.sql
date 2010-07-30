@@ -15,7 +15,7 @@ create table players (
     `firstlogin` TIMESTAMP, -- Time when the player first logged in
     `lastlogin` TIMESTAMP,  -- Time when the player last logged in
     `country` VARCHAR(100), -- Country of residence
-    `state` VARCHAR(100),   -- State of residence
+    `location` VARCHAR(100),   -- Location of residence
     `email` VARCHAR(100), -- Email address
     `aim` VARCHAR(100), -- AOL Instant Messenger address
     `msn` VARCHAR(100), -- MSN Instant Messenger address

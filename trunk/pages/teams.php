@@ -1,6 +1,6 @@
 <h2>Teams</h2>
 <?php
-/* VARIABLES BEING READ FROM TEH QUERY STRING ON OCCASION
+/* VARIABLES BEING READ FROM THE QUERY STRING ON OCCASION
  ******************************************************************
  * $i	representing an ID (for any purposes)
  * $a	representing an action that's being performed or prepared by the user
@@ -11,11 +11,10 @@
 
 if (@$_POST['newteam']){
 	$newteam = sanitize($_POST['newteam']);
-	$ts = time();
 	$teamexists = mysql_fetch_array(mysql_query("SELECT * FROM teams WHERE `name`='$newteam'"));
 	if($teamexists){
 		echo "Team Name Unavailable";
-	} elseif(mysql_query("INSERT INTO teams (`name`,`created`,`leader`,`rank`,`description`,`closed`,`inactive`,`deleted`) VALUES ('$newteam','$ts','$userid','1200','My New Team!','0','0','0')")) {
+	} elseif(mysql_query("INSERT INTO teams (`name`,`created`,`leader`,`rank`,`description`,`closed`,`inactive`,`deleted`) VALUES ('$newteam', NOW(),'$userid','1200','My New Team!', FALSE, FALSE, FALSE)")) {
 			$newteamid = mysql_fetch_array(mysql_query("SELECT id FROM teams WHERE `name`='$newteam'"));
 			mysql_query("UPDATE players SET `team`=".$newteamid[0]);
 			echo "Team ".$_POST['newteam']." created successfully!";
@@ -55,7 +54,7 @@ if (@$_POST['newteam']){
 </table>
 <br>
 <h2>Add a Team</h2>
-<form method="POST">
+<form method="POST" action="<?php print $_SERVER['PHP_SELF']; ?>">
 <input type="hidden" name="a" value="add">
 Name: <input type="text" name="newteam">
 <input type="submit">

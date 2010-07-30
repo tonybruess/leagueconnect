@@ -77,11 +77,15 @@ class MySQL
      * without having SQL scattered all throughout the code.
      */
 
+    private static /* array */ $PlayerInfoCache = array();
+
     /* Player */ public static function GetPlayerInfo($id)
     {
         self::CheckConnection();
 
-        $result = mysql_query("SELECT * FROM `players` WHERE `ID` = '$id' LIMIT 1");
+        $id = self::Sanitize($id);
+
+        $result = mysql_query("SELECT * FROM `players` WHERE `id` = '$id' LIMIT 1");
 
         if(mysql_num_rows($result) == 0)
         {
@@ -89,32 +93,36 @@ class MySQL
         }
 
         $row = mysql_fetch_array($result);
+        $PlayerInfoCache[$id] = $row;
 
         $player = new Player();
-        $player->AIM = $row['aim'];
-        $player->AltNicks = (strlen($row['altNicks']) == 0 ? array() : explode('|', $row['altNicks']));
-        $player->BZID = (int)$row['bzid'];
-        $player->Banned = ($row['banned'] != 0);
-        $player->Comment = $row['comment'];
-        $player->Country = $row['country'];
-        $player->Deleted = ($row['deleted'] != 0);
-        $player->Email = $row['email'];
-        $player->FirstLogin = strtotime($row['firstlogin']);
-        $player->ID = (int)$row['id'];
-        $player->IRCNick = $row['ircnick'];
-        $player->Jabber = $row['jabber'];
-        $player->LastLogin = strtotime($row['lastlogin']);
-        $player->MSN = $row['msn'];
-        $player->Name = $row['name'];
-        $player->NewMail = $row['newmail'];
-        $player->NewMatch = $row['newmatch'];
-        $player->NewNews = $row['newnews'];
-        $player->PublicEmail = $row['pubemail'];
-        $player->RecordMatch = $row['recordmatch'];
-        $player->State = $row['state'];
-        $player->Team = (int)$row['team'];
+        $player->FromSQLRow($row);
 
         return $player;
+    }
+
+    /* void */ public static function SetPlayerInfo($id, $player)
+    {
+        self::CheckConnection();
+
+        $id = self::Sanitize($id);
+        $row = $player->ToSQLRow();
+        $cached = $PlayerInfoCache[$id];
+        $sqlParts = array();
+
+        foreach($row as $key=>$val)
+        {
+            if($val == $cached[$key]) // Don't update things that haven't changed
+                continue;
+
+            $sqlParts[] = "$key='".self::Sanitize($val)."'";
+        }
+
+        $sql = implode(', ', $sqlParts);
+
+        mysql_query("UPDATE `players` SET $sql WHERE `id`=$id LIMIT 1");
+
+        $PlayerInfoCache[$id] = $row;
     }
 }
 
