@@ -7,14 +7,14 @@ create table groups (
 );
 
 create table players (
-    `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `id` INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `name` VARCHAR(100),
-    `bzid` INT,
-    `team` INT,
+    `bzid` INT UNSIGNED,
+    `team` INT UNSIGNED,
     `recordmatch` INT,
-    `newmail` INT,
-    `newnews` INT,
-    `newmatch` INT,
+    `newmail` INT UNSIGNED,
+    `newnews` INT UNSIGNED,
+    `newmatch` INT UNSIGNED,
     `comment` TEXT,
     `firstlogin` TIMESTAMP,
     `lastlogin` TIMESTAMP,
@@ -45,14 +45,14 @@ create table settings (
 create table teams (
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `name` VARCHAR(128),
-    `created` INT,
-    `leader` INT,
+    `created` TIMESTAMP,
+    `leader` UNSIGNED INT,
     `cloeaders` TEXT,
     `activity` INT,
-    `rank` INT,
+    `rank` UNSIGNED INT,
     `logourl` VARCHAR(128),
     `description` TEXT,
-    `closed` INT,
+    `closed` BOOLEAN,
     `inactive` BOOLEAN,
     `deleted` BOOLEAN
 );
