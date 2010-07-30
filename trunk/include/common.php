@@ -1,5 +1,6 @@
 <?php
-$userid = $_SESSION['userid'];
+
+global $userid;
 
 function hasPerm($i){
 	if(@$_SESSION['perm'][$i])
