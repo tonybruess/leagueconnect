@@ -44,14 +44,15 @@ create table settings (
 
 create table teams (
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `name` VARCHAR(128),
+    `Name` VARCHAR(128),
     `created` INT,
     `leader` INT,
+	`cloeaders` TEXT,
     `activity` INT,
     `rank` INT,
     `logourl` VARCHAR(128),
     `description` TEXT,
-    `closed` BOOL,
+    `closed` INT,
     `inactive` BOOL,
     `deleted` BOOL);
 
