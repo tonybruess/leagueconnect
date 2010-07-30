@@ -14,15 +14,15 @@ create table players (
     `comment` TEXT, -- Comment?
     `firstlogin` TIMESTAMP, -- Time when the player first logged in
     `lastlogin` TIMESTAMP,  -- Time when the player last logged in
-    `country` VARCHAR(100), -- Country of residence
+    `country` VARCHAR(50), -- Country of residence
     `location` VARCHAR(100),   -- Location of residence
-    `email` VARCHAR(100), -- Email address
-    `aim` VARCHAR(100), -- AOL Instant Messenger address
-    `msn` VARCHAR(100), -- MSN Instant Messenger address
-    `jabber` VARCHAR(100), -- Jabber address
+    `email` VARCHAR(320), -- Email address
+    `aim` VARCHAR(320), -- AOL Instant Messenger address
+    `msn` VARCHAR(320), -- MSN Instant Messenger address
+    `jabber` VARCHAR(320), -- Jabber address
     `altNicks` TEXT, -- Alternative nicknames
-    `ircnick` VARCHAR(100), -- IRC nickname
-    `pubemail` VARCHAR(100), -- Public Email?
+    `ircnick` VARCHAR(30), -- IRC nickname
+    `pubemail` VARCHAR(320), -- Public Email?
     `banned` BOOLEAN, -- TRUE if banned, FALSE if not
     `deleted` BOOLEAN -- TRUE if deleted, FALSE if not
 );
