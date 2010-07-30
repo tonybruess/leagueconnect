@@ -1,14 +1,14 @@
 
 create table groups (
     `id` INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT, -- Unique identifier for this group
-    `name` VARCHAR(100), -- Name of the group
-    `role` BIGINT, -- ???
+    `name` VARCHAR(30), -- Name of the group
+    `role` INT UNSIGNED, -- Role ID of the permission from the roles table
     `enabled` BOOLEAN NOT NULL DEFAULT FALSE -- TRUE if enabled, FALSE otherwise
 );
 
 create table players (
     `id` INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT, -- Unique identifier for each player
-    `name` VARCHAR(100), -- Callsign
+    `name` VARCHAR(30), -- Callsign
     `bzid` INT UNSIGNED, -- BZFlag callsign unique identifier
     `team` INT UNSIGNED, -- ID of the team this player is a member of
     `recordmatch` INT, -- ???
@@ -32,7 +32,7 @@ create table players (
 );
 
 create table roles (
-    `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, -- Unique identifier for this role
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, -- Unique identifier for this role
     `name` TEXT, -- Name of the role
     `permissions` VARCHAR(100) -- Permissions granted to this role
 );
@@ -64,9 +64,9 @@ create table messages (
     `from` INT( 11 ) NOT NULL , -- Player ID who sent the message
     `to` INT( 11 ) NOT NULL , -- Player ID of the recepient
     `read` BOOLEAN NOT NULL DEFAULT FALSE, -- TRUE if read, FALSE otherwise
-    `from_deleted` BOOLEAN NOT NULL DEFAULT FALSE, -- ???
-    `to_deleted` BOOLEAN NOT NULL DEFAULT FALSE, -- ???
-    `created` TIMESTAMP NOT NULL
+    `from_deleted` BOOLEAN NOT NULL DEFAULT FALSE, -- TRUE if the player who sent the message deleted it, FALSE otherwise
+    `to_deleted` BOOLEAN NOT NULL DEFAULT FALSE, -- TRUE if the player who received the message deleted it, FALSE otherwise
+    `created` TIMESTAMP NOT NULL -- Time the message was created
  );
 
 -- basic setup
