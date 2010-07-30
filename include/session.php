@@ -1,14 +1,12 @@
 <?php
+require_once('./include/current-user.php');
+
 session_start();
 header("Cache-control: private");
 
 if(isset($_SESSION['callsign']))
 {
-    $name = $_SESSION['callsign'];
-}
-else
-{
-    $name = 'guest';
+    CurrentUser::$Callsign = $_SESSION['callsign'];
 }
 
 if(isset($_SESSION['userid']))
