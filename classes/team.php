@@ -9,7 +9,7 @@ class Team
     public /* string */ $Name;
     public /* timestamp */ $Created;
     public /* unsigned int */ $Leader;
-    public /* ??? */ $Coleaders;
+    public /* array of strings */ $CoLeaders;
     public /* int */ $Activity;
     public /* unsigned int */ $Rank;
     public /* string (url) */ $Logo;
