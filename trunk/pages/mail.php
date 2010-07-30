@@ -3,16 +3,15 @@ if(!hasPerm(2)){
 	require_once("include/noperm.php");
 	require_once("include/footer.php");
 	die();
-}		
-	$ts = time();
+}
 	$uid = CurrentPlayer::$ID;
     function read($message) {
-        $sql = "UPDATE messages SET `read` = '1' WHERE `id` = '$message' LIMIT 1";
+        $sql = "UPDATE messages SET `read` = TRUE WHERE `id` = '$message' LIMIT 1";
         return (@mysql_query($sql)) ? true:false;
     }
     
     function deleted($messageid) {
-    	$messageclean = MySQL::sanitize($messageid);
+    	$messageclean = MySQL::Sanitize($messageid);
 		$uid = CurrentPlayer::$ID;
 		$sql = "SELECT * FROM messages WHERE `id` = '$messageclean' && (`from` = '".CurrentPlayer::$ID."' || `to` = '".CurrentPlayer::$ID."') LIMIT 1";
 		$result = mysql_query($sql);
