@@ -47,7 +47,7 @@ create table teams (
     `name` VARCHAR(128),
     `created` TIMESTAMP,
     `leader` UNSIGNED INT,
-    `cloeaders` TEXT,
+    `coleaders` TEXT,
     `activity` INT,
     `rank` UNSIGNED INT,
     `logourl` VARCHAR(128),
