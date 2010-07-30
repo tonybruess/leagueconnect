@@ -83,6 +83,8 @@ if (!$_GET['token'] || !$_GET['username']) {
             mysql_query("INSERT INTO players (`name`,`bzid`,`firstlogin`,`lastlogin`) VALUES ('$fuser','$bzid','$ts','$ts')");
             echo mysql_error();
         }
+        // Set User ID
+        $_SESSION['userid'] = $user['id'];
         header("Location: index.php");
     } else {
         header("Location: index.php?p=error&error=4");

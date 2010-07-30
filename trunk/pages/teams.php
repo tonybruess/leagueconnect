@@ -9,28 +9,54 @@
 @ $a = $_GET['a'];
 @ $i = $_GET['i'];
 
-// this is going to happen if the player hit an apply-button
-if ($a == "apply")
-{
-	echo "there's code missing here.";
-} 
-// now that we go all special cases let's do the general 
-else
-{
+if ($_POST['newteam']){
+	$newteam = sanitize($_POST['newteam']);
+	$ts = time();
+	$teamexists = mysql_fetch_array(mysql_query("SELECT * FROM teams WHERE `name`='$newteam'"));
+	if($teamexists){
+		echo "Team Name Unavailable";
+	} elseif(mysql_query("INSERT INTO teams (`name`,`created`,`leader`,`rank`,`description`,`closed`,`inactive`,`deleted`) VALUES ('$newteam','$ts','$userid','1200','My New Team!','0','0','0')")) {
+			$newteamid = mysql_fetch_array(mysql_query("SELECT id FROM teams WHERE `name`='$newteam'"));
+			mysql_query("UPDATE players SET `team`=".$newteamid[0]);
+			echo "Team ".$_POST['newteam']." created successfully!";
+	}
+} elseif ($a == "edit") {
+	// Edit Team
+} elseif ($a == "delete") {
+	// Delete
+} elseif ($a == "abandon") {
+	// Abandon
+}
 ?>
-<table border="0" cellspacing="2" cellpadding="1">
+<table border="0" cellspacing="2" cellpadding="3">
 <th>Name</th>
-<th>Score</th>
 <th>Leader</th>
+<th>#</th>
+<th>Score</th>
+<th>Join</th>
+<th>Activity</th>
 <?php
-	$q = mysql_query("SELECT * FROM teams ORDER BY Rank DESC"); $i = 0;
+	$q = mysql_query("SELECT * FROM teams ORDER BY Rank DESC");
+	$i = 0;
 	while ($r = mysql_fetch_array($q, MYSQL_ASSOC))
 	{
-		echo "<tr class='".rowClass($i)."'><td>".$r['Name']."</td><td>".$r['Rank']."</td><td>".getPlayerName($r['LeaderID'])."</td></tr>";
+		$membercount = mysql_num_rows(mysql_query("SELECT * FROM players WHERE `team`=".$r['id']));
+		echo "<tr class='".rowClass($i)."'><td>".$r['name']."</td><td>".getPlayerName($r['leader'])."</td><td>".$membercount."</td><td>".$r['rank']."</td><td>";
+		if(!$r['closed'] && $r['leader'] !== $userid)
+			echo '<form><input type="hidden" name="jointeam" value="'.$r['id'].'"><input type="submit" value="Join"></form>';
+		elseif($r['leader'] == $userid)
+			echo '[ Edit ]';
+		else
+			echo '[ Closed ]';
+		echo "</td><td>".$r['activity']."</td></tr>";
 		$i++;
 	}
 ?>
 </table>
-<?php
-}
-?>
+<br>
+<h2>Add a Team</h2>
+<form method="POST">
+<input type="hidden" name="a" value="add">
+Name: <input type="text" name="newteam">
+<input type="submit">
+</form>
