@@ -76,7 +76,7 @@ if (!$_GET['token'] || !$_GET['username']) {
         $user = mysql_fetch_assoc($q);
         if ($user) {
             // Update last login because we have them
-            mysql_query("UPDATE players SET `lastlogin`='$ts',`name`='$fuser'");
+            mysql_query("UPDATE players SET `lastlogin`='$ts',`name`='$fuser' WHERE `bzid`='$bzid'");
             echo mysql_error();
         } else {
             // Add them as a new user
