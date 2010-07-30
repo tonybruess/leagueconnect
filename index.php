@@ -3,6 +3,7 @@ define ('CODE_VERSION', "0.01");
 require_once("include/common.php");
 require_once("include/session.php");
 @ $name = $_SESSION['callsign'];
+@ $userid = $_SESSION['userid'];
 require_once("include/mysql.php");
 require_once("include/header.php");
 @ $page = $_GET['p'];
