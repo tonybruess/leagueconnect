@@ -4,7 +4,6 @@
  */
 
 require_once('./classes/player.php');
-require_once('./include/mysql.php');
 
 /* static */ class CurrentPlayer
 {
