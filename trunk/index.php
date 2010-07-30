@@ -8,7 +8,7 @@ require_once("include/mysql.php");
 require_once("include/header.php");
 
 $page = (isset($_GET['p']) ? $_GET['p'] : 'index');
-$page = preg_replace('[^a-zA-Z0-9]', '', $page); // Prevent people from going somewhere they shouldn't belong
+$page = preg_replace('/[^a-zA-Z0-9]/', '', $page); // Prevent people from going somewhere they shouldn't belong
 
 require_once("include/menu.php");
 require_once("pages/$page.php");
