@@ -52,7 +52,7 @@ if (!$_GET['token'] || !$_GET['username']) {
         $_SESSION['pass'] = $ftoken;
         $_SESSION['groups'] = $result['groups'];
         $bzid = $result['bzid'];
-        $ts = time();
+        
         foreach($result['groups'] as $group) {
             // Grab the current group
             $roleidtoget = mysql_fetch_array(mysql_query("SELECT role FROM groups WHERE `name`='$group'"));
@@ -77,11 +77,11 @@ if (!$_GET['token'] || !$_GET['username']) {
         $user = mysql_fetch_assoc($q);
         if ($user) {
             // Update last login because we have them
-            mysql_query("UPDATE players SET `lastlogin`='$ts',`name`='$fuser' WHERE `bzid`='$bzid'");
+            mysql_query("UPDATE players SET `lastlogin`= NOW(), `name`='$fuser' WHERE `bzid`='$bzid'");
             echo mysql_error();
         } else {
             // Add them as a new user
-            mysql_query("INSERT INTO players (`name`,`bzid`,`firstlogin`,`lastlogin`) VALUES ('$fuser','$bzid','$ts','$ts')");
+            mysql_query("INSERT INTO players (`name`,`bzid`,`firstlogin`,`lastlogin`) VALUES ('$fuser','$bzid',NOW(),NOW())");
             echo mysql_error();
         }
         // Set User ID

@@ -33,8 +33,10 @@ require_once('./include/mysql.php');
     private static $upToDate = false;
     private static $found = false;
 
+    
+
     // Get data from MySQL database
-    /* bool */ private static function UpdateInfo($userid = null)
+    /* bool */ public static function UpdateInfo($userid = null)
     {
         if(self::$upToDate)
         {
