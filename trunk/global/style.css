@@ -106,10 +106,13 @@ th {
 	text-decoration: none;
 }
 #menu li a.active, #admin li a.active  {
-	color: red;
+	color: green;
 }
 #menu li a:hover, #admin li a:hover {
 	color: grey;
+}
+#menu li a.new {
+	color: red;
 }
 h1 {
 	margin: 0px;

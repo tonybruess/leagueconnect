@@ -11,8 +11,8 @@ if(!hasPerm(2)){
     // Fetch a specific message
 
     // Flag a message as viewed
-    function viewed($message) {
-        $sql = "UPDATE messages SET `to_viewed` = '1' WHERE `id` = '".$message."' LIMIT 1";
+    function read($message) {
+        $sql = "UPDATE messages SET `read` = '1' WHERE `id` = '".$message."' LIMIT 1";
         return (@mysql_query($sql)) ? true:false;
     }
     
@@ -137,9 +137,7 @@ if(!isset($_GET['op']) || $_GET['op'] == 'new') {
 	// fetch the data
 		$message = mysql_fetch_assoc($result);
 	}
-    if($userid == $messages[0]['toid'] && !$messages[0]['to_viewed']) {
-		viewed($message['id']);
-	}
+ 	read($message['id']);
 ?>
     <table border="0" cellspacing="2" cellpadding="3">
         <tr>

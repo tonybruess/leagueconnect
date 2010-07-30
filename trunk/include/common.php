@@ -1,4 +1,6 @@
 <?php
+$userid = $_SESSION['userid'];
+
 function hasPerm($i){
 	if(@$_SESSION['perm'][$i])
 		return true;
@@ -30,5 +32,15 @@ function getUserId($username) {
         } else {
             return false;
         }
+}
+
+function hasMail() {
+	$sql = "SELECT * FROM messages WHERE `to`='$userid' AND `read`='0' AND `to_deleted`='0'";
+	$result = mysql_query($sql);
+	$result = mysql_fetch_array($result);
+	if($result)
+		return true;
+	else
+		return false;
 }
 ?>
