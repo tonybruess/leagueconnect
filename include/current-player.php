@@ -4,17 +4,17 @@
  */
 
 require_once('./classes/player.php');
+require_once('./include/mysql.php');
 
 /* static */ class CurrentPlayer
 {
     public static /* unsigned int */ $ID = 0;
     public static /* string */ $Name = 'guest';
     public static /* unsigned int */ $BZID = 0;
-    public static /* ??? */ $Team = '';
-    public static /* ??? */ $RecordMatch = '';
-    public static /* bool or int */ $NewMail = false;
-    public static /* bool or int */ $NewNews = false;
-    public static /* bool or int */ $NewMatch = false;
+    public static /* unsigned int */ $Team = '';
+    public static /* bool */ $NewMail = false;
+    public static /* bool */ $NewNews = false;
+    public static /* bool */ $NewMatch = false;
     public static /* string */ $Comment = '';
     public static /* datetime */ $FirstLogin = 0;
     public static /* datetime */ $LastLogin = 0;
@@ -60,7 +60,6 @@ require_once('./classes/player.php');
                 self::$Name = $player->Name;
                 self::$BZID = $player->BZID;
                 self::$Team = $player->Team;
-                self::$RecordMatch = $player->RecordMatch;
                 self::$NewMail = $player->NewMail;
                 self::$NewNews = $player->NewNews;
                 self::$NewMatch = $player->NewMatch;
