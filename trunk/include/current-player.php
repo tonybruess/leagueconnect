@@ -30,24 +30,24 @@ require_once('./include/mysql.php');
     public static /* bool */ $Banned = false;
     public static /* bool */ $Deleted = false;
 
-    private static $initialized = false;
+    private static $upToDate = false;
     private static $found = false;
 
     // Get data from MySQL database
-    /* bool */ private static function Initialize($userid = null)
+    /* bool */ private static function UpdateInfo($userid = null)
     {
-        if($initialized)
+        if(self::$upToDate)
         {
-            return $found;
+            return self::$found;
         }
 
-        $initialized = true;
+        self::$upToDate = true;
 
         $id = ($userid != null ? $userid : self::$UserID);
 
         if($id == 0) // Null player
         {
-            $found = false;
+            self::$found = false;
         }
         else
         {
@@ -78,15 +78,15 @@ require_once('./include/mysql.php');
                 self::$Banned = $player->Banned;
                 self::$Deleted = $player->Deleted;
 
-                $found = true;
+                self::$found = true;
             }
             catch(Exception $e)
             {
-                $found = false;
+                self::$found = false;
             }
         }
 
-        return $found;
+        return self::$found;
     }
 }
 ?>
