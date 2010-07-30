@@ -9,7 +9,7 @@
 @ $a = $_GET['a'];
 @ $i = $_GET['i'];
 
-if ($_POST['newteam']){
+if (@$_POST['newteam']){
 	$newteam = sanitize($_POST['newteam']);
 	$ts = time();
 	$teamexists = mysql_fetch_array(mysql_query("SELECT * FROM teams WHERE `name`='$newteam'"));
@@ -42,13 +42,13 @@ if ($_POST['newteam']){
 	{
 		$membercount = mysql_num_rows(mysql_query("SELECT * FROM players WHERE `team`=".$r['id']));
 		echo "<tr class='".rowClass($i)."'><td>".$r['name']."</td><td>".getPlayerName($r['leader'])."</td><td>".$membercount."</td><td>".$r['rank']."</td><td>";
-		if(!$r['closed'] && $r['leader'] !== $userid)
+		if($r['closed'] == 0 && $r['leader'] !== $userid)
 			echo '<form><input type="hidden" name="jointeam" value="'.$r['id'].'"><input type="submit" value="Join"></form>';
 		elseif($r['leader'] == $userid)
 			echo '[ Edit ]';
 		else
 			echo '[ Closed ]';
-		echo "</td><td>".$r['activity']."</td></tr>";
+		echo "</td><td>&nbsp;</td></tr>"; // have activity estimated in realtime from the matches table
 		$i++;
 	}
 ?>
