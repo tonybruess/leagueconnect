@@ -5,18 +5,34 @@ if(!hasPerm(2)){
 	die();
 }		
 	$ts = time();
+	$uid = CurrentPlayer::$ID;
     function read($message) {
-        $sql = "UPDATE messages SET `read` = '1' WHERE `id` = '".$message."' LIMIT 1";
+        $sql = "UPDATE messages SET `read` = '1' WHERE `id` = '$message' LIMIT 1";
         return (@mysql_query($sql)) ? true:false;
     }
     
-    function deleted($message) {
-        $sql = "UPDATE messages SET `to_deleted` = '1' WHERE `id` = '".$message."' LIMIT 1";
+    function deleted($messageid) {
+    	$messageclean = MySQL::sanitize($messageid);
+		$uid = CurrentPlayer::$ID;
+		$sql = "SELECT * FROM messages WHERE `id` = '$messageclean' && (`from` = '".CurrentPlayer::$ID."' || `to` = '".CurrentPlayer::$ID."') LIMIT 1";
+		$result = mysql_query($sql);
+		if(mysql_num_rows($result)) {
+			$message = mysql_fetch_assoc($result);
+		}
+    	if($message['from'] == $uid)
+    		// From Deleted
+    		$sql = "UPDATE messages SET `from_deleted` = '1' WHERE `id` = '$messageid' LIMIT 1";
+        else
+        	// To Deleted
+    		$sql = "UPDATE messages SET `to_deleted` = '1' WHERE `id` = '$messageid' LIMIT 1";
         return (@mysql_query($sql)) ? true:false;
     }
+    
         
-	function sendmessage($to,$title,$message) {
-        $sql = "INSERT INTO messages SET `to` = '".$to."', `from` = '".$_SESSION['userid']."', `title` = '".$title."', `message` = '".$message."', `created` = '$ts'";
+	function sendmessage($to,$subject,$message) {
+	$ts = time();
+	$uid = CurrentPlayer::$ID;
+        $sql = "INSERT INTO messages SET `to` = '$to', `from` = '$uid', `subject` = '$subject', `message` = '$message', `created` = '$ts'";
         return (@mysql_query($sql)) ? true:false;
     }
     
@@ -70,17 +86,15 @@ if(!hasPerm(2)){
 // If unspecified/recgonized page, show all messages
 if(!isset($_GET['op']) || $_GET['op'] == 'new') {
 ?>
-<a href="?p=mail&op=compose">Compose</a> - 
-<a href="?p=mail&op=new">Read</a>
 <table border="0" cellspacing="2" cellpadding="3">
     <tr>
         <td>From</td>
-        <td>Title</td>
+        <td>Subject</td>
         <td>Date</td>
     </tr>
     <?php
         // If there are messages, show them
-   		$sql = "SELECT * FROM messages WHERE `to` = '".CurrentPlayer::$ID."' && `to_deleted`='0'";
+   		$sql = "SELECT * FROM messages WHERE `to` = '$uid' && `to_deleted`='0'";
 		$result = mysql_query($sql) or die (mysql_error());
         // Check if there are any results
         if(mysql_num_rows($result)) {
@@ -92,7 +106,7 @@ if(!isset($_GET['op']) || $_GET['op'] == 'new') {
                 ?>
                 <tr>
                     <td><?php echo getPlayerName($message['from']); ?></td>
-                    <td><a href='?p=mail&op=view&mid=<?php echo $message['id']; ?>'<?php if($unread) echo 'style="color: red;"'; ?>><?php echo $message['title'] ?></a></td>
+                    <td><a href='?p=mail&op=view&mid=<?php echo $message['id']; ?>'<?php if($unread) echo 'style="color: red;"'; ?>><?php echo $message['subject'] ?></a></td>
                     <td><?php echo date("m-d-Y",$message['ts']); ?></td>
                 </tr>
                 <?php
@@ -113,7 +127,8 @@ if(!isset($_GET['op']) || $_GET['op'] == 'new') {
 	// fetch the data
 		$message = mysql_fetch_assoc($result);
 	}
- 	read($message['id']);
+	if($message['from'] !== $uid)
+ 		read($message['id']);
 ?>
     <table border="0" cellspacing="2" cellpadding="3">
         <tr>
@@ -126,7 +141,7 @@ if(!isset($_GET['op']) || $_GET['op'] == 'new') {
         </tr>
         <tr>
             <td>Subject:</td>
-            <td><?php echo $message['title']; ?></td>
+            <td><?php echo $message['subject']; ?></td>
         </tr>
         <tr>
 		<td>Message:</td>
@@ -137,7 +152,7 @@ if(!isset($_GET['op']) || $_GET['op'] == 'new') {
     <?php if($message['from'] > 0){ ?>
     <form name='reply' method='post' action='<?php echo $_SERVER['PHP_SELF']."?p=mail&op=compose"; ?>'>
         <input type='hidden' name='from' value='<?php echo $message['from']; ?>'>
-        <input type='hidden' name='subject' value='Re: <?php echo $message['title']; ?>'>
+        <input type='hidden' name='subject' value='Re: <?php echo $message['subject']; ?>'>
         <input type='hidden' name='message' value='[quote]<?php echo $message['message']; ?>[/quote]'>
         <input type='submit' name='reply' value='Reply'>
     </form>
@@ -152,30 +167,61 @@ if(!isset($_GET['op']) || $_GET['op'] == 'new') {
 	if($_POST['reply'])
 		$reply = 1;
 ?>
-<form name="new" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?p=mail&op=compose">
-<br><strong>To:</strong>
-<select name=to>
-<option value="">Select a User</option><?php
-$query = "SELECT * FROM players ORDER BY name asc"; 
-$result = mysql_query($query) or die(mysql_error());
-while($row = mysql_fetch_array($result)){
-	echo '<option value="'.$row['id'].'"';
-	if($row['id'] == $_POST['from'] || $row['id'] == $_POST['to']) echo " selected";
-	echo '>'.$row['name'].'</option>';
-}
+	<form name="new" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?p=mail&op=compose">
+		<br><strong>To:</strong>
+		<select name=to>
+		<option value="">Select a User</option><?php
+		$query = "SELECT * FROM players ORDER BY name asc"; 
+		$result = mysql_query($query) or die(mysql_error());
+		while($row = mysql_fetch_array($result)){
+			echo '<option value="'.$row['id'].'"';
+			if($row['id'] == $_POST['from'] || $row['id'] == $_POST['to']) echo " selected";
+			echo '>'.$row['name'].'</option>';
+		}
+		?>
+		</select><br><br>
+		<strong>Subject:</strong>
+		<input type='text' name='subject' value='<?php if($fail || $reply) echo $_POST['subject'];?>'><br><br>
+		<strong>Message:</strong><br>
+		<script type="text/javascript" src="bbeditor/ed.js"></script>  
+		<script>edToolbar('message'); </script>
+		<textarea cols="60" rows="20" name='message' id='message'><?php if($fail || $reply) echo $_POST['message']; ?></textarea><br><br>
+		<input type='submit' name='newmessage' value='Send'>
+	</form>
+<?php
+} elseif($_GET['op'] == 'sent'){
 ?>
-</select><br><br>
-<strong>Subject:</strong>
-<input type='text' name='subject' value='<?php if($fail || $reply) echo $_POST['subject'];?>'><br><br>
-<strong>Message:</strong><br>
-<script type="text/javascript" src="bbeditor/ed.js"></script>  
-<script>edToolbar('message'); </script>
-<textarea cols="60" rows="20" name='message' id='message'><?php if($fail || $reply) echo $_POST['message']; ?></textarea><br><br>
-<input type='submit' name='newmessage' value='Send'>
-</form>
-</body>
-</html>
+<table border="0" cellspacing="2" cellpadding="3">
+    <tr>
+        <td>To</td>
+        <td>Subject</td>
+        <td>Date</td>
+    </tr>
+    <?php
+        // If there are messages, show them
+   		$sql = "SELECT * FROM messages WHERE `from` = '".CurrentPlayer::$ID."' &&  `from_deleted` = '0'";
+		$result = mysql_query($sql) or die (mysql_error());
+        // Check if there are any results
+        if(mysql_num_rows($result)) {
+            // if yes, fetch them!
+            while($message = mysql_fetch_assoc($result)) {
+            	$unread = false;
+            	if($message['read']=='0')
+            		$unread = true;
+                ?>
+                <tr>
+                    <td><?php echo getPlayerName($message['to']); ?></td>
+                    <td><a href='?p=mail&op=view&mid=<?php echo $message['id']; ?>'<?php if($unread) echo 'style="color: red;"'; ?>><?php echo $message['subject'] ?></a></td>
+                    <td><?php echo date("m-d-Y",$message['ts']); ?></td>
+                </tr>
+                <?php
+            }
+        } else {
+            // No messages!
+            echo "<tr><td colspan='3'><strong>You have no sent messages</strong></td></tr>";
+        }
+    ?>
+</table>
 <?php
 }
-//Thats all folks
 ?>
