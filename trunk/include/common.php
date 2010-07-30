@@ -36,7 +36,7 @@ function getUserId($username) {
 }
 
 function hasMail() {
-	$sql = "SELECT * FROM messages WHERE `to`=".CurrentUser::$UserID." AND `read`='0' AND `to_deleted`='0'";
+	$sql = "SELECT * FROM messages WHERE `to`=".CurrentPlayer::$ID." AND `read`='0' AND `to_deleted`='0'";
 	$result = mysql_query($sql);
 	$result = mysql_fetch_array($result);
 	if($result)

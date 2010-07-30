@@ -24,7 +24,7 @@ if(!$_GET['i']){
 		?>
 		</table>
 <?php } else {
-	$id = sanitize($_GET['i']);
+	$id = MySQL::sanitize($_GET['i']);
 	$user = mysql_fetch_array(mysql_query("SELECT * FROM players WHERE `id`='$id'"));
 	?>
 	<h2>Managing <?php echo $user['name']; ?></h2>
