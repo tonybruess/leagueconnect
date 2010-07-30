@@ -6,8 +6,8 @@ require_once('./config.php');
 <html>
 <head>
 <title>Web League</title>
-<link rel="stylesheet" type="text/css" href="style.css">
-<script type="text/JavaScript" src="curvycorners.js"></script>
+<link rel="stylesheet" type="text/css" href="global/style.css">
+<script type="text/JavaScript" src="global/curvycorners.js"></script>
 </head>
 <body>
 <div id="main">

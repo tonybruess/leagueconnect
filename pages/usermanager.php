@@ -28,12 +28,13 @@ if(!$_GET['i']){
 	$user = mysql_fetch_array(mysql_query("SELECT * FROM players WHERE `id`='$id'"));
 	?>
 	<h2>Managing <?php echo $user['name']; ?></h2>
-	<form>
+	<form method="POST">
 	Name: <input type="text" name="name" value="<?php echo $user['name']; ?>"><br>
 	BZID: <input type="text" name="bzid" value="<?php echo $user['bzid']; ?>"><br>
 	Comment: <textarea cols="110" rows="4" style="resize: vertical;"><?php echo $user['comment'] ?></textarea><br>
 	Banned: <input type="checkbox" name="banned" value="1"<?php if($user['banned']) echo ' checked';?>"><br>
 	Deleted: <input type="checkbox" name="deleted" value="1"<?php if($user['deleted']) echo ' checked';?>"><br>
 	BZID: <input type="text" name="name" value="<?php echo $user['bzid']; ?>"><br>
+	<input type="submit" name="Save">
 	</form>
 <?php } ?>
