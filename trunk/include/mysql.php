@@ -107,7 +107,7 @@ class MySQL
 
         $result = mysql_query("SELECT id FROM players WHERE `bzid`='$bzid'");
 
-        if(mysql_count_rows($result) == 0)
+        if(mysql_num_rows($result) == 0)
         {
             return 0;
         }

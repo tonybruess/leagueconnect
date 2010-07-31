@@ -31,7 +31,7 @@ create table players (
 create table roles (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, -- Unique identifier for this role
     `name` VARCHAR(256), -- Name of the role
-    `permissions` INT(32) -- Permissions granted to this role
+    `permissions` VARCHAR(100) -- Permissions granted to this role
 );
 
 create table settings (
