@@ -209,6 +209,8 @@ class MySQL
         $leader = self::Sanitize($leader);
 
         self::Query("INSERT INTO teams (`name`, `created`, `leader`) VALUES ('$name', NOW(), '$leader')");
+        $team_id = mysql_fetch_assoc(self::Query("SELECT id FROM teams WHERE `name`='$name'"));
+        self::Query("UPDATE players SET `team`='".$team_id['id']."' WHERE `id`='$leader'");
     }
 
     /* bool */ public static function TeamExists($name)
@@ -264,7 +266,34 @@ class MySQL
             self::$TeamInfoCache[$id] = $row; // Update cache
         }
     }
-    #endregion
+    
+    /* bool */ public static function isTeamLeader($playerid,$team)
+    {
+    	self::CheckConnection();
+    	
+    	if(!$team)
+    	{
+			return mysql_num_rows(self::Query("SELECT id FROM teams WHERE `leader`='$playerid' LIMIT 1")) != 0;	
+    	} else {
+			return mysql_num_rows(self::Query("SELECT id FROM teams WHERE `leader`='$playerid' && `id`='$team' LIMIT 1")) != 0;	
+    	}
+     	
+    }
+
+    /* bool */ public static function isTeamMember($playerid,$team)
+    {
+    	self::CheckConnection();
+    	
+    	if(!$team)
+    	{
+ 			return mysql_num_rows(self::Query("SELECT id FROM teams WHERE `leader`='$playerid' LIMIT 1")) != 0;	
+   		} else {
+			return mysql_num_rows(self::Query("SELECT id FROM teams WHERE `leader`='$playerid' && `id`='$team' LIMIT 1")) != 0;	
+    	}
+    	
+    }
+
+   #endregion
 }
 
 // FIXME: Only call Connect when needed
