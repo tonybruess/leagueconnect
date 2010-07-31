@@ -125,7 +125,7 @@ class MySQL
 
         $bzid = self::Sanitize($bzid);
 
-        return mysql_count_rows(mysql_query("SELECT id FROM players WHERE `bzid`='$bzid'")) != 0;
+        return mysql_num_rows(mysql_query("SELECT id FROM players WHERE `bzid`='$bzid'")) != 0;
     }
 
     /* Player */ public static function GetPlayerInfo($id)
