@@ -16,6 +16,8 @@ class MySQL
     
     public static $Connected = false;
     public static $ConnectionError = '';
+    public static $Errors = array();
+    public static $ErrorSQL = array();
     
     /* bool */ public static function Connect()
     {
@@ -57,6 +59,22 @@ class MySQL
             return true;
         }
     }
+
+    /* resource or false */ public static function Query($sql)
+    {
+        $result = mysql_query($sql);
+
+        if($result)
+        {
+            return $result;
+        }
+        else
+        {
+            // Log the error and return false
+            $error = mysql_error() . '\n' . $sql . '\n' . '------' . '\n';
+            return false;
+        }
+    }
     
     /* string */ public static function Sanitize($str)
     {
@@ -77,9 +95,10 @@ class MySQL
      * without having SQL scattered all throughout the code.
      */
 
-    private static /* array */ $PlayerInfoCache = array();
-
     #region players table
+
+    private static /* array */ $PlayerInfoCache = array();
+    
     /* void */ public static function AddPlayer($name, $bzid)
     {
         self::CheckConnection();
@@ -87,7 +106,7 @@ class MySQL
         $name = self::Sanitize($name);
         $bzid = self::Sanitize($bzid);
 
-        mysql_query("INSERT INTO players (`name`, `bzid`, `firstlogin`, `lastlogin`) VALUES ('$name', '$bzid', NOW(), NOW())");
+        self::Query("INSERT INTO players (`name`, `bzid`, `firstlogin`, `lastlogin`) VALUES ('$name', '$bzid', NOW(), NOW())");
     }
 
     /* void */ public static function PlayerLogin($name, $bzid)
@@ -97,7 +116,7 @@ class MySQL
         $name = self::Sanitize($name);
         $bzid = self::Sanitize($bzid);
 
-        mysql_query("UPDATE players SET `name`='$name', `lastlogin`=NOW() WHERE `bzid`='$bzid'");
+        self::Query("UPDATE players SET `name`='$name', `lastlogin`=NOW() WHERE `bzid`='$bzid'");
     }
 
     /* unsigned int */ public static function GetPlayerIDByBZID($bzid)
@@ -106,7 +125,7 @@ class MySQL
 
         $bzid = self::Sanitize($bzid);
 
-        $result = mysql_query("SELECT id FROM players WHERE `bzid`='$bzid'");
+        $result = self::Query("SELECT id FROM players WHERE `bzid`='$bzid'");
 
         if(mysql_num_rows($result) == 0)
         {
@@ -125,7 +144,7 @@ class MySQL
 
         $bzid = self::Sanitize($bzid);
 
-        return mysql_num_rows(mysql_query("SELECT id FROM players WHERE `bzid`='$bzid'")) != 0;
+        return mysql_num_rows(self::Query("SELECT id FROM players WHERE `bzid`='$bzid'")) != 0;
     }
 
     /* Player */ public static function GetPlayerInfo($id)
@@ -134,7 +153,7 @@ class MySQL
 
         $id = self::Sanitize($id);
 
-        $result = mysql_query("SELECT * FROM `players` WHERE `id` = '$id' LIMIT 1");
+        $result = self::Query("SELECT * FROM `players` WHERE `id` = '$id' LIMIT 1");
 
         if(mysql_num_rows($result) == 0)
         {
@@ -156,22 +175,94 @@ class MySQL
 
         $id = self::Sanitize($id);
         $row = $player->ToSQLRow();
-        $cached = self::$PlayerInfoCache[$id];
+        $cached = (isset(self::$PlayerInfoCache[$id]) ? self::$PlayerInfoCache[$id] : null);
         $sqlParts = array();
 
         foreach($row as $key=>$val)
         {
-            if($val == $cached[$key]) // Don't update things that haven't changed
+            if(($cached == null && $val != null) || ($cached != null && $val != $cached[$key]))
+            {
+                $sqlParts[] = "$key='".self::Sanitize($val)."'";
+            }
+        }
+
+        if(count($sqlParts) == 0)
+            return;
+
+        $sql = implode(',', $sqlParts);
+
+        if(self::Query("UPDATE `players` SET $sql WHERE `id`='$id' LIMIT 1"))
+        {
+            self::$PlayerInfoCache[$id] = $row; // Update cache
+        }
+    }
+    #endregion
+
+    #region teams table
+    private static $TeamInfoCache = array();
+
+    /* void */ public static function AddTeam($name, $leader)
+    {
+        self::CheckConnection();
+
+        $name = self::Sanitize($name);
+        $leader = self::Sanitize($leader);
+
+        self::Query("INSERT INTO teams (`name`, `created`, `leader`) VALUES ('$name', NOW(), '$leader')");
+    }
+
+    /* bool */ public static function TeamExists($name)
+    {
+        self::CheckConnection();
+
+        $name = self::Sanitize($name);
+
+        return mysql_num_rows(self::Query("SELECT id FROM teams WHERE `name`='$name' LIMIT 1")) != 0;
+    }
+
+    /* Team */ public static function GetTeamInfo($id)
+    {
+        self::CheckConnection();
+
+        $id = self::Sanitize($id);
+
+        $result = self::Query("SELECT * FROM teams WHERE `id`='$id' LIMIT 1");
+        $row = mysql_fetch_assoc($result);
+
+        self::$TeamInfoCache[$id] = $row;
+
+        $team = new Team();
+        $team->FromSQLRow($row);
+
+        return $team;
+    }
+
+    /* void */ public static function SetTeamInfo($id, $team)
+    {
+        self::CheckConnection();
+
+        $id = self::Sanitize($id);
+        $row = $team->ToSQLRow();
+        $cached = self::$TeamInfoCache[$id];
+        $sqlParts = array();
+
+        foreach($row as $key=>$val)
+        {
+            if($val == $cached[$key]) // Skip fields that have the same value as before
                 continue;
 
             $sqlParts[] = "$key='".self::Sanitize($val)."'";
         }
 
-        $sql = implode(', ', $sqlParts);
+        if(count($sqlParts) == 0) // Nothing to update
+            return;
 
-        mysql_query("UPDATE `players` SET $sql WHERE `id`=$id LIMIT 1");
+        $sql = implode(',', $sqlParts);
 
-        self::$PlayerInfoCache[$id] = $row;
+        if(self::Query("UPDATE teams SET $sql WHERE `id`='$id' LIMIT 1"))
+        {
+            self::$TeamInfoCache[$id] = $row; // Update cache
+        }
     }
     #endregion
 }

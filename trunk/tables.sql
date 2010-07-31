@@ -30,28 +30,28 @@ create table players (
 
 create table roles (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, -- Unique identifier for this role
-    `name` VARCHAR(256), -- Name of the role
-    `permissions` VARCHAR(100) -- Permissions granted to this role
+    `name` VARCHAR(256) NOT NULL, -- Name of the role
+    `permissions` VARCHAR(100) NOT NULL -- Permissions granted to this role
 );
 
 create table settings (
-    `setting` VARCHAR(100) PRIMARY KEY,
+    `setting` VARCHAR(100) NOT NULL PRIMARY KEY,
     `value` VARCHAR(100)
 );
 
 create table teams (
     `id` INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT, -- Unique identifier for this team
-    `name` VARCHAR(128), -- Name of the team
-    `created` TIMESTAMP, -- Date the team was created
-    `leader` INT UNSIGNED, -- Player ID of the leader of the team
-    `coleaders` TEXT, -- List of player IDs for the co-leaders
-    `activity` INT, -- Activity?
-    `rank` INT UNSIGNED, -- Rank of this team
-    `logo` VARCHAR(128), -- URL for the team's logo
-    `description` TEXT, -- Description of the team
-    `closed` BOOLEAN, -- TRUE if this is closed and no one may join, FALSE otherwise
-    `inactive` BOOLEAN, -- TRUE if this team is inactive, FALSE otherwise
-    `deleted` BOOLEAN -- TRUE if this team is deleted, FALSE otherwise
+    `name` VARCHAR(128) NOT NULL, -- Name of the team
+    `created` TIMESTAMP NOT NULL, -- Date the team was created
+    `leader` INT UNSIGNED NOT NULL, -- Player ID of the leader of the team
+    `coleaders` TEXT DEFAULT "", -- List of player IDs for the co-leaders
+    `activity` INT DEFAULT 0, -- Activity?
+    `rank` INT UNSIGNED DEFAULT 0, -- Rank of this team
+    `logo` VARCHAR(128) DEFAULT "", -- URL for the team's logo
+    `description` TEXT DEAFULT "", -- Description of the team
+    `closed` BOOLEAN DEFAULT FALSE, -- TRUE if this is closed and no one may join, FALSE otherwise
+    `inactive` BOOLEAN DEFAULT FALSE, -- TRUE if this team is inactive, FALSE otherwise
+    `deleted` BOOLEAN DEFAULT FALSE -- TRUE if this team is deleted, FALSE otherwise
 );
 
 create table messages (

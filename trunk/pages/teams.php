@@ -9,7 +9,22 @@
 @ $a = $_GET['a'];
 @ $i = $_GET['i'];
 
-if (@$_POST['newteam']){
+if (isset($_POST['newteam']))
+{
+    /*
+    $team = $_POST['newteam'];
+
+    if(MySQL::TeamExists($team))
+    {
+        echo 'Team Name Unavailable';
+    }
+    else
+    {
+        MySQL::AddTeam($team, CurrentPlayer::$ID);
+        $leader = new Player();
+        $leader->Team =
+    }
+     */
 	$newteam = sanitize($_POST['newteam']);
 	$teamexists = mysql_fetch_array(mysql_query("SELECT * FROM teams WHERE `name`='$newteam'"));
 	if($teamexists){
