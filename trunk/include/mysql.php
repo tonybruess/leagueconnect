@@ -72,6 +72,8 @@ class MySQL
         {
             // Log the error and return false
             $error = mysql_error() . '\n' . $sql . '\n' . '------' . '\n';
+            file_put_contents(Config::ErrorLogFile, FILE_APPEND);
+            
             return false;
         }
     }
@@ -191,10 +193,31 @@ class MySQL
 
         $sql = implode(',', $sqlParts);
 
-        if(self::Query("UPDATE `players` SET $sql WHERE `id`='$id' LIMIT 1"))
+        if(self::Query("UPDATE players SET $sql WHERE `id`='$id' LIMIT 1"))
         {
             self::$PlayerInfoCache[$id] = $row; // Update cache
         }
+    }
+
+    /* array of Players */ public static function GetPlayersByTeam($team)
+    {
+        self::CheckConnection();
+
+        $team = self::Sanitize($team);
+
+        $result = self::Query("SELECT * FROM players WHERE `team`='$team'");
+        $players = array();
+
+        while($row = mysql_fetch_assoc($result))
+        {
+            $player = new Player();
+            $player->FromSQLRow($row);
+            $players[] = $player;
+
+            self::$PlayerInfoCache[$row['id']] = $row;
+        }
+
+        return $players;
     }
     #endregion
 
@@ -267,30 +290,57 @@ class MySQL
         }
     }
     
-    /* bool */ public static function isTeamLeader($playerid,$team)
+    /* bool */ public static function IsTeamLeader($player, $team=null)
     {
     	self::CheckConnection();
-    	
-    	if(!$team)
-    	{
-			return mysql_num_rows(self::Query("SELECT id FROM teams WHERE `leader`='$playerid' LIMIT 1")) != 0;	
-    	} else {
-			return mysql_num_rows(self::Query("SELECT id FROM teams WHERE `leader`='$playerid' && `id`='$team' LIMIT 1")) != 0;	
-    	}
-     	
+
+        $player = self::Sanitize($player);
+        $team = self::Sanitize($team);
+
+        if($team == '')
+        {
+            return mysql_num_rows(self::Query("SELECT id FROM teams WHERE `leader`='$player' LIMIT 1")) != 0;
+        }
+        else
+        {
+            return mysql_num_rows(self::Query("SELECT id FROM teams WHERE `leader`='$player' && `id`='$team' LIMIT 1")) != 0;
+        }
     }
 
-    /* bool */ public static function isTeamMember($playerid,$team)
+    /* bool */ public static function IsTeamMember($player, $team=null)
     {
     	self::CheckConnection();
-    	
-    	if(!$team)
-    	{
- 			return mysql_num_rows(self::Query("SELECT id FROM teams WHERE `leader`='$playerid' LIMIT 1")) != 0;	
-   		} else {
-			return mysql_num_rows(self::Query("SELECT id FROM teams WHERE `leader`='$playerid' && `id`='$team' LIMIT 1")) != 0;	
-    	}
-    	
+
+        $player = self::Sanitize($player);
+        $team = self::Sanitize($team);
+
+        if($team == '')
+        {
+            return mysql_num_rows(self::Query("SELECT id FROM players WHERE `id`='$player' && `team`!=NULL")) != 0;
+        }
+        else
+        {
+            return mysql_num_rows(self::Query("SELECT id FROM players WHERE `id`='$player' && `team`='$team'")) != 0;
+        }
+    }
+
+    /* array of Teams */ public static function GetTeamInfoList()
+    {
+        self::CheckConnection();
+
+        $result = self::Query('SELECT * FROM teams');
+        $teams = array();
+
+        while($row = mysql_fetch_assoc($result))
+        {
+            $team = new Team();
+            $team->FromSQLRow($row);
+            $teams[] = $team;
+
+            self::$TeamInfoCache[$row['id']] = $row;
+        }
+
+        return $teams;
     }
 
    #endregion
