@@ -1,4 +1,4 @@
-			<?php if($_SESSION['callsign']){ ?>
+			<?php if(@$_SESSION['player']){ ?>
 			<meta HTTP-EQUIV="Refresh" CONTENT="0;URL=index.php">
 			<?php
 			} else {
