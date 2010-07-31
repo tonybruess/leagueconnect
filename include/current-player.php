@@ -91,4 +91,7 @@ require_once('./include/mysql.php');
         return self::$found;
     }
 }
+
+// FIXME: Only run this when needed
+CurrentPlayer::UpdateInfo(@$_SESSION['player']);
 ?>
