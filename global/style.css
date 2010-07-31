@@ -137,3 +137,101 @@ table tr.rowEven {
 table tr.rowOdd {
  background-color: #D1D1D1; 
 }
+fieldset{
+	border: #999999 solid 1px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
+textarea{
+	background: #f0f0f0;
+	border: #999999 solid 1px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	padding: 3px;
+	resize: vertical;
+}
+textarea:hover{
+	border: #555555 solid 1px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
+textarea:active{
+	border: #555555 solid 1px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
+input[type=text]{
+	border: #999999 solid 1px;
+	background: #f0f0f0;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	margin-bottom: 5px;
+	padding: 3px;
+}
+input[type=text]:hover{
+	border: #555555 solid 1px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
+input[type=text]:active{
+	border: #555555 solid 1px;
+	background: #f0f0f0;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
+input[type=text]:disabled{
+	background: #CDCDCE;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
+input[type=password]{
+	border: #999999 solid 1px;
+	background: #f0f0f0;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	margin-bottom: 5px;
+	padding: 3px;
+}
+input[type=password]:hover{
+	border: #555555 solid 1px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
+input[type=password]:active{
+	border: #555555 solid 1px;
+	background: #f0f0f0;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
+input[type=password]:disabled{
+	background: #CDCDCE;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
+select{
+	margin-bottom: 5px;
+	border: #555555 solid 1px;
+	background: #f0f0f0;
+}
+input[type=submit]{
+	background: #f0f0f0;
+	border: #555555 solid 1px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
+input[type=submit]:hover{
+	background: #DDDDDD;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
+input[type=button]{
+	background: #f0f0f0;
+	border: #555555 solid 1px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
+input[type=button]:hover{
+	background: #DDDDDD;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
