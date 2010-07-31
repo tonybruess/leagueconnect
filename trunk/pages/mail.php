@@ -4,6 +4,10 @@ if(!hasPerm(2)){
 	require_once("include/footer.php");
 	die();
 }
+?>
+<h2>[<a href="?p=mail&op=compose">Compose</a>] - [<a href="?p=mail&op=new">Inbox</a>] - [<a href="?p=mail&op=sent">Outbox</a>]</h2>
+<script type="text/javascript" src="global/bbeditor/ed.js"></script>  
+<?php
 	$uid = CurrentPlayer::$ID;
     function read($message) {
         $sql = "UPDATE messages SET `read` = TRUE WHERE `id` = '$message' LIMIT 1";
@@ -29,10 +33,13 @@ if(!hasPerm(2)){
     
         
 	function sendmessage($to,$subject,$message) {
-	$ts = time();
-	$uid = CurrentPlayer::$ID;
-        $sql = "INSERT INTO messages SET `to` = '$to', `from` = '$uid', `subject` = '$subject', `message` = '$message', `created` = '$ts'";
-        return (@mysql_query($sql)) ? true:false;
+		$ts = time();
+		$uid = CurrentPlayer::$ID;
+		if($to == $uid)
+			return false;
+		else
+        	$sql = "INSERT INTO messages SET `to` = '$to', `from` = '$uid', `subject` = '$subject', `message` = '$message', `created` = '$ts'";
+        	return (@mysql_query($sql)) ? true:false;
     }
     
     function render($text) {
@@ -53,16 +60,16 @@ if(!hasPerm(2)){
         	if(sendmessage($toclean,$subclean,$mesclean)) {
             // Goood
             	echo "Message successfully sent to ".getPlayerName($_POST['to']);
-            	echo "<br><br>";
+            	echo "<br>";
         	} else {
             	// No Good
-            	echo "Error, couldn't send PM. Maybe wrong user.";
-            	echo "<br><br>";
+            	echo "Error, couldn't send PM";
+            	echo "<br>";
             	$fail = 1;
         	}
     	} else {
-    		echo "Missing Data";
-			echo "<br><br>";
+    		echo "Please fill out all fields";
+			echo "<br>";
 			$fail = 1;
 		}
     }
@@ -79,8 +86,6 @@ if(!hasPerm(2)){
     }
     
 ?>
-<h2>[<a href="?p=mail&op=compose">Compose</a>] - [<a href="?p=mail&op=new">Inbox</a>] - [<a href="?p=mail&op=sent">Outbox</a>]</h2>
-<script type="text/javascript" src="global/bbeditor/ed.js"></script>  
 <?php
 // If unspecified/recgonized page, show all messages
 if(!isset($_GET['op']) || $_GET['op'] == 'new') {
@@ -169,8 +174,8 @@ if(!isset($_GET['op']) || $_GET['op'] == 'new') {
 	<form name="new" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?p=mail&op=compose">
 		<br><strong>To:</strong>
 		<select name=to>
-		<option value="">Select a User</option><?php
-		$query = "SELECT * FROM players ORDER BY name asc"; 
+		<option value="" disabled>Select a User</option><?php
+		$query = "SELECT * FROM players WHERE `id` != '$uid' ORDER BY name asc"; 
 		$result = mysql_query($query) or die(mysql_error());
 		while($row = mysql_fetch_array($result)){
 			echo '<option value="'.$row['id'].'"';
