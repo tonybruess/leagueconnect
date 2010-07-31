@@ -93,5 +93,8 @@ require_once('./include/mysql.php');
 }
 
 // FIXME: Only run this when needed
-CurrentPlayer::UpdateInfo(@$_SESSION['player']);
+if(isset($_SESSION['player']))
+{
+    CurrentPlayer::UpdateInfo($_SESSION['player']);
+}
 ?>
