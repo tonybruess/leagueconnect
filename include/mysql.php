@@ -79,6 +79,7 @@ class MySQL
 
     private static /* array */ $PlayerInfoCache = array();
 
+    #region players table
     /* void */ public static function AddPlayer($name, $bzid)
     {
         self::CheckConnection();
@@ -172,6 +173,7 @@ class MySQL
 
         self::$PlayerInfoCache[$id] = $row;
     }
+    #endregion
 }
 
 // FIXME: Only call Connect when needed
