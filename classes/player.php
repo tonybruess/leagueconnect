@@ -50,6 +50,8 @@ class Player
         self::$NewNews = $row['newnews'];
         self::$PublicEmail = $row['pubemail'];
         self::$Team = (int)$row['team'];
+
+        return self;
     }
 
     /* array of strings */ public function ToSQLRow()
