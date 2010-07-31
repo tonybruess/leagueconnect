@@ -66,7 +66,7 @@ class MySQL
         }
         else
         {
-            $str = addslashes($str);
+            die('Please upgrade your version of PHP to atleast 4.3.0')
         }
         
         return $str;
