@@ -1,4 +1,5 @@
 
+use leagueconnect;
 create table groups (
     `id` INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT, -- Unique identifier for this group
     `name` VARCHAR(30), -- Name of the group
@@ -12,8 +13,8 @@ create table players (
     `bzid` INT UNSIGNED, -- BZFlag callsign unique identifier
     `team` INT UNSIGNED, -- ID of the team this player is a member of
     `comment` TEXT, -- Comment?
-    `firstlogin` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Time when the player first logged in
-    `lastlogin` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Time when the player last logged in
+    `firstlogin` TIMESTAMP, -- Time when the player first logged in
+    `lastlogin` TIMESTAMP,  -- Time when the player last logged in
     `country` VARCHAR(50), -- Country of residence
     `location` VARCHAR(100),   -- Location of residence
     `email` VARCHAR(320), -- Email address
@@ -29,8 +30,8 @@ create table players (
 
 create table roles (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, -- Unique identifier for this role
-    `name` TEXT, -- Name of the role
-    `permissions` VARCHAR(100) -- Permissions granted to this role
+    `name` VARCHAR(256), -- Name of the role
+    `permissions` INT(32) -- Permissions granted to this role
 );
 
 create table settings (
@@ -42,10 +43,10 @@ create table teams (
     `id` INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT, -- Unique identifier for this team
     `name` VARCHAR(128), -- Name of the team
     `created` TIMESTAMP, -- Date the team was created
-    `leader` UNSIGNED INT, -- Player ID of the leader of the team
+    `leader` INT UNSIGNED, -- Player ID of the leader of the team
     `coleaders` TEXT, -- List of player IDs for the co-leaders
     `activity` INT, -- Activity?
-    `rank` UNSIGNED INT, -- Rank of this team
+    `rank` INT UNSIGNED, -- Rank of this team
     `logo` VARCHAR(128), -- URL for the team's logo
     `description` TEXT, -- Description of the team
     `closed` BOOLEAN, -- TRUE if this is closed and no one may join, FALSE otherwise
