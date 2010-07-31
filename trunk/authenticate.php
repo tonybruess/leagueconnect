@@ -1,7 +1,7 @@
 <?php
 session_start();
 header("Cache-control: private");
-include ("include/mysql.php");
+include ("include/database");
 include ("include/current-user.php");
 function validate_token($token, $username, $groups = array(), $checkIP = true) {
     if (isset($token, $username) && strlen($token) > 0 && strlen($username) > 0) {
