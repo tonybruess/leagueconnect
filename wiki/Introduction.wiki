@@ -1,10 +1,41 @@
-#summary One-sentence summary of this page.
+=League Connect=
+----
+==Overview==
+----
+League Connect is a CMS that can be used for leagues on BZFlag
 
-= Introduction =
+It allows easy management of players, teams, bans, and more all tied into one powerful interface.
+----
+==Current Features==
+----
+League Connect is full of features. Some of them are still being planned out and new ones are thought of almost everyday. Here are some of the features. Some are planned, some are implemented, and others aren't going to happen. But just to give you an idea, heres a list.
 
-Coming Soon
+  * Users login with their BZBB passwords
+  * Permissions are assigned based on global groups
+  * New mail system with a bb editor
+  * Team page allows easy managment of teams
+  * News page is easily managed and can provide a quick way to make important annoncments
+  * Matches page lists all matches. You can see what server they happened on, where to find the replay server, and what recording to load to replay the match
+  * Players page lets you view other profiles and edit your own
+  * Help page provides an easy syntax for admins to write Q and A
+  * Contact page allows methods of contact with a form that can be emailed to admins
+  * Bans page easily lists all bans for current users and is easily editable
+  * Administration Interface which allows full control over the site
+  * BZID based user profiles which allows name changes without data loss
+  * Unique interface which is smooth and eye pleasing
 
+----
+==How Can I Help?==
+----
+You can start helping by submitting patches. Click the issues tab above to get started.
 
-= Details =
+To coordinate with the development team, join #bzextreme on irc.freenode.net. There you can meet us, see whats going on, and help more efficently.
 
-Coming Soon
+Eventually after we get used to you and see your a help to the project, you could possibly gain commit access. This does take a while but it allows easy changes to the source code with a single command.
+----
+==I have a version of Web League. Can I switch over to League Connect?==
+----
+Sure! Currently in development is the webleague-importer. It will eventually allow you to import a webleague database, converting all the data to League Connect.
+
+This is very convenient to existing leagues who would like to keep their data intact.
+----
