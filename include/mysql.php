@@ -86,7 +86,7 @@ class MySQL
         $name = self::Sanitize($name);
         $bzid = self::Sanitize($bzid);
 
-        mysql_query("INSERT INTO players (`name`, `bzid`) VALUES ('$name', '$bzid')");
+        mysql_query("INSERT INTO players (`name`, `bzid`, `firstlogin`, `lastlogin`) VALUES ('$name', '$bzid', NOW(), NOW())");
     }
 
     /* void */ public static function PlayerLogin($name, $bzid)
@@ -113,7 +113,8 @@ class MySQL
         }
         else
         {
-            return mysql_fetch_assoc($result)['id'];
+            $row = mysql_fetch_assoc($result);
+            return $row['id'];
         }
     }
 
