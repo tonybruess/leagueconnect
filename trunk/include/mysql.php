@@ -66,7 +66,7 @@ class MySQL
         }
         else
         {
-            die('Please upgrade your version of PHP to atleast 4.3.0')
+            die('Please upgrade your version of PHP to at least 4.3.0');
         }
         
         return $str;
