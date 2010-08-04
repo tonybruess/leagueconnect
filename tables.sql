@@ -1,5 +1,5 @@
-
 use leagueconnect;
+
 create table groups (
     `id` INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT, -- Unique identifier for this group
     `name` VARCHAR(30), -- Name of the group
@@ -65,6 +65,20 @@ create table messages (
     `to_deleted` BOOLEAN NOT NULL DEFAULT FALSE, -- TRUE if the player who received the message deleted it, FALSE otherwise
     `created` TIMESTAMP NOT NULL -- Time the message was created
  );
+
+create table pages (
+	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, -- Unique identifier for the page
+	`name` VARCHAR ( 255 ), -- Name of the page
+	`description` TEXT -- Short description
+);
+
+create table entrys (
+	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, -- Unique identifier for the entry
+	`author` VARCHAR ( 255 ), -- Name of the page
+	`message` TEXT, -- Message to be displayed
+	`created` TIMESTAMP NOT NULL, -- When the message was posted
+	`page` INT -- Which page to put the entry on
+);
 
 -- basic setup
 insert into roles (`name`,`permissions`) VALUES ('Site Admin','11111111111111111111111');
