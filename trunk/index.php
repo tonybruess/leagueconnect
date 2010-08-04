@@ -4,7 +4,7 @@ define ('CODE_VERSION', "0.01");
 
 require_once("include/session.php");
 require_once("include/common.php");
-require_once("include/database");
+require_once("include/database.php");
 require_once("include/header.php");
 
 $page = (isset($_GET['p']) ? $_GET['p'] : 'index');
