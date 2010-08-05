@@ -33,7 +33,10 @@ require_once('./include/database.php');
     private static $upToDate = false;
     private static $found = false;
 
-    
+    /* bool */ public static function HasPerm($perm)
+    {
+        return @$_SESSION['perm'][$perm];
+    }
 
     // Get data from MySQL database
     /* bool */ public static function UpdateInfo($userid = null)

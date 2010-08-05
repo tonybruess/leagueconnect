@@ -1,5 +1,5 @@
 <?php
-if(!hasPerm(9)){
+if(!CurrentPlayer::HasPerm(Permissions::ViewLogs)){
 	require_once("include/noperm.php");
 	require_once("include/footer.php");
 	die();

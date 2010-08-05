@@ -1,5 +1,5 @@
 <?php
-if(!hasPerm(5)){
+if(!CurrentPlayer::HasPerm(Permissions::ManageTeams)){
 	require_once("include/noperm.php");
 	require_once("include/footer.php");
 	die();

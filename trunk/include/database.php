@@ -353,7 +353,7 @@ class MySQL
  
  		$pageid = self::Sanitize($pageid);
  
-		$result = self::Query("SELECT * FROM entrys WHERE `page`='$pageid'");
+		$result = self::Query("SELECT * FROM entries WHERE `page`='$pageid'");
 
 		while($row = mysql_fetch_assoc($result))
 		{
@@ -374,23 +374,26 @@ class MySQL
 		self::CheckConnection();
  
  		$idea = self::Sanitize($idea);
- 		
- 		if($idea == 'News'){
- 			$result = mysql_fetch_assoc(mysql_query("SELECT name FROM pages WHERE id='1' LIMIT 1"));
- 			return $result['name'];
- 		} elseif ($idea == 'Help'){
-  			$result = mysql_fetch_assoc(mysql_query("SELECT name FROM pages WHERE id='2' LIMIT 1"));
- 			return $result['name'];
-		} elseif ($idea == 'Contact'){
- 			$result = mysql_fetch_assoc(mysql_query("SELECT name FROM pages WHERE id='3' LIMIT 1"));
- 			return $result['name'];
- 		} elseif ($idea == 'Bans'){
- 			$result = mysql_fetch_assoc(mysql_query("SELECT name FROM pages WHERE id='4' LIMIT 1"));
- 			return $result['name'];
- 		} else {
- 			return 'Unknown';
- 		}
- 
+        $id = -1;
+
+        $lookup = array(
+            'News' => 1,
+            'Help' => 2,
+            'Contact' => 3,
+            'Bans' => 4
+        );
+
+        $result = self::Query("SELECT name FROM pages WHERE id='{$lookup[$idea]}' LIMIT 1");
+
+        if(mysql_num_rows($result) == 0)
+        {
+            return 'Unknown';
+        }
+        else
+        {
+            $row = mysql_fetch_assoc($result);
+            return $row['name'];
+        }
 	} 
 }
 

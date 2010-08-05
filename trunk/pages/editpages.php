@@ -1,5 +1,5 @@
 <?php
-if(!hasPerm(7)){
+if(!CurrentPlayer::HasPerm(Permissions::EditPages)){
 	require_once("include/noperm.php");
 	require_once("include/footer.php");
 	die();
