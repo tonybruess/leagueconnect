@@ -5,7 +5,8 @@ if(!CurrentPlayer::HasPerm(Permissions::SendMail)){
 	die();
 }
 ?>
-<h2>[<a href="?p=mail&op=compose">Compose</a>] - [<a href="?p=mail&op=new">Inbox</a>] - [<a href="?p=mail&op=sent">Outbox</a>]</h2>
+<h2>Mail</h2>
+<p>[<a href="?p=mail&op=compose">Compose</a>] - [<a href="?p=mail&op=new">Inbox</a>] - [<a href="?p=mail&op=sent">Outbox</a>]</p>
 <script type="text/javascript" src="global/bbeditor/ed.js"></script>  
 <?php
 	$uid = CurrentPlayer::$ID;
