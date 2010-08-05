@@ -359,18 +359,19 @@ class MySQL
  
  		$pageid = self::Sanitize($pageid);
  
-		$result = self::Query("SELECT * FROM entries WHERE `page`='$pageid'");
+		$result = self::Query("SELECT * FROM entries WHERE `page`='$pageid' ORDER BY created DESC");
 
 		while($row = mysql_fetch_assoc($result))
 		{
 		?>
 		<div id="item">
 			<div id="header">
-				<div id="author">By: Author</div>
-				<div id="time">Time</div>
+				<div id="author">By: <?php echo $row['author'] ?></div>
+				<div id="time"><?php echo $row['created'] ?></div>
 			</div>
-			<div id="data">Body</div>
+			<div id="data"><?php echo $row['message'] ?></div>
 		</div>
+		<br><br>
 		<?php
 		}
   }
