@@ -73,7 +73,13 @@ class MySQL
         {
             // Log the error and return false
             $error = mysql_error() . '\n' . $sql . '\n' . '------' . '\n';
-            file_put_contents(Config::ErrorLogFile, FILE_APPEND);
+
+            if(!file_exists(Config::ErrorLogFile))
+            {
+                file_put_contents(Config::ErrorLogFile, '');
+            }
+
+            file_put_contents(Config::ErrorLogFile, $error, FILE_APPEND);
             
             return false;
         }
