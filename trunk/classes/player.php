@@ -29,27 +29,27 @@ class Player
 
     /* Player */ public function FromSQLRow($row)
     {
-        self::$AIM = $row['aim'];
-        self::$AltNicks = (strlen($row['altNicks']) == 0 ? array() : explode(',', $row['altNicks']));
-        self::$BZID = (int)$row['bzid'];
-        self::$Banned = ($row['banned'] != 0);
-        self::$Comment = $row['comment'];
-        self::$Country = $row['country'];
-        self::$Deleted = ($row['deleted'] != 0);
-        self::$Email = $row['email'];
-        self::$FirstLogin = strtotime($row['firstlogin']);
-        self::$ID = (int)$row['id'];
-        self::$IRCNick = $row['ircnick'];
-        self::$Jabber = $row['jabber'];
-        self::$LastLogin = strtotime($row['lastlogin']);
-        self::$Location = $row['location'];
-        self::$MSN = $row['msn'];
-        self::$Name = $row['name'];
-        self::$NewMail = $row['newmail'];
-        self::$NewMatch = $row['newmatch'];
-        self::$NewNews = $row['newnews'];
-        self::$PublicEmail = $row['pubemail'];
-        self::$Team = (int)$row['team'];
+        $this->AIM = $row['aim'];
+        $this->AltNicks = (strlen($row['altNicks']) == 0 ? array() : explode(',', $row['altNicks']));
+        $this->BZID = (int)$row['bzid'];
+        $this->Banned = ($row['banned'] != 0);
+        $this->Comment = $row['comment'];
+        $this->Country = $row['country'];
+        $this->Deleted = ($row['deleted'] != 0);
+        $this->Email = $row['email'];
+        $this->FirstLogin = strtotime($row['firstlogin']);
+        $this->ID = (int)$row['id'];
+        $this->IRCNick = $row['ircnick'];
+        $this->Jabber = $row['jabber'];
+        $this->LastLogin = strtotime($row['lastlogin']);
+        $this->Location = $row['location'];
+        $this->MSN = $row['msn'];
+        $this->Name = $row['name'];
+        $this->NewMail = $row['newmail'];
+        $this->NewMatch = $row['newmatch'];
+        $this->NewNews = $row['newnews'];
+        $this->PublicEmail = $row['pubemail'];
+        $this->Team = (int)$row['team'];
 
         return self;
     }
@@ -57,27 +57,27 @@ class Player
     /* array of strings */ public function ToSQLRow()
     {
         $row = array();
-        $row['aim'] = self::$AIM;
-        $row['altNicks'] = implode(',', self::$AltNicks);
-        $row['bzid'] = self::$BZID;
-        $row['banned'] = (self::$Banned ? 1 : 0);
-        $row['comment'] = self::$Comment;
-        $row['country'] = self::$Country;
-        $row['deleted'] = (self::$Deleted ? 1 : 0);
-        $row['email'] = self::$Email;
-        $row['firstlogin'] = self::$FirstLogin;
-        $row['id'] = self::$ID;
-        $row['ircnick'] = self::$IRCNick;
-        $row['jabber'] = self::$Jabber;
-        $row['lastlogin'] = self::$LastLogin;
-        $row['location'] = self::$Location;
-        $row['msn'] = self::$MSN;
-        $row['name'] = self::$Name;
-        $row['newmail'] = (self::$NewMail ? 1 : 0);
-        $row['newnews'] = (self::$NewNews ? 1 : 0);
-        $row['newmatch'] = (self::$NewMatch ? 1 : 0);
-        $row['pubemail'] = self::$PublicEmail;
-        $row['team'] = self::$Team;
+        $row['aim'] = $this->AIM;
+        $row['altNicks'] = implode(',', $this->AltNicks);
+        $row['bzid'] = $this->BZID;
+        $row['banned'] = ($this->Banned ? 1 : 0);
+        $row['comment'] = $this->Comment;
+        $row['country'] = $this->Country;
+        $row['deleted'] = ($this->Deleted ? 1 : 0);
+        $row['email'] = $this->Email;
+        $row['firstlogin'] = $this->FirstLogin;
+        $row['id'] = $this->ID;
+        $row['ircnick'] = $this->IRCNick;
+        $row['jabber'] = $this->Jabber;
+        $row['lastlogin'] = $this->LastLogin;
+        $row['location'] = $this->Location;
+        $row['msn'] = $this->MSN;
+        $row['name'] = $this->Name;
+        $row['newmail'] = ($this->NewMail ? 1 : 0);
+        $row['newnews'] = ($this->NewNews ? 1 : 0);
+        $row['newmatch'] = ($this->NewMatch ? 1 : 0);
+        $row['pubemail'] = $this->PublicEmail;
+        $row['team'] = $this->Team;
 
         return $row;
     }

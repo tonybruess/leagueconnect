@@ -153,7 +153,7 @@ class MySQL
 
         $bzid = self::Sanitize($bzid);
 
-        return mysql_num_rows(self::Query("SELECT id FROM players WHERE `bzid`='$bzid'")) != 0;
+        return mysql_num_rows(self::Query("SELECT id FROM players WHERE `bzid`='$bzid' LIMIT 1")) != 0;
     }
 
     /* Player */ public static function GetPlayerInfo($id)
@@ -162,7 +162,7 @@ class MySQL
 
         $id = self::Sanitize($id);
 
-        $result = self::Query("SELECT * FROM `players` WHERE `id` = '$id' LIMIT 1");
+        $result = self::Query("SELECT * FROM players WHERE `id` = '$id' LIMIT 1");
 
         if(mysql_num_rows($result) == 0)
         {
