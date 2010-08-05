@@ -1,5 +1,5 @@
 <?php
-if(!hasPerm(2)){
+if(!CurrentPlayer::HasPerm(Permissions::SendMail)){
 	require_once("include/noperm.php");
 	require_once("include/footer.php");
 	die();
