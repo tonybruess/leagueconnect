@@ -83,3 +83,7 @@ create table entrys (
 -- basic setup
 insert into roles (`name`,`permissions`) VALUES ('Site Admin','11111111111111111111111');
 insert into groups (`name`,`role`,`enabled`) VALUES ('GU.LEAGUE', '1', TRUE);
+insert into pages (`name`,`description`) VALUES ('News','News Page');
+insert into pages (`name`,`description`) VALUES ('Help','Help Page');
+insert into pages (`name`,`description`) VALUES ('Contact','Contact Page');
+insert into pages (`name`,`description`) VALUES ('Bans','Bans Page');
