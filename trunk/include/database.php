@@ -6,6 +6,7 @@
 
 require_once('./config.php');
 require_once('./classes/player.php');
+require_once('./classes/team.php');
 
 class MySQL
 {
