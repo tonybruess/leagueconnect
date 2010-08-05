@@ -20,18 +20,18 @@ class Team
 
     /* Team */ public function FromSQLRow($row)
     {
-        self::$ID = $row['id'];
-        self::$Name = $row['name'];
-        self::$Created = strtotime($row['created']);
-        self::$Leader = $row['leader'];
-        self::$CoLeaders = explode(',', $row['coleaders']);
-        self::$Activity = (int)$row['activity'];
-        self::$Rank = (int)$row['rank'];
-        self::$Logo = $row['logo'];
-        self::$Description = $row['description'];
-        self::$Closed = ($row['closed'] != 0);
-        self::$Inactive = ($row['inactive'] != 0);
-        self::$Deleted = ($row['deleted'] != 0);
+        $this->ID = $row['id'];
+        $this->Name = $row['name'];
+        $this->Created = strtotime($row['created']);
+        $this->Leader = $row['leader'];
+        $this->CoLeaders = explode(',', $row['coleaders']);
+        $this->Activity = (int)$row['activity'];
+        $this->Rank = (int)$row['rank'];
+        $this->Logo = $row['logo'];
+        $this->Description = $row['description'];
+        $this->Closed = ($row['closed'] != 0);
+        $this->Inactive = ($row['inactive'] != 0);
+        $this->Deleted = ($row['deleted'] != 0);
 
         return self;
     }
@@ -40,18 +40,18 @@ class Team
     {
         $row = array();
 
-        $row['id'] = self::$ID;
-        $row['name'] = self::$Name;
-        $row['created'] = self::$Created;
-        $row['leader'] = self::$Leader;
-        $row['coleaders'] = implode(',', self::$CoLeaders);
-        $row['activity'] = self::$Activity;
-        $row['rank'] = self::$Rank;
-        $row['logo'] = self::$Logo;
-        $row['description'] = self::$Description;
-        $row['closed'] = (self::$Closed ? 1 : 0);
-        $row['inactive'] = (self::$Inactive ? 1 : 0);
-        $row['deleted'] = (self::$Deleted ? 1 : 0);
+        $row['id'] = $this->ID;
+        $row['name'] = $this->Name;
+        $row['created'] = $this->Created;
+        $row['leader'] = $this->Leader;
+        $row['coleaders'] = implode(',', $this->CoLeaders);
+        $row['activity'] = $this->Activity;
+        $row['rank'] = $this->Rank;
+        $row['logo'] = $this->Logo;
+        $row['description'] = $this->Description;
+        $row['closed'] = ($this->Closed ? 1 : 0);
+        $row['inactive'] = ($this->Inactive ? 1 : 0);
+        $row['deleted'] = ($this->Deleted ? 1 : 0);
 
         return $row;
     }
