@@ -345,6 +345,53 @@ class MySQL
     }
 
    #endregion
+   
+   #region pages
+  /* list of items */ public static function GetItems($pageid)
+  {
+		self::CheckConnection();
+ 
+ 		$pageid = self::Sanitize($pageid);
+ 
+		$result = self::Query("SELECT * FROM entrys WHERE `page`='$pageid'");
+
+		while($row = mysql_fetch_assoc($result))
+		{
+		?>
+		<div id="item">
+			<div id="header">
+				<div id="author">By: Author</div>
+				<div id="time">Time</div>
+			</div>
+			<div id="data">Body</div>
+		</div>
+		<?php
+		}
+  }
+
+  /* list of items */ public static function getPageName($idea)
+  {
+		self::CheckConnection();
+ 
+ 		$idea = self::Sanitize($idea);
+ 		
+ 		if($idea == 'News'){
+ 			$result = mysql_fetch_assoc(mysql_query("SELECT name FROM pages WHERE id='1' LIMIT 1"));
+ 			return $result['name'];
+ 		} elseif ($idea == 'Help'){
+  			$result = mysql_fetch_assoc(mysql_query("SELECT name FROM pages WHERE id='2' LIMIT 1"));
+ 			return $result['name'];
+		} elseif ($idea == 'Contact'){
+ 			$result = mysql_fetch_assoc(mysql_query("SELECT name FROM pages WHERE id='3' LIMIT 1"));
+ 			return $result['name'];
+ 		} elseif ($idea == 'Bans'){
+ 			$result = mysql_fetch_assoc(mysql_query("SELECT name FROM pages WHERE id='4' LIMIT 1"));
+ 			return $result['name'];
+ 		} else {
+ 			return 'Unknown';
+ 		}
+ 
+	} 
 }
 
 // FIXME: Only call Connect when needed

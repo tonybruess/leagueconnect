@@ -4,13 +4,13 @@
 <?php if(hasPerm(2)){ ?>			<li><a href="?p=mail"<?php if($page == 'mail'){ echo ' class="active"'; } elseif (hasMail()) { echo ' class="new"'; }?>>Mail</a></li><?php } ?>
 <?php if(!isset($_SESSION['callsign'])){ ?>			<li><a href="http://my.bzflag.org/weblogin.php?url=<?php echo urlencode(Config::AuthenticatePath);?>%3Ftoken%3D%25TOKEN%25%26username%3D%25USERNAME%25">Login</a></li><?php } ?>
 
-			<li><a href="?p=news"<?php if($page == 'news') echo ' class="active"';?>>News</a></li>
+			<li><a href="?p=news"<?php if($page == 'news') echo ' class="active"';?>><?php echo MySQL::getPageName("News");?></a></li>
 			<li><a href="?p=matches"<?php if($page == 'matches') echo ' class="active"';?>>Matches</a></li>
 			<li><a href="?p=teams"<?php if($page == 'teams') echo ' class="active"';?>>Teams</a></li>
 			<li><a href="?p=players"<?php if($page == 'players') echo ' class="active"';?>>Players</a></li>
-			<li><a href="?p=help"<?php if($page == 'help') echo ' class="active"';?>>Help</a></li>
-			<li><a href="?p=contact"<?php if($page == 'contact') echo ' class="active"';?>>Contact</a></li>
-			<li><a href="?p=bans"<?php if($page == 'bans') echo ' class="active"';?>>Bans</a></li>
+			<li><a href="?p=help"<?php if($page == 'help') echo ' class="active"';?>><?php echo MySQL::getPageName("Help");?></a></li>
+			<li><a href="?p=contact"<?php if($page == 'contact') echo ' class="active"';?>><?php echo MySQL::getPageName("Contact");?></a></li>
+			<li><a href="?p=bans"<?php if($page == 'bans') echo ' class="active"';?>><?php echo MySQL::getPageName("Bans");?></a></li>
 			<?php if(isset($_SESSION['callsign'])){ ?><li><a href="?p=logout">Logout</a></li><?php } ?>	
 		</ul>
 	</div>
