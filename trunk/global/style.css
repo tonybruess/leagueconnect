@@ -132,11 +132,46 @@ h2 {
 }
 
 table tr.rowEven {
- background-color: #E0E0E0;
+	background-color: #E0E0E0;
 }
+
 table tr.rowOdd {
- background-color: #D1D1D1; 
+	background-color: #D1D1D1; 
 }
+
+#item {
+	border: 0.2em solid black;
+	-webkit-border-radius: 1em;
+	-moz-border-radius: 1em;
+	border-radius: 1em;
+}
+
+#item #header {
+	background: silver;
+	-webkit-border-radius: 1em 1em 0em 0em;
+	-moz-border-radius: 1em 1em 0em 0em;
+	border-radius: 1em 1em 0em 0em;
+	overflow: auto;
+	padding-top: .1em;
+	padding-bottom: 0.2em;
+	padding-right: 1em;
+}
+
+#item #time {
+	text-align: right;
+	float: right;
+}
+
+#item #author {
+	text-align: left;
+	float: left;
+	margin-left: 1em;
+}
+
+#item #data {
+	margin: 1em;
+}
+
 fieldset{
 	border: #999999 solid 1px;
 	-moz-border-radius: 3px;
