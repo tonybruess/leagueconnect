@@ -4,6 +4,7 @@ define('CODE_VERSION', "0.01");
 
 require_once("include/session.php");
 require_once("include/common.php");
+require_once('include/current-player.php');
 require_once("include/database.php");
 require_once("include/header.php");
 require_once('classes/permissions.php');
