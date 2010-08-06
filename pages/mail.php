@@ -209,7 +209,7 @@ if(!isset($_GET['op']) || $_GET['op'] == 'new') {
                 <tr>
                     <td><?php echo getPlayerName($message['to']); ?></td>
                     <td><a href='?p=mail&op=view&mid=<?php echo $message['id']; ?>'<?php if($unread) echo 'style="color: red;"'; ?>><?php echo $message['subject'] ?></a></td>
-                    <td><?php echo date("m-d-Y",$message['ts']); ?></td>
+                    <td><?php echo strftime("%B %e, %G at %I:%M %p", strtotime($message['created'])); ?></td>
                 </tr>
                 <?php
             }
