@@ -1,7 +1,7 @@
         <h2>Bans</h2>
-        <p>[<a href="?p=bans">View Entries</a>] - [<a href="?p=bans&op=new">New Entry</a>]</p>
+        <p>[<a href="?p=bans">View Entries</a>]<?php if(CurrentPlayer::HasPerm(Permissions::AddPages)){?> - [<a href="?p=bans&op=new">New Entry</a>]<?php } ?></p>
         <?php
-        if($_GET['op'] == 'new')
+        if($_GET['op'] == 'new' && CurrentPlayer::HasPerm(Permissions::AddPages))
         {
             if($_POST)
             {
@@ -33,7 +33,7 @@
 
             <?php
         }
-        elseif($_GET['op'] == 'edit' && $_GET['i'])
+        elseif($_GET['op'] == 'edit' && $_GET['i'] && CurrentPlayer::HasPerm(Permissions::EditPages))
         {
             $id = MySQL::Sanitize($_GET['i']);
             if($_POST)

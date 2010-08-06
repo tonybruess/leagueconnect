@@ -16,7 +16,7 @@ if(!$_GET['i']){
             echo '<tr>';
             echo '<td>'.$row['name'].'</td>';
             echo '<td>'.$row['bzid'].'</td>';
-            echo '<td>'.date("m-d-Y g:i:s",$row['lastlogin']).'</td>';
+            echo '<td>'.strftime("%B %e, %G at %I:%M %p", strtotime($row['lastlogin'])).'</td>';
             echo '<td><a href="?p=usermanager&i='.$row['id'].'">Manage</a></td>';
             echo '</tr>';
             echo "\n";
