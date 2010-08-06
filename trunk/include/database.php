@@ -388,7 +388,7 @@ class MySQL
                 <div id="author">By: <?php echo $row['author'] ?></div>
                 <div id="time"><?php echo $row['created'] ?></div>
             </div>
-            <div id="data"><?php echo FormatToBBCode($row['message']) ?></div>
+            <div id="data"><?php echo FormatToBBCode($row['message']); if(CurrentPlayer::HasPerm(Permissions::EditPages)){ ?><br><br>[<a href="?p=news&op=edit&i=<?php echo $row['id'] ?>">Edit</a>]<?php } ?></div>
         </div>
         <br><br>
             <?php
@@ -435,10 +435,6 @@ class MySQL
         $lookup = array(
             // news
             "INSERT INTO news SET `author`='$author', `message`='$message', `created`='$date'" => 1,
-            // help
-            "DO 0" => 2,
-            // contact
-            "DO 0" => 3,
             // bans
             "INSERT INTO bans SET `author`='$author', `message`='$message', `created`='$date'" => 4,
         );
@@ -456,6 +452,34 @@ class MySQL
         }
     }
     
+    /* bool */ public static function UpdateEntry($author, $message, $date, $page, $messageid)
+    {
+        self::CheckConnection();
+        
+        $author = self::Sanitize($author);
+        $message = self::Sanitize($message);
+        $date = self::Sanitize($date);
+        $messageid = self::Sanitize($messageid);
+        $id = -1;
+
+        $lookup = array(
+            // news
+            "UPDATE news SET `author`='$author', `message`='$message', `created`='$date'" => 1,
+            // bans
+            "UPDATE bans SET `author`='$author', `message`='$message', `created`='$date'" => 4,
+        );
+        
+        $query = array_keys($lookup, $page);
+        
+        if(self::Query($query[0] . " WHERE `id` ='$messageid'"))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
     #endregion 
 }
 
