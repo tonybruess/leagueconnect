@@ -10,6 +10,6 @@ require_once('./config.php');
 </head>
 <body>
 <div id="main">
-	<div id="head">
-		<h1><?php echo Config::LeagueName ?></h1>
-	</div>
+    <div id="head">
+        <h1><?php echo Config::LeagueName ?></h1>
+    </div>
