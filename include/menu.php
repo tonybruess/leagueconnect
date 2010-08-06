@@ -22,7 +22,7 @@
 
 <?php if(CurrentPlayer::HasPerm(8)){ ?>            <li><a href="?p=usermanager"<?php if($page == 'usermanager') echo ' class="active"';?>>User Manager</a></li><?php } ?>
 
-<?php if(CurrentPlayer::HasPerm(Permissions::ManageTeams)){ ?>            <li><a href="?p=teammanager"<?php if($page == 'teammanager') echo ' class="active"';?>>Team Manager</a></li><?php } ?>
+<?php if(CurrentPlayer::HasPerm(Permissions::EditTeams)){ ?>            <li><a href="?p=teammanager"<?php if($page == 'teammanager') echo ' class="active"';?>>Team Manager</a></li><?php } ?>
 
 <?php if(CurrentPlayer::HasPerm(Permissions::ViewLogs)){ ?>            <li><a href="?p=logs"<?php if($page == 'logs') echo ' class="active"';?>>Logs</a></li><?php } ?>
         </ul>
