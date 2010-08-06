@@ -388,7 +388,7 @@ class MySQL
                 <div id="author">By: <?php echo $row['author'] ?></div>
                 <div id="time"><?php echo $row['created'] ?></div>
             </div>
-            <div id="data"><?php echo bbcode($row['message']) ?></div>
+            <div id="data"><?php echo FormatToBBCode($row['message']) ?></div>
         </div>
         <br><br>
             <?php

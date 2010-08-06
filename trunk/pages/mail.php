@@ -143,7 +143,7 @@ if(!isset($_GET['op']) || $_GET['op'] == 'new') {
         </tr>
         <tr>
         <td>Message:</td>
-        <td><?php echo bbcode($message['message']); ?></td>
+        <td><?php echo FormatToBBCode($message['message']); ?></td>
         </tr>
     </table>
     <br>
@@ -181,7 +181,7 @@ if(!isset($_GET['op']) || $_GET['op'] == 'new') {
         <strong>Subject:</strong>
         <input type='text' name='subject' value='<?php if($fail || $reply) echo $_POST['subject'];?>'><br><br>
         <strong>Message:</strong><br>
-        <script>edToolbar('message'); </script>
+        <script>AddBBCodeToolbar('message'); </script>
         <textarea cols="60" rows="20" name='message' id='message'><?php if($fail || $reply) echo $_POST['message']; ?></textarea><br><br>
         <input type='submit' name='newmessage' value='Send'>
     </form>

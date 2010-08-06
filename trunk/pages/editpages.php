@@ -27,7 +27,7 @@ if($_GET['i']){
         Text:
         <br>
         <script type="text/javascript" src="global/bbeditor/ed.js"></script>
-        <script>edToolbar('text'); </script>
+        <script>AddBBCodeToolbar('text'); </script>
         <textarea name="text" cols=50 rows=10 id="text"><?php echo $page['text']; ?></textarea>
         <br><br>
         <?php } ?>

@@ -86,7 +86,6 @@ if(MySQL::IsTeamMember(CurrentPlayer::$ID))
 }
 else
 {
-
 ?>
 
     <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
@@ -96,7 +95,6 @@ else
     </form>
 
 <?php
-
 }
 
 ?>
