@@ -377,7 +377,7 @@ class MySQL
 		}
   }
 
-  /* list of items */ public static function getPageName($idea)
+  /* list of items */ public static function GetPageName($idea)
   {
 		self::CheckConnection();
  
@@ -405,9 +405,9 @@ class MySQL
 	}
 	#endregion
 	
-	#region cms
+	#region news
 	
-	/* */ public static function addItem($author,$message,$date,$page)
+	/* bool */ public static function AddItem($author, $message, $date, $page)
 	{
 		self::CheckConnection();
 		
@@ -415,35 +415,14 @@ class MySQL
 		$message = self::Sanitize($message);
 		$date = self::Sanitize($date);
 		
-		if(mysql_query("INSERT INTO entries SET `author`='$author', `message`='$message', `created`='$date', `page`='$page'"))
+		if(self::Query("INSERT INTO entries SET `author`='$author', `message`='$message', `created`='$date', `page`='$page'"))
+        {
 			return true;
+        }
 		else
+        {
 			return false;
-	}
-		
-		
-	/* */ public static function newItemForm()
-	{
-	?>
-		<form method="POST">
-		Author:
-		<input type="text" name="author" value="<?php echo CurrentPlayer::$Name ?>">
-		<br><br>
-		Message:
-		<br>
-		<script type="text/javascript" src="global/bbeditor/ed.js"></script>
-		<script>edToolbar('message'); </script>
-		<textarea cols=50 rows=10 name="message" id="message"></textarea>
-		<br><br>
-		Date: <input type="text" name="date" value="<?php echo date("Y-m-d") ?>" maxlength="10" style="width: 70px;">
-		<br><br>
-		Time: <input type="text" name="time" value="<?php echo date("H:i:s") ?>" maxlength="8" style="width: 50px;">
-		<br><br>
-		Page: <?php echo MySQL::getPageName("News"); ?>
-		<br><br>
-		<input type="submit" value="Save">
-		</form>
-	<?php
+        }
 	}
 	
 	#endregion 
