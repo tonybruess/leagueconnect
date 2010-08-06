@@ -72,7 +72,7 @@ class MySQL
         else
         {
             // Log the error and return false
-            $error = mysql_error() . '\n' . $sql . '\n' . '------' . '\n';
+            $error = mysql_error() . "\n" . $sql . "\n" . '------' . "\n";
 
             if(!file_exists(Config::ErrorLogFile))
             {
