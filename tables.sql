@@ -82,23 +82,31 @@ DROP TABLE IF EXISTS pages;
 CREATE TABLE pages (
 	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, -- Unique identifier for the page
 	`name` VARCHAR ( 255 ), -- Name of the page
-	`description` TEXT -- Short description
+	`text` TEXT, -- Page text. Not necessary
+	`type` INT -- Type of page. 1 = post based, 2 = text based
 );
 
 
-DROP TABLE IF EXISTS entries;
-CREATE TABLE entries (
+DROP TABLE IF EXISTS news;
+CREATE TABLE news (
 	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, -- Unique identifier for the entry
 	`author` VARCHAR ( 255 ), -- Name of the page
 	`message` TEXT, -- Message to be displayed
-	`created` TIMESTAMP NOT NULL, -- When the message was posted
-	`page` INT -- Which page to put the entry on
+	`created` TIMESTAMP NOT NULL -- When the message was posted
+);
+
+DROP TABLE IF EXISTS bans;
+CREATE TABLE bans (
+	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, -- Unique identifier for the entry
+	`author` VARCHAR ( 255 ), -- Name of the page
+	`message` TEXT, -- Message to be displayed
+	`created` TIMESTAMP NOT NULL -- When the message was posted
 );
 
 -- basic setup
 insert into roles (`name`,`permissions`) VALUES ('Site Admin','11111111111111111111111');
 insert into groups (`name`,`role`,`enabled`) VALUES ('GU.LEAGUE', '1', TRUE);
-insert into pages (`name`,`description`) VALUES ('News','News Page');
-insert into pages (`name`,`description`) VALUES ('Help','Help Page');
-insert into pages (`name`,`description`) VALUES ('Contact','Contact Page');
-insert into pages (`name`,`description`) VALUES ('Bans','Bans Page');
+insert into pages (`name`,`text`,`type`) VALUES ('News','News Page','1');
+insert into pages (`name`,`text`,`type`) VALUES ('Help','Help Page','2');
+insert into pages (`name`,`text`,`type`) VALUES ('Contact','Contact Page','2');
+insert into pages (`name`,`text`,`type`) VALUES ('Bans','Bans Page','1');

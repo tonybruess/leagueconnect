@@ -1,7 +1,7 @@
 <?php
 
 require_once('./include/current-player.php');
-$result = MySQL::Query("SELECT id FROM messages WHERE `read`=FALSE AND `to`='".CurrentPlayer::$ID."'");
+$result = MySQL::Query("SELECT id FROM messages WHERE `read`='0' AND `to`='".CurrentPlayer::$ID."' AND `to_deleted`='0'");
 $messages = mysql_num_rows($result);
 ?>
 

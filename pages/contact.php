@@ -1,2 +1,2 @@
 		<h2>Contact</h2>
-		<p>Under Development</p>
+		<?php echo bbcode(MySQL::GetPage(3)); ?>

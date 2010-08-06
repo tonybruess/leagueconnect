@@ -9,9 +9,9 @@ if(!CurrentPlayer::HasPerm(Permissions::EditPages)){
 if($_GET['i']){
 	if($_POST){
 		$name = MySQL::Sanitize($_POST['name']);
-		$description = MySQL::Sanitize($_POST['description']);
+		$text = MySQL::Sanitize($_POST['text']);
 		$id = MySQL::Sanitize($_POST['id']);
-		if(mysql_query("UPDATE pages SET `name`='$name', `description`='$description' WHERE `id`='$id'"))
+		if(mysql_query("UPDATE pages SET `name`='$name', `text`='$text' WHERE `id`='$id'"))
 			echo "Updated Successfully";
 		echo mysql_error();
 	}
@@ -23,10 +23,14 @@ if($_GET['i']){
 		<form method="POST">
 		Name: <input type="text" name="name" value="<?php echo $page['name'] ?>">
 		<br><br>
-		Description:
+		<?php if($page['type'] == '2'){ ?>
+		Text:
 		<br>
-		<textarea name="description" cols=50 rows=10><?php echo $page['description']; ?></textarea>
+        <script type="text/javascript" src="global/bbeditor/ed.js"></script>
+        <script>edToolbar('text'); </script>
+		<textarea name="text" cols=50 rows=10 id="text"><?php echo $page['text']; ?></textarea>
 		<br><br>
+		<?php } ?>
 		<input type="hidden" name="id" value="<?php echo $page['id']; ?>">
 		<input type="submit" value="Save">
 		</form>
