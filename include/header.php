@@ -1,11 +1,10 @@
 <?php
 require_once('./config.php');
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
-<title>Web League</title>
+<title><?php echo Config::LeagueName ?></title>
 <link rel="stylesheet" type="text/css" href="global/style.css">
 <script type="text/JavaScript" src="global/curvycorners.js"></script>
 </head>
