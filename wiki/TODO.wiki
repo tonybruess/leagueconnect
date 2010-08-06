@@ -2,15 +2,15 @@ Overall:
   Make a more descriptive dashboard so to say.
   User Permissions:
   User permissions should be setup as follows. Each number should be setup in ./classes/permissions.php
-* 1: Login
-* 2: Read/Send Mail
-* 3: Administer News
-* 4: Administer Matches
-* 5: Administer Teams
-* 6: Administer Bans
-* 7: Administer Pages
-* 8: Administer Users
-* 9: Administer Logs
+  * 1: Login
+  * 2: Read/Send Mail
+  * 3: Administer News
+  * 4: Administer Matches
+  * 5: Administer Teams
+  * 6: Administer Bans
+  * 7: Administer Pages
+  * 8: Administer Users
+  * 9: Administer Logs
   These permissions need to be redone
 Mail:
   Make a universal timestamp
