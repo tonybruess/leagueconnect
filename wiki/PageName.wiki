@@ -1,0 +1,57 @@
+#summary Permissions and how they work
+
+= Introduction =
+
+This page will go over the basics of permissions and how they work
+
+= Permissions =
+
+Each permission has a corresponding number and name that are used to apply permissions to a user and for checking for permissions. Below is a list of permissions and corresponding numbers
+
+Login = 1
+ViewMail = 2
+SendMail = 3
+EditMail = 4
+ViewPages = 5
+AddPages = 6
+EditPages = 7
+ViewMatches = 8
+AddMatches = 9
+EditMatches = 10
+ViewTeams = 11
+AddTems = 12
+JoinTeams = 13
+EditTeams = 14
+ReviveTeams = 15
+ViewPlayers = 16
+EditPlayers = 17
+DeletePlayers = 18
+EnterMatch = 19
+ViewLogs = 20
+
+= Checking =
+
+To check if a user has permission, simply use the the following syntax.
+
+if(CurrentPlayer::HasPerm(Permissions::AddMatches))
+    echo 'This player can Add Matches!';
+
+= Assigning Permissions =
+
+Permissions are assigned every time a user logs in. It does so by grabbing permissions from MySQL.
+
+For every group that a user is in that MySQL has as an approved group, permissions escalate and add up.
+
+For example:
+
+If a user is in COMPANY.ADMIN and they recieve ViewLogs, EnterMatch, and DeletePlayers from that group and they're also in COMPANY.COP which gives them ViewPlayers and EditPlayers, they now have 5 permissions. Not 2, not 3, they added together.
+
+This makes it easy for league owners to create several groups in which they can place users to gradually gain permissions.
+
+= Login Permission =
+
+This permission is unique because it can deny or allow access no matter what permissions the user has.
+
+If checked, the user is not granted login permission. This permission, however, does not take away login permissions from other groups. For example:
+
+If an admin takes away login permissions from COMPANY.LEAGUE but COMPANY.OWNER still has login permissions, anyone in COMPANY.OWNER can still login, but if a user is not in COMPANY.OWNER and just COMPANY.LEAGUE, they will not be able to login.
