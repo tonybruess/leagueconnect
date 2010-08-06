@@ -1,46 +1,46 @@
 Overall:
-  Make a more descriptive dashboard so to say.
-  User Permissions:
-  User permissions should be setup as follows. Each number should be setup in ./classes/permissions.php
-  * 1: Login
-  * 2: Read/Send Mail
-  * 3: Administer News
-  * 4: Administer Matches
-  * 5: Administer Teams
-  * 6: Administer Bans
-  * 7: Administer Pages
-  * 8: Administer Users
-  * 9: Administer Logs
-  These permissions need to be redone
+   Make a more descriptive dashboard so to say.
+   User Permissions:
+   User permissions should be setup as follows. Each number should be setup in ./classes/permissions.php
+   * 1: Login
+   * 2: Read/Send Mail
+   * 3: Administer News
+   * 4: Administer Matches
+   * 5: Administer Teams
+   * 6: Administer Bans
+   * 7: Administer Pages
+   * 8: Administer Users
+   * 9: Administer Logs
+   These permissions need to be redone
 Mail:
-  Make a universal timestamp
-  Send to more then one person
-  Send to an entire team
-  Edit CSS to better display all of the messages and such
-  Back and forth button to read through messages
+   Make a universal timestamp
+   Send to more then one person
+   Send to an entire team
+   Edit CSS to better display all of the messages and such
+   Back and forth button to read through messages
 News:
-  Allow editing of news articles
-  Modulize the entire edit/new form for easy use
-  Matches:
-  Create Match SQL Table
-  Add formula for calculating match +/- points
-  Calculate activity each time a match is played
+   Allow editing of news articles
+   Modulize the entire edit/new form for easy use
+   Matches:
+   Create Match SQL Table
+   Add formula for calculating match +/- points
+   Calculate activity each time a match is played
 Teams:
-  Add detail page for teams
-  Add edit page for teams
-  Look into error messages better so we can tell the user exactly what they did wrong
+   Add detail page for teams
+   Add edit page for teams
+   Look into error messages better so we can tell the user exactly what they did wrong
 Players:
-  List all players here
-  Allow players to edit their profile from this page and home page
-  Allow viewing of other profiles and editing through user manager
+   List all players here
+   Allow players to edit their profile from this page and home page
+   Allow viewing of other profiles and editing through user manager
 Pages:
-  Allow better functionality for adding/deleteing/renaming pages (right now theres four static pages)
+   Allow better functionality for adding/deleteing/renaming pages (right now theres four static pages)
 User Manager:
-  Show all users, last login, 
+   Show all users, last login, 
 Team Manager:
-  View all teams
-  Revive a team
-  Edit team information
+   View all teams
+   Revive a team
+   Edit team information
 Logs:
-  Eventually hope to have an LogEvent function which logs all user actions
-  LogEvent would make it simple and would be a log of the userid, page, time, and a short description of the action
+   Eventually hope to have an LogEvent function which logs all user actions
+   LogEvent would make it simple and would be a log of the userid, page, time, and a short description of the action
