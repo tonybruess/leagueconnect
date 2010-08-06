@@ -7,6 +7,7 @@
 require_once('./config.php');
 require_once('./classes/player.php');
 require_once('./classes/team.php');
+require_once('./include/bbcode.php');
 
 class MySQL
 {
@@ -369,7 +370,7 @@ class MySQL
 				<div id="author">By: <?php echo $row['author'] ?></div>
 				<div id="time"><?php echo $row['created'] ?></div>
 			</div>
-			<div id="data"><?php echo $row['message'] ?></div>
+			<div id="data"><?php echo bbcode($row['message']) ?></div>
 		</div>
 		<br><br>
 		<?php
@@ -401,7 +402,51 @@ class MySQL
             $row = mysql_fetch_assoc($result);
             return $row['name'];
         }
-	} 
+	}
+	#endregion
+	
+	#region cms
+	
+	/* */ public static function addItem($author,$message,$date,$page)
+	{
+		self::CheckConnection();
+		
+		$author = self::Sanitize($author);
+		$message = self::Sanitize($message);
+		$date = self::Sanitize($date);
+		
+		if(mysql_query("INSERT INTO entries SET `author`='$author', `message`='$message', `created`='$date', `page`='$page'"))
+			return true;
+		else
+			return false;
+	}
+		
+		
+	/* */ public static function newItemForm()
+	{
+	?>
+		<form method="POST">
+		Author:
+		<input type="text" name="author" value="<?php echo CurrentPlayer::$Name ?>">
+		<br><br>
+		Message:
+		<br>
+		<script type="text/javascript" src="global/bbeditor/ed.js"></script>
+		<script>edToolbar('message'); </script>
+		<textarea cols=50 rows=10 name="message" id="message"></textarea>
+		<br><br>
+		Date: <input type="text" name="date" value="<?php echo date("Y-m-d") ?>" maxlength="10" style="width: 70px;">
+		<br><br>
+		Time: <input type="text" name="time" value="<?php echo date("H:i:s") ?>" maxlength="8" style="width: 50px;">
+		<br><br>
+		Page: <?php echo MySQL::getPageName("News"); ?>
+		<br><br>
+		<input type="submit" value="Save">
+		</form>
+	<?php
+	}
+	
+	#endregion 
 }
 
 // FIXME: Only call Connect when needed
