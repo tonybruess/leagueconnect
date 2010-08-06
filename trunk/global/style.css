@@ -62,53 +62,38 @@ th {
     -moz-border-radius: 16px;
     border-radius: 16px;
 }
-#menu, #admin {
+#menu {
     color: black;
     margin: auto;
     margin-top: -60px;
-    height: 30px;
+    height: 60px;
     width: 600px;
     font-family: fantasy;
     font-size: 15px;
     background-color: #d1d1d1;
-    -webkit-border-top-left-radius: 16px;
-    -moz-border-radius-topleft: 16px;
-    border-top-left-radius: 16px;
-    -webkit-border-top-right-radius: 16px;
-    -moz-border-radius-topright: 16px;
-    border-top-right-radius: 16px;
+    -webkit-border-radius: 16px;
+    -moz-border-radius: 16px;
+    border-radius: 16px;
 }
-#admin {
-    margin-top: -5px;
-    -webkit-border-radius: 0px;
-    -mox-border-radius: 0px;
-    border-radius: 0px;
-    -webkit-border-bottom-left-radius: 16px;
-    -moz-border-radius-bottomleft: 16px;
-    border-bottom-left-radius: 16px;
-    -webkit-border-bottom-right-radius: 16px;
-    -moz-border-radius-bottomright: 16px;
-    border-bottom-right-radius: 16px;
-}
-#menu ul, #admin ul {
+#menu ul {
     padding-top: 5px;
     padding-left: 5px;
     text-align: center;
     width: 578px;
     margin: 0px;
 }
-#menu li, #admin li {
+#menu li {
     margin-left: 10px;
     display: inline;    
 }
-#menu li a, #admin li a {
+#menu li a {
     color: black;    
     text-decoration: none;
 }
-#menu li a.active, #admin li a.active  {
+#menu li a.active {
     color: green;
 }
-#menu li a:hover, #admin li a:hover {
+#menu li a:hover {
     color: grey;
 }
 #menu li a.new {
