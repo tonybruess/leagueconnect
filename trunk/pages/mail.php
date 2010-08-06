@@ -4,6 +4,7 @@ if(!CurrentPlayer::HasPerm(Permissions::SendMail)){
 	require_once("include/footer.php");
 	die();
 }
+require_once("include/bbcode.php");
 ?>
 <h2>Mail</h2>
 <p>[<a href="?p=mail&op=compose">Compose</a>] - [<a href="?p=mail&op=new">Inbox</a>] - [<a href="?p=mail&op=sent">Outbox</a>]</p>
@@ -42,15 +43,7 @@ if(!CurrentPlayer::HasPerm(Permissions::SendMail)){
         	$sql = "INSERT INTO messages SET `to` = '$to', `from` = '$uid', `subject` = '$subject', `message` = '$message', `created` = '$ts'";
         	return (@mysql_query($sql)) ? true:false;
     }
-    
-    function render($text) {
-  		$bbcode = array("<", ">", "[list]", "[*]", "[/list]", "[img]", "[/img]", "[b]", "[/b]", "[u]", "[/u]", "[i]", "[/i]", '[color="', "[/color]", "[size=\"", "[/size]", '[url="', "[/url]", "[mail=\"", "[/mail]", "[code]", "[/code]", "[quote]", "[/quote]", '"]');
-  		$htmlcode = array("&lt;", "&gt;", "<ul>", "<li>", "</ul>", "<img src=\"", "\">", "<b>", "</b>", "<u>", "</u>", "<i>", "</i>", "<span style=\"color:", "</span>", "<span style=\"font-size:", "</span>", '<a href="', "</a>", "<a href=\"mailto:", "</a>", "<code>", "</code>", "<img src=\"img/quote1.jpg\">", "<img src=\"img/quote2.jpg\">", '">');
- 		$newtext = str_replace($bbcode, $htmlcode, $text);
-  		$newtext = nl2br($newtext); //second pass
-  		return $newtext;
-	}
-	
+    	
     // check if a new message had been sent
     if(isset($_POST['newmessage'])) {
         // error while sending message?
@@ -112,7 +105,7 @@ if(!isset($_GET['op']) || $_GET['op'] == 'new') {
                 <tr>
                     <td><?php echo getPlayerName($message['from']); ?></td>
                     <td><a href='?p=mail&op=view&mid=<?php echo $message['id']; ?>'<?php if($unread) echo 'style="color: red;"'; ?>><?php echo $message['subject'] ?></a></td>
-                    <td><?php echo date("m-d-Y",$message['ts']); ?></td>
+                    <td><?php echo strftime("%B %e, %G at %I:%M %p", strtotime($message['created'])) ?></td>
                 </tr>
                 <?php
             }
@@ -142,7 +135,7 @@ if(!isset($_GET['op']) || $_GET['op'] == 'new') {
         </tr>
         <tr>
             <td>Date:</td>
-            <td><?php echo strftime("%a, %B %e, %G at %I:%M %p", strtotime($message['created'])); ?></td>
+            <td><?php echo strftime("%B %e, %G at %I:%M %p", strtotime($message['created'])); ?></td>
         </tr>
         <tr>
             <td>Subject:</td>
@@ -150,7 +143,7 @@ if(!isset($_GET['op']) || $_GET['op'] == 'new') {
         </tr>
         <tr>
 		<td>Message:</td>
-		<td><?php echo render($message['message']); ?></td>
+		<td><?php echo bbcode($message['message']); ?></td>
         </tr>
     </table>
     <br>
@@ -188,7 +181,6 @@ if(!isset($_GET['op']) || $_GET['op'] == 'new') {
 		<strong>Subject:</strong>
 		<input type='text' name='subject' value='<?php if($fail || $reply) echo $_POST['subject'];?>'><br><br>
 		<strong>Message:</strong><br>
-		<script type="text/javascript" src="bbeditor/ed.js"></script>  
 		<script>edToolbar('message'); </script>
 		<textarea cols="60" rows="20" name='message' id='message'><?php if($fail || $reply) echo $_POST['message']; ?></textarea><br><br>
 		<input type='submit' name='newmessage' value='Send'>
