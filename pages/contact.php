@@ -1,2 +1,2 @@
         <h2>Contact</h2>
-        <?php echo bbcode(MySQL::GetPage(3)); ?>
+        <?php echo FormatToBBCode(MySQL::GetPage(3)); ?>

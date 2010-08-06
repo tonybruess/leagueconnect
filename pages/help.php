@@ -2,4 +2,4 @@
 require_once("include/bbcode.php");
 ?>
         <h2>Help</h2>
-        <?php echo bbcode(MySQL::GetPage(2)); ?>
+        <?php echo FormatToBBCode(MySQL::GetPage(2)); ?>

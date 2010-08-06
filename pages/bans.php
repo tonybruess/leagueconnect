@@ -21,7 +21,7 @@
             Message:
             <br>
             <script type="text/javascript" src="global/bbeditor/ed.js"></script>
-            <script>edToolbar('message'); </script>
+            <script>AddBBCodeToolbar('message'); </script>
             <textarea cols=50 rows=10 name="message" id="message"></textarea>
             <br><br>
             Date: <input type="text" name="date" value="<?php echo date("Y-m-d") ?>" maxlength="10" style="width: 70px;">
