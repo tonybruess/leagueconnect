@@ -62,7 +62,7 @@ foreach($teams as $team)
     <td>
         <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
             <input type="hidden" name="jointeam" value="<?php echo $team->ID; ?>">
-            <input type="submit" value="<?php if(CurrentPlayer::ID == $leader->ID){ echo 'Edit'; } else { echo 'Join'; } ?>" <?php if($team->Closed){ echo 'disabled'; } ?> >
+            <input type="submit" value="<?php if(CurrentPlayer::$ID == $leader->ID){ echo 'Edit'; } else { echo 'Join'; } ?>" <?php if($team->Closed){ echo 'disabled'; } ?> >
         </form>
     </td>
     <td>&nbsp;</td>
