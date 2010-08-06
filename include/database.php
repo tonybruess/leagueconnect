@@ -403,11 +403,8 @@ class MySQL
             return $row['name'];
         }
 	}
-	#endregion
 	
-	#region news
-	
-	/* bool */ public static function AddItem($author, $message, $date, $page)
+	/* bool */ public static function AddPage($author, $message, $date, $page)
 	{
 		self::CheckConnection();
 		
