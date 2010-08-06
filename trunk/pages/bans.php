@@ -1,17 +1,17 @@
-		<h2>Bans</h2>
-		<p>[<a href="?p=bans">View Entries</a>] - [<a href="?p=bans&op=new">New Entry</a>]</p>
-		<?php
-		if($_GET['op'] == 'new')
-		{
-			if($_POST)
-			{
-				$date = $_POST['date'] . ' ' . $_POST['time'];
+        <h2>Bans</h2>
+        <p>[<a href="?p=bans">View Entries</a>] - [<a href="?p=bans&op=new">New Entry</a>]</p>
+        <?php
+        if($_GET['op'] == 'new')
+        {
+            if($_POST)
+            {
+                $date = $_POST['date'] . ' ' . $_POST['time'];
 
-				if(MySQL::AddEntry($_POST['author'],$_POST['message'],$date,4))
+                if(MySQL::AddEntry($_POST['author'],$_POST['message'],$date,4))
                 {
-					echo "Posted new entry successfully.";
+                    echo "Posted new entry successfully.";
                 }
-			}
+            }
             ?>
 
             <form method="POST">
@@ -34,13 +34,13 @@
             </form>
 
             <?php
-		}
-		elseif($_POST['edit'])
-		{
-		// TODO: Edit already posted news items
-		}
-		else
-		{
-			MySQL::GetPage(4);
-		}
-		?>
+        }
+        elseif($_POST['edit'])
+        {
+        // TODO: Edit already posted news items
+        }
+        else
+        {
+            MySQL::GetPage(4);
+        }
+        ?>

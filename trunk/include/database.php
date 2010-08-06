@@ -300,7 +300,7 @@ class MySQL
     
     /* bool */ public static function IsTeamLeader($player, $team=null)
     {
-    	self::CheckConnection();
+        self::CheckConnection();
 
         $player = self::Sanitize($player);
         $team = self::Sanitize($team);
@@ -317,7 +317,7 @@ class MySQL
 
     /* bool */ public static function IsTeamMember($player, $team=null)
     {
-    	self::CheckConnection();
+        self::CheckConnection();
 
         $player = self::Sanitize($player);
         $team = self::Sanitize($team);
@@ -356,13 +356,13 @@ class MySQL
    #region pages
   /* list of items */ public static function GetPage($pageid)
   {
-		self::CheckConnection();
+        self::CheckConnection();
  
- 		$pageid = self::Sanitize($pageid);
+         $pageid = self::Sanitize($pageid);
         $id = -1;
 
         $lookup = array(
-        	// news
+            // news
             "SELECT * FROM news ORDER BY created DESC" => 1,
             // help
             "SELECT * FROM pages WHERE `id`='2'" => 2,
@@ -372,35 +372,35 @@ class MySQL
             "SELECT * FROM bans ORDER BY created DESC" => 4
         );
         
-		$page = array_keys($lookup, $pageid);
-		$result = self::Query($page[0]);		
-		$data = mysql_fetch_assoc($result);
-		
-		if($data['type'] == '2'){
-			return $data['text'];
-		} else {
-			$result = self::Query($page[0]);
-			while($row = mysql_fetch_assoc($result))
-			{
-			?>
-		<div id="item">
-			<div id="header">
-				<div id="author">By: <?php echo $row['author'] ?></div>
-				<div id="time"><?php echo $row['created'] ?></div>
-			</div>
-			<div id="data"><?php echo bbcode($row['message']) ?></div>
-		</div>
-		<br><br>
-			<?php
-			}
-		}
+        $page = array_keys($lookup, $pageid);
+        $result = self::Query($page[0]);        
+        $data = mysql_fetch_assoc($result);
+        
+        if($data['type'] == '2'){
+            return $data['text'];
+        } else {
+            $result = self::Query($page[0]);
+            while($row = mysql_fetch_assoc($result))
+            {
+            ?>
+        <div id="item">
+            <div id="header">
+                <div id="author">By: <?php echo $row['author'] ?></div>
+                <div id="time"><?php echo $row['created'] ?></div>
+            </div>
+            <div id="data"><?php echo bbcode($row['message']) ?></div>
+        </div>
+        <br><br>
+            <?php
+            }
+        }
   }
 
   /* list of items */ public static function GetPageName($idea)
   {
-		self::CheckConnection();
+        self::CheckConnection();
  
- 		$idea = self::Sanitize($idea);
+         $idea = self::Sanitize($idea);
         $id = -1;
 
         $lookup = array(
@@ -421,19 +421,19 @@ class MySQL
             $row = mysql_fetch_assoc($result);
             return $row['name'];
         }
-	}
-	
-	/* bool */ public static function AddEntry($author, $message, $date, $page)
-	{
-		self::CheckConnection();
-		
-		$author = self::Sanitize($author);
-		$message = self::Sanitize($message);
-		$date = self::Sanitize($date);
+    }
+    
+    /* bool */ public static function AddEntry($author, $message, $date, $page)
+    {
+        self::CheckConnection();
+        
+        $author = self::Sanitize($author);
+        $message = self::Sanitize($message);
+        $date = self::Sanitize($date);
         $id = -1;
 
         $lookup = array(
-        	// news
+            // news
             "INSERT INTO news SET `author`='$author', `message`='$message', `created`='$date'" => 1,
             // help
             "DO 0" => 2,
@@ -443,20 +443,20 @@ class MySQL
             "INSERT INTO bans SET `author`='$author', `message`='$message', `created`='$date'" => 4,
         );
         
-		$query = array_keys($lookup, $page);
+        $query = array_keys($lookup, $page);
         
-		
-		if(self::Query($query[0]))
+        
+        if(self::Query($query[0]))
         {
-			return true;
+            return true;
         }
-		else
+        else
         {
-			return false;
+            return false;
         }
-	}
-	
-	#endregion 
+    }
+    
+    #endregion 
 }
 
 // FIXME: Only call Connect when needed

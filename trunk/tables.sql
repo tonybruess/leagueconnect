@@ -80,27 +80,27 @@ CREATE TABLE messages (
 
 DROP TABLE IF EXISTS pages;
 CREATE TABLE pages (
-	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, -- Unique identifier for the page
-	`name` VARCHAR ( 255 ), -- Name of the page
-	`text` TEXT, -- Page text. Not necessary
-	`type` INT -- Type of page. 1 = post based, 2 = text based
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, -- Unique identifier for the page
+    `name` VARCHAR ( 255 ), -- Name of the page
+    `text` TEXT, -- Page text. Not necessary
+    `type` INT -- Type of page. 1 = post based, 2 = text based
 );
 
 
 DROP TABLE IF EXISTS news;
 CREATE TABLE news (
-	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, -- Unique identifier for the entry
-	`author` VARCHAR ( 255 ), -- Name of the page
-	`message` TEXT, -- Message to be displayed
-	`created` TIMESTAMP NOT NULL -- When the message was posted
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, -- Unique identifier for the entry
+    `author` VARCHAR ( 255 ), -- Name of the page
+    `message` TEXT, -- Message to be displayed
+    `created` TIMESTAMP NOT NULL -- When the message was posted
 );
 
 DROP TABLE IF EXISTS bans;
 CREATE TABLE bans (
-	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, -- Unique identifier for the entry
-	`author` VARCHAR ( 255 ), -- Name of the page
-	`message` TEXT, -- Message to be displayed
-	`created` TIMESTAMP NOT NULL -- When the message was posted
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, -- Unique identifier for the entry
+    `author` VARCHAR ( 255 ), -- Name of the page
+    `message` TEXT, -- Message to be displayed
+    `created` TIMESTAMP NOT NULL -- When the message was posted
 );
 
 -- basic setup

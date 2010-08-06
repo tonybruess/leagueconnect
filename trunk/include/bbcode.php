@@ -18,9 +18,9 @@
         '#\[img\](.*?)\[/img\]#si' => '<img src="\\1">',
         '#\[email\](.*?)\[/email\]#si' => '<a href="mailto:\\1">\\1</a>'
     );
-    	$newtext = preg_replace(array_keys($bbcode), array_values($bbcode), $text);
-  		$newtext = nl2br($newtext,FALSE); //new line to <br>
-  		return $newtext;
-	}
+        $newtext = preg_replace(array_keys($bbcode), array_values($bbcode), $text);
+          $newtext = nl2br($newtext,FALSE); //new line to <br>
+          return $newtext;
+    }
 
 ?>

@@ -1,274 +1,274 @@
 body {
-	background-color: silver;
-	font-family: "Lucida Grande", Arial, Geneva, sans-serif;
+    background-color: silver;
+    font-family: "Lucida Grande", Arial, Geneva, sans-serif;
 }
 #main {
 }
 #head {
-	background-color: black;
-	font-family: "Gill Sans", sans-serif;
-	margin-left: auto;
-	margin-bottom: 30px;
-	margin-right: auto;
-	margin-top: 30px;
-	padding: 30px;
-	height: 100px;
-	width: 800px;
-	-webkit-border-radius: 16px;
-	-moz-border-radius: 16px;
-	border-radius: 16px;
+    background-color: black;
+    font-family: "Gill Sans", sans-serif;
+    margin-left: auto;
+    margin-bottom: 30px;
+    margin-right: auto;
+    margin-top: 30px;
+    padding: 30px;
+    height: 100px;
+    width: 800px;
+    -webkit-border-radius: 16px;
+    -moz-border-radius: 16px;
+    border-radius: 16px;
 }
 #body {
-	background-color: #D1D1D1;
-	padding: 30px;
-	margin-bottom: 30px;
-	margin-top: 30px;
-	margin-right: auto;
-	margin-left: auto;
-	-webkit-border-radius: 16px;
-	-moz-border-radius: 16px;
-	border-radius: 16px;
-	height: auto;
-	width: 800px;
+    background-color: #D1D1D1;
+    padding: 30px;
+    margin-bottom: 30px;
+    margin-top: 30px;
+    margin-right: auto;
+    margin-left: auto;
+    -webkit-border-radius: 16px;
+    -moz-border-radius: 16px;
+    border-radius: 16px;
+    height: auto;
+    width: 800px;
 }
 tr {
-	background-color: #C1C1C1;
-	font-size: 14px
+    background-color: #C1C1C1;
+    font-size: 14px
 }
 th {
-	background-color: #D1D1D1;
-	font-size: 16px;
+    background-color: #D1D1D1;
+    font-size: 16px;
 }
 #body a {
-	color: grey;
-	text-decoration: none;
+    color: grey;
+    text-decoration: none;
 }
 #body a:hover {
-	color: green;
-	text-decoration: none;
+    color: green;
+    text-decoration: none;
 }
 #footer {
-	background-color: #D1D1D1;
-	height: 25px;
-	width: 860px;
-	margin: auto;
-	padding: 0px;
-	text-align: center;
-	line-height: 2em;
-	margin-bottom: 30px;
-	font-size: 13px;
-	font-family: Georgia, "Times New Roman", Times, serif;
-	-webkit-border-radius: 16px;
-	-moz-border-radius: 16px;
-	border-radius: 16px;
+    background-color: #D1D1D1;
+    height: 25px;
+    width: 860px;
+    margin: auto;
+    padding: 0px;
+    text-align: center;
+    line-height: 2em;
+    margin-bottom: 30px;
+    font-size: 13px;
+    font-family: Georgia, "Times New Roman", Times, serif;
+    -webkit-border-radius: 16px;
+    -moz-border-radius: 16px;
+    border-radius: 16px;
 }
 #menu, #admin {
-	color: black;
-	margin: auto;
-	margin-top: -60px;
-	height: 30px;
-	width: 600px;
-	font-family: fantasy;
-	font-size: 15px;
-	background-color: #d1d1d1;
-	-webkit-border-top-left-radius: 16px;
-	-moz-border-radius-topleft: 16px;
-	border-top-left-radius: 16px;
-	-webkit-border-top-right-radius: 16px;
-	-moz-border-radius-topright: 16px;
-	border-top-right-radius: 16px;
+    color: black;
+    margin: auto;
+    margin-top: -60px;
+    height: 30px;
+    width: 600px;
+    font-family: fantasy;
+    font-size: 15px;
+    background-color: #d1d1d1;
+    -webkit-border-top-left-radius: 16px;
+    -moz-border-radius-topleft: 16px;
+    border-top-left-radius: 16px;
+    -webkit-border-top-right-radius: 16px;
+    -moz-border-radius-topright: 16px;
+    border-top-right-radius: 16px;
 }
 #admin {
-	margin-top: -5px;
-	-webkit-border-radius: 0px;
-	-mox-border-radius: 0px;
-	border-radius: 0px;
-	-webkit-border-bottom-left-radius: 16px;
-	-moz-border-radius-bottomleft: 16px;
-	border-bottom-left-radius: 16px;
-	-webkit-border-bottom-right-radius: 16px;
-	-moz-border-radius-bottomright: 16px;
-	border-bottom-right-radius: 16px;
+    margin-top: -5px;
+    -webkit-border-radius: 0px;
+    -mox-border-radius: 0px;
+    border-radius: 0px;
+    -webkit-border-bottom-left-radius: 16px;
+    -moz-border-radius-bottomleft: 16px;
+    border-bottom-left-radius: 16px;
+    -webkit-border-bottom-right-radius: 16px;
+    -moz-border-radius-bottomright: 16px;
+    border-bottom-right-radius: 16px;
 }
 #menu ul, #admin ul {
-	padding-top: 5px;
-	padding-left: 5px;
-	text-align: center;
-	width: 578px;
-	margin: 0px;
+    padding-top: 5px;
+    padding-left: 5px;
+    text-align: center;
+    width: 578px;
+    margin: 0px;
 }
 #menu li, #admin li {
-	margin-left: 10px;
-	display: inline;	
+    margin-left: 10px;
+    display: inline;    
 }
 #menu li a, #admin li a {
-	color: black;	
-	text-decoration: none;
+    color: black;    
+    text-decoration: none;
 }
 #menu li a.active, #admin li a.active  {
-	color: green;
+    color: green;
 }
 #menu li a:hover, #admin li a:hover {
-	color: grey;
+    color: grey;
 }
 #menu li a.new {
-	color: red;
+    color: red;
 }
 h1 {
-	margin: 0px;
-	font-size: 50px;
-	text-align: center;
-	color: #cccccc;
+    margin: 0px;
+    font-size: 50px;
+    text-align: center;
+    color: #cccccc;
 }
 h2 {
-	font-family: Georgia, "Times New Roman", Times, serif;
-	border-bottom: black solid 1px; 
+    font-family: Georgia, "Times New Roman", Times, serif;
+    border-bottom: black solid 1px; 
 }
 #body p:first-letter {
-	font-size: 20px;
+    font-size: 20px;
 }
 #body p {
-	font-family: Georgia, "Times New Roman", Times, serif;
+    font-family: Georgia, "Times New Roman", Times, serif;
 }
 
 table tr.rowEven {
-	background-color: #E0E0E0;
+    background-color: #E0E0E0;
 }
 
 table tr.rowOdd {
-	background-color: #D1D1D1; 
+    background-color: #D1D1D1; 
 }
 
 #item {
-	border: 0.2em solid black;
-	-webkit-border-radius: 1em;
-	-moz-border-radius: 1em;
-	border-radius: 1em;
+    border: 0.2em solid black;
+    -webkit-border-radius: 1em;
+    -moz-border-radius: 1em;
+    border-radius: 1em;
 }
 
 #item #header {
-	background: silver;
-	-webkit-border-radius: 1em 1em 0em 0em;
-	-moz-border-radius: 1em 1em 0em 0em;
-	border-radius: 1em 1em 0em 0em;
-	overflow: auto;
-	padding-top: .1em;
-	padding-bottom: 0.2em;
-	padding-right: 1em;
+    background: silver;
+    -webkit-border-radius: 1em 1em 0em 0em;
+    -moz-border-radius: 1em 1em 0em 0em;
+    border-radius: 1em 1em 0em 0em;
+    overflow: auto;
+    padding-top: .1em;
+    padding-bottom: 0.2em;
+    padding-right: 1em;
 }
 
 #item #time {
-	text-align: right;
-	float: right;
+    text-align: right;
+    float: right;
 }
 
 #item #author {
-	text-align: left;
-	float: left;
-	margin-left: 1em;
+    text-align: left;
+    float: left;
+    margin-left: 1em;
 }
 
 #item #data {
-	margin: 1em;
+    margin: 1em;
 }
 
 fieldset{
-	border: #999999 solid 1px;
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
+    border: #999999 solid 1px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
 }
 textarea{
-	background: #f0f0f0;
-	border: #999999 solid 1px;
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
-	padding: 3px;
-	resize: vertical;
+    background: #f0f0f0;
+    border: #999999 solid 1px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    padding: 3px;
+    resize: vertical;
 }
 textarea:hover{
-	border: #555555 solid 1px;
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
+    border: #555555 solid 1px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
 }
 textarea:active{
-	border: #555555 solid 1px;
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
+    border: #555555 solid 1px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
 }
 input[type=text]{
-	border: #999999 solid 1px;
-	background: #f0f0f0;
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
-	margin-bottom: 5px;
-	padding: 3px;
+    border: #999999 solid 1px;
+    background: #f0f0f0;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    margin-bottom: 5px;
+    padding: 3px;
 }
 input[type=text]:hover{
-	border: #555555 solid 1px;
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
+    border: #555555 solid 1px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
 }
 input[type=text]:active{
-	border: #555555 solid 1px;
-	background: #f0f0f0;
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
+    border: #555555 solid 1px;
+    background: #f0f0f0;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
 }
 input[type=text]:disabled{
-	background: #CDCDCE;
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
+    background: #CDCDCE;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
 }
 input[type=password]{
-	border: #999999 solid 1px;
-	background: #f0f0f0;
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
-	margin-bottom: 5px;
-	padding: 3px;
+    border: #999999 solid 1px;
+    background: #f0f0f0;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    margin-bottom: 5px;
+    padding: 3px;
 }
 input[type=password]:hover{
-	border: #555555 solid 1px;
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
+    border: #555555 solid 1px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
 }
 input[type=password]:active{
-	border: #555555 solid 1px;
-	background: #f0f0f0;
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
+    border: #555555 solid 1px;
+    background: #f0f0f0;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
 }
 input[type=password]:disabled{
-	background: #CDCDCE;
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
+    background: #CDCDCE;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
 }
 select{
-	margin-bottom: 5px;
-	border: #555555 solid 1px;
-	background: #f0f0f0;
+    margin-bottom: 5px;
+    border: #555555 solid 1px;
+    background: #f0f0f0;
 }
 input[type=submit]{
-	background: #f0f0f0;
-	border: #555555 solid 1px;
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
+    background: #f0f0f0;
+    border: #555555 solid 1px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
 }
 input[type=submit]:hover{
-	background: #DDDDDD;
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
+    background: #DDDDDD;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
 }
 input[type=button]{
-	background: #f0f0f0;
-	border: #555555 solid 1px;
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
+    background: #f0f0f0;
+    border: #555555 solid 1px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
 }
 input[type=button]:hover{
-	background: #DDDDDD;
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
+    background: #DDDDDD;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
 }
 blockquote {
     background: #ebebeb none 6px 8px no-repeat;
