@@ -7,7 +7,7 @@
 			{
 				$date = $_POST['date'] . ' ' . $_POST['time'];
 
-				if(MySQL::AddItem($_POST['author'],$_POST['message'],$date,1))
+				if(MySQL::AddEntry($_POST['author'],$_POST['message'],$date,1))
                 {
 					echo "Posted new entry successfully.";
                 }
@@ -41,6 +41,6 @@
 		}
 		else
 		{
-			MySQL::GetItems(1);
+			MySQL::GetPage(1);
 		}
 		?>

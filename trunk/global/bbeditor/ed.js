@@ -19,13 +19,10 @@ function edToolbar(obj) {
 	document.write("<img class=\"button\" src=\"global/bbeditor/images/underline.gif\" name=\"btnUnderline\" title=\"Underline\" onClick=\"doAddTags('[u]','[/u]','" + obj + "')\">");
 	document.write("<img class=\"button\" src=\"global/bbeditor/images/link.gif\" name=\"btnLink\" title=\"Insert URL Link\" onClick=\"doURL('" + obj + "')\">");
 	document.write("<img class=\"button\" src=\"global/bbeditor/images/picture.gif\" name=\"btnPicture\" title=\"Insert Image\" onClick=\"doImage('" + obj + "')\">");
-	document.write("<img class=\"button\" src=\"global/bbeditor/images/ordered.gif\" name=\"btnList\" title=\"Ordered List\" onClick=\"doList('[LIST=1]','[/LIST]','" + obj + "')\">");
-	document.write("<img class=\"button\" src=\"global/bbeditor/images/unordered.gif\" name=\"btnList\" title=\"Unordered List\" onClick=\"doList('[LIST]','[/LIST]','" + obj + "')\">");
-	document.write("<img class=\"button\" src=\"global/bbeditor/images/quote.gif\" name=\"btnQuote\" title=\"Quote\" onClick=\"doAddTags('[quote]','[/quote]','" + obj + "')\">"); 
+    document.write("<img class=\"button\" src=\"global/bbeditor/images/quote.gif\" name=\"btnQuote\" title=\"Quote\" onClick=\"doAddTags('[quote]','[/quote]','" + obj + "')\">"); 
   	document.write("<img class=\"button\" src=\"global/bbeditor/images/code.gif\" name=\"btnCode\" title=\"Code\" onClick=\"doAddTags('[code]','[/code]','" + obj + "')\">");
     document.write("</div>");
-	//document.write("<textarea id=\""+ obj +"\" name = \"" + obj + "\" cols=\"" + width + "\" rows=\"" + height + "\"></textarea>");
-				}
+}
 
 function doImage(obj)
 {
@@ -141,52 +138,4 @@ textarea = document.getElementById(obj);
 		
 		
 	}
-}
-
-function doList(tag1,tag2,obj){
-textarea = document.getElementById(obj);
-// Code for IE
-		if (document.selection) 
-			{
-				textarea.focus();
-				var sel = document.selection.createRange();
-				var list = sel.text.split('\n');
-		
-				for(i=0;i<list.length;i++) 
-				{
-				list[i] = '[*]' + list[i];
-				}
-				//alert(list.join("\n"));
-				sel.text = tag1 + '\n' + list.join("\n") + '\n' + tag2;
-			} else
-			// Code for Firefox
-			{
-
-		var len = textarea.value.length;
-	    var start = textarea.selectionStart;
-		var end = textarea.selectionEnd;
-		var i;
-		
-		var scrollTop = textarea.scrollTop;
-		var scrollLeft = textarea.scrollLeft;
-
-		
-        var sel = textarea.value.substring(start, end);
-	    //alert(sel);
-		
-		var list = sel.split('\n');
-		
-		for(i=0;i<list.length;i++) 
-		{
-		list[i] = '[*]' + list[i];
-		}
-		//alert(list.join("<br>"));
-        
-		
-		var rep = tag1 + '\n' + list.join("\n") + '\n' +tag2;
-		textarea.value =  textarea.value.substring(0,start) + rep + textarea.value.substring(end,len);
-		
-		textarea.scrollTop = scrollTop;
-		textarea.scrollLeft = scrollLeft;
- }
 }

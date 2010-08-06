@@ -354,17 +354,35 @@ class MySQL
    #endregion
    
    #region pages
-  /* list of items */ public static function GetItems($pageid)
+  /* list of items */ public static function GetPage($pageid)
   {
 		self::CheckConnection();
  
  		$pageid = self::Sanitize($pageid);
- 
-		$result = self::Query("SELECT * FROM entries WHERE `page`='$pageid' ORDER BY created DESC");
+        $id = -1;
 
-		while($row = mysql_fetch_assoc($result))
-		{
-		?>
+        $lookup = array(
+        	// news
+            "SELECT * FROM news ORDER BY created DESC" => 1,
+            // help
+            "SELECT * FROM pages WHERE `id`='2'" => 2,
+            // contact
+            "SELECT * FROM pages WHERE `id`='3'" => 3,
+            // bans
+            "SELECT * FROM bans ORDER BY created DESC" => 4
+        );
+        
+		$page = array_keys($lookup, $pageid);
+		$result = self::Query($page[0]);		
+		$data = mysql_fetch_assoc($result);
+		
+		if($data['type'] == '2'){
+			return $data['text'];
+		} else {
+			$result = self::Query($page[0]);
+			while($row = mysql_fetch_assoc($result))
+			{
+			?>
 		<div id="item">
 			<div id="header">
 				<div id="author">By: <?php echo $row['author'] ?></div>
@@ -373,7 +391,8 @@ class MySQL
 			<div id="data"><?php echo bbcode($row['message']) ?></div>
 		</div>
 		<br><br>
-		<?php
+			<?php
+			}
 		}
   }
 
@@ -404,15 +423,30 @@ class MySQL
         }
 	}
 	
-	/* bool */ public static function AddItem($author, $message, $date, $page)
+	/* bool */ public static function AddEntry($author, $message, $date, $page)
 	{
 		self::CheckConnection();
 		
 		$author = self::Sanitize($author);
 		$message = self::Sanitize($message);
 		$date = self::Sanitize($date);
+        $id = -1;
+
+        $lookup = array(
+        	// news
+            "INSERT INTO news SET `author`='$author', `message`='$message', `created`='$date'" => 1,
+            // help
+            "DO 0" => 2,
+            // contact
+            "DO 0" => 3,
+            // bans
+            "INSERT INTO bans SET `author`='$author', `message`='$message', `created`='$date'" => 4,
+        );
+        
+		$query = array_keys($lookup, $page);
+        
 		
-		if(self::Query("INSERT INTO entries SET `author`='$author', `message`='$message', `created`='$date', `page`='$page'"))
+		if(self::Query($query[0]))
         {
 			return true;
         }
