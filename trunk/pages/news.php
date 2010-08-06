@@ -5,17 +5,18 @@
 		{
 			if($_POST)
 			{
-
-				$date = $_POST['date'] . ' ' . $_POST['time'];
-				
+				$date = $_POST['date'] . ' ' . $_POST['time'];				
 				if(MySQL::addItem($_POST['author'],$_POST['message'],$date,1))
 					echo "Posted new entry successfully";
 			}
-			
 			MySQL::newItemForm();
-
-		} elseif($_POST['edit']){
-		} else {
+		}
+		elseif($_POST['edit'])
+		{
+		// TODO: Edit already posted news items
+		}
+		else
+		{
 			MySQL::GetItems(1);
 		}
 		?>
