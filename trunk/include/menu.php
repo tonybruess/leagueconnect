@@ -15,7 +15,7 @@ function PrintMenuEntry($name, $title, $perm = null)
         return;
     }
 
-    echo "            <li><a href='?p=$name".($page == $name ? ' class="active"' : '')."'>".$title.'</a></li>'."\n";
+    echo "            <li><a href='?p=$name'".($page == $name ? ' class="active"' : '')."'>".$title.'</a></li>'."\n";
 }
 
 PrintMenuEntry('index', 'Home');
