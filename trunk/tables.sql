@@ -82,8 +82,7 @@ DROP TABLE IF EXISTS pages;
 CREATE TABLE pages (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, -- Unique identifier for the page
     `name` VARCHAR ( 255 ), -- Name of the page
-    `text` TEXT, -- Page text. Not necessary
-    `type` INT -- Type of page. 1 = post based, 2 = text based
+    `content` TEXT -- Page text. Not necessary
 );
 
 
@@ -92,21 +91,24 @@ CREATE TABLE news (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, -- Unique identifier for the entry
     `author` VARCHAR ( 255 ), -- Name of the page
     `message` TEXT, -- Message to be displayed
-    `created` TIMESTAMP NOT NULL -- When the message was posted
+    `created` TIMESTAMP NOT NULL DEFAULT NOW() -- When the message was posted
 );
 
 DROP TABLE IF EXISTS bans;
 CREATE TABLE bans (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, -- Unique identifier for the entry
-    `author` VARCHAR ( 255 ), -- Name of the page
-    `message` TEXT, -- Message to be displayed
-    `created` TIMESTAMP NOT NULL -- When the message was posted
+    `player` VARCHAR ( 225 ), -- Name of banned player
+    `banner` VARCHAR ( 225 ), -- Callsign of banner
+    `bzid` INT UNSIGNED, -- BZID of banned player, NULL if none
+    `duration` INT UNSIGNED, -- Duration of ban (in minutes), 0 = forever
+    `ipaddress` VARCHAR ( 15 ), -- IP address of banned player, NULL if none
+    `hostmask` VARCHAR ( 225 ), -- Hostmask for ban, NULL if none
+    `reason` TEXT, -- Reason for ban
+    `created` TIMESTAMP NOT NULL DEFAULT NOW() -- Time of ban
 );
 
 -- basic setup
 insert into roles (`name`,`permissions`) VALUES ('Site Admin','11111111111111111111111');
 insert into groups (`name`,`role`,`enabled`) VALUES ('GU.LEAGUE', '1', TRUE);
-insert into pages (`name`,`text`,`type`) VALUES ('News','News Page','1');
-insert into pages (`name`,`text`,`type`) VALUES ('Help','Help Page','2');
-insert into pages (`name`,`text`,`type`) VALUES ('Contact','Contact Page','2');
-insert into pages (`name`,`text`,`type`) VALUES ('Bans','Bans Page','1');
+insert into pages (`name`,`content`) VALUES ('Help','Help');
+insert into pages (`name`,`content`) VALUES ('Contact','Contact');

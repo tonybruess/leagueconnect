@@ -4,10 +4,12 @@
  * MySQL class to work with the MySQL database.
  */
 
-require_once('./config.php');
-require_once('./classes/player.php');
-require_once('./classes/team.php');
-require_once('./include/bbcode.php');
+require_once('config.php');
+require_once('classes/player.php');
+require_once('classes/team.php');
+require_once('classes/page.php');
+require_once('classes/ban.php');
+require_once('classes/news-entry.php');
 
 class MySQL
 {
@@ -73,7 +75,7 @@ class MySQL
         else
         {
             // Log the error and return false
-            $error = mysql_error() . "\n" . $sql . "\n" . '------' . "\n";
+            $error = 'MySQL Error: ' . mysql_error() . "\n" . "SQL: $sql\n" . "-------\n";
 
             if(!file_exists(Config::ErrorLogFile))
             {
@@ -81,8 +83,33 @@ class MySQL
             }
 
             file_put_contents(Config::ErrorLogFile, $error, FILE_APPEND);
-            
+
+            throw new Exception('MySQL Error: '.mysql_error());
             return false;
+        }
+    }
+
+    /* unsigned int */ private static function NumRows($result)
+    {
+        if(!$result)
+        {
+            return 0;
+        }
+        else
+        {
+            return mysql_num_rows($result);
+        }
+    }
+
+    /* array or false */ private static function FetchRow($result)
+    {
+        if(!$result)
+        {
+            return false;
+        }
+        else
+        {
+            return mysql_fetch_assoc($result);
         }
     }
     
@@ -105,10 +132,90 @@ class MySQL
      * without having SQL scattered all throughout the code.
      */
 
-    #region players table
+    #region global
+    private static /* array */ $Cache = array();
 
-    private static /* array */ $PlayerInfoCache = array();
-    
+    /* cls or null */ private static function GetInfo($table, $id, &$cls) // cls is the class that corresponds to each row
+    {
+        self::CheckConnection();
+
+        $table = self::Sanitize($table);
+        $id = self::Sanitize($id);
+
+        if(!isset(self::$Cache[$table]))
+        {
+            self::$Cache[$table] = array();
+        }
+
+        if(isset(self::$Cache[$table][$id]))
+        {
+            $row = self::$Cache[$table][$id];
+        }
+        else
+        {
+            $result = self::Query("SELECT * FROM $table WHERE `id` = '$id' LIMIT 1");
+
+            if(self::NumRows($result))
+            {
+                return null;
+            }
+
+            $row = self::FetchRow($result);
+            self::$Cache[$table][$id] = $row;
+        }
+
+        $cls->FromSQLRow($row);
+
+        return $cls;
+    }
+
+    /* bool */ private static function SetInfo($table, $id, $cls)
+    {
+        self::CheckConnection();
+
+        $table = self::Sanitize($table);
+        $id = self::Sanitize($id);
+
+        if(!isset(self::$Cache[$table]))
+        {
+            self::$Cache[$table] = array();
+        }
+
+        $row = $cls->ToSQLRow();
+        $cached = (isset(self::$Cache[$table][$id]) ? self::$Cache[$table][$id] : array());
+        $sqlParts = array();
+
+        foreach($row as $key=>$val)
+        {
+            if($val == null) // Skip null values
+                continue;
+
+            if(!isset($cached[$key]) || $val != $cached[$key]) // Only set if it is different
+            {
+                $sqlParts[] = "$key='".self::Sanitize($val)."'";
+            }
+        }
+
+        if(count($sqlParts) == 0) // Nothing to update
+        {
+            return true;
+        }
+
+        $sql = implode(',', $sqlParts);
+
+        if(self::Query("UPDATE $table SET $sql WHERE `id`='$id' LIMIT 1"))
+        {
+            self::$Cache[$table][$id] = $row; // Update the cache
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    #endregion
+
+    #region players
     /* void */ public static function AddPlayer($name, $bzid)
     {
         self::CheckConnection();
@@ -137,13 +244,13 @@ class MySQL
 
         $result = self::Query("SELECT id FROM players WHERE `bzid`='$bzid'");
 
-        if(mysql_num_rows($result) == 0)
+        if(self::NumRows($result) == 0)
         {
             return 0;
         }
         else
         {
-            $row = mysql_fetch_assoc($result);
+            $row = self::FetchRow($result);
             return $row['id'];
         }
     }
@@ -154,83 +261,38 @@ class MySQL
 
         $bzid = self::Sanitize($bzid);
 
-        return mysql_num_rows(self::Query("SELECT id FROM players WHERE `bzid`='$bzid' LIMIT 1")) != 0;
+        return self::NumRows(self::Query("SELECT id FROM players WHERE `bzid`='$bzid' LIMIT 1")) != 0;
     }
 
-    /* Player */ public static function GetPlayerInfo($id)
+    /* Player or null */ public static function GetPlayerInfo($id)
     {
-        self::CheckConnection();
-
-        $id = self::Sanitize($id);
-
-        $result = self::Query("SELECT * FROM players WHERE `id` = '$id' LIMIT 1");
-
-        if(mysql_num_rows($result) == 0)
-        {
-            throw new Exception('Player not found.');
-        }
-
-        $row = mysql_fetch_array($result);
-        self::$PlayerInfoCache[$id] = $row;
-
-        $player = new Player();
-        $player->FromSQLRow($row);
-
-        return $player;
+        return self::GetInfo('players', $id, new Player());
     }
 
-    /* void */ public static function SetPlayerInfo($id, $player)
+    /* bool */ public static function SetPlayerInfo($id, $player)
     {
-        self::CheckConnection();
-
-        $id = self::Sanitize($id);
-        $row = $player->ToSQLRow();
-        $cached = (isset(self::$PlayerInfoCache[$id]) ? self::$PlayerInfoCache[$id] : null);
-        $sqlParts = array();
-
-        foreach($row as $key=>$val)
-        {
-            if(($cached == null && $val != null) || ($cached != null && $val != $cached[$key]))
-            {
-                $sqlParts[] = "$key='".self::Sanitize($val)."'";
-            }
-        }
-
-        if(count($sqlParts) == 0)
-            return;
-
-        $sql = implode(',', $sqlParts);
-
-        if(self::Query("UPDATE players SET $sql WHERE `id`='$id' LIMIT 1"))
-        {
-            self::$PlayerInfoCache[$id] = $row; // Update cache
-        }
+        return self::SetInfo('players', $id, $player);
     }
 
-    /* array of Players */ public static function GetPlayersByTeam($team)
+    /* array of ints */ public static function GetPlayersByTeam($team)
     {
         self::CheckConnection();
 
         $team = self::Sanitize($team);
 
-        $result = self::Query("SELECT * FROM players WHERE `team`='$team'");
-        $players = array();
+        $result = self::Query("SELECT id FROM players WHERE `team`='$team'");
+        $ids = array();
 
-        while($row = mysql_fetch_assoc($result))
+        while($row = self::FetchRow($result))
         {
-            $player = new Player();
-            $player->FromSQLRow($row);
-            $players[] = $player;
-
-            self::$PlayerInfoCache[$row['id']] = $row;
+            $ids[] = (int)$row['id'];
         }
 
-        return $players;
+        return $ids;
     }
     #endregion
 
     #region teams table
-    private static $TeamInfoCache = array();
 
     /* void */ public static function AddTeam($name, $leader)
     {
@@ -240,7 +302,7 @@ class MySQL
         $leader = self::Sanitize($leader);
 
         self::Query("INSERT INTO teams (`name`, `created`, `leader`) VALUES ('$name', NOW(), '$leader')");
-        $team_id = mysql_fetch_assoc(self::Query("SELECT id FROM teams WHERE `name`='$name'"));
+        $team_id = self::FetchRow(self::Query("SELECT id FROM teams WHERE `name`='$name'"));
         self::Query("UPDATE players SET `team`='".$team_id['id']."' WHERE `id`='$leader'");
     }
 
@@ -250,52 +312,17 @@ class MySQL
 
         $name = self::Sanitize($name);
 
-        return mysql_num_rows(self::Query("SELECT id FROM teams WHERE `name`='$name' LIMIT 1")) != 0;
+        return self::NumRows(self::Query("SELECT id FROM teams WHERE `name`='$name' LIMIT 1")) != 0;
     }
 
-    /* Team */ public static function GetTeamInfo($id)
+    /* Team or null */ public static function GetTeamInfo($id)
     {
-        self::CheckConnection();
-
-        $id = self::Sanitize($id);
-
-        $result = self::Query("SELECT * FROM teams WHERE `id`='$id' LIMIT 1");
-        $row = mysql_fetch_assoc($result);
-
-        self::$TeamInfoCache[$id] = $row;
-
-        $team = new Team();
-        $team->FromSQLRow($row);
-
-        return $team;
+        return self::GetInfo('teams', $id, new Team());
     }
 
-    /* void */ public static function SetTeamInfo($id, $team)
+    /* bool */ public static function SetTeamInfo($id, $team)
     {
-        self::CheckConnection();
-
-        $id = self::Sanitize($id);
-        $row = $team->ToSQLRow();
-        $cached = self::$TeamInfoCache[$id];
-        $sqlParts = array();
-
-        foreach($row as $key=>$val)
-        {
-            if($val == $cached[$key]) // Skip fields that have the same value as before
-                continue;
-
-            $sqlParts[] = "$key='".self::Sanitize($val)."'";
-        }
-
-        if(count($sqlParts) == 0) // Nothing to update
-            return;
-
-        $sql = implode(',', $sqlParts);
-
-        if(self::Query("UPDATE teams SET $sql WHERE `id`='$id' LIMIT 1"))
-        {
-            self::$TeamInfoCache[$id] = $row; // Update cache
-        }
+        return self::SetInfo('teams', $id, $team);
     }
     
     /* bool */ public static function IsTeamLeader($player, $team=null)
@@ -307,11 +334,11 @@ class MySQL
 
         if($team == '')
         {
-            return mysql_num_rows(self::Query("SELECT id FROM teams WHERE `leader`='$player' LIMIT 1")) != 0;
+            return self::NumRows(self::Query("SELECT id FROM teams WHERE `leader`='$player' LIMIT 1")) != 0;
         }
         else
         {
-            return mysql_num_rows(self::Query("SELECT id FROM teams WHERE `leader`='$player' && `id`='$team' LIMIT 1")) != 0;
+            return self::NumRows(self::Query("SELECT id FROM teams WHERE `leader`='$player' && `id`='$team' LIMIT 1")) != 0;
         }
     }
 
@@ -324,11 +351,11 @@ class MySQL
 
         if($team == '')
         {
-            return mysql_num_rows(self::Query("SELECT id FROM players WHERE `id`='$player' && `team`!=NULL")) != 0;
+            return self::NumRows(self::Query("SELECT id FROM players WHERE `id`='$player' && `team`!=NULL")) != 0;
         }
         else
         {
-            return mysql_num_rows(self::Query("SELECT id FROM players WHERE `id`='$player' && `team`='$team'")) != 0;
+            return self::NumRows(self::Query("SELECT id FROM players WHERE `id`='$player' && `team`='$team'")) != 0;
         }
     }
 
@@ -336,51 +363,114 @@ class MySQL
     {
         self::CheckConnection();
 
-        $result = self::Query('SELECT * FROM teams');
+        $result = self::Query('SELECT id FROM teams');
         $teams = array();
 
-        while($row = mysql_fetch_assoc($result))
+        while($row = self::FetchRow($result))
         {
-            $team = new Team();
-            $team->FromSQLRow($row);
-            $teams[] = $team;
-
-            self::$TeamInfoCache[$row['id']] = $row;
+            $id = (int)$row['id'];
+            $teams[] = self::GetInfo('teams', $id, new Team());
         }
 
         return $teams;
     }
-
-   #endregion
+    #endregion
    
-   #region pages
-  /* list of items */ public static function GetPage($pageid)
-  {
+    #region pages
+    /* Page or null */ public static function GetPageInfo($id)
+    {
+        return self::GetInfo('pages', $id, new Page());
+    }
+
+    /* bool */ public static function SetPageInfo($id, $page)
+    {
+        return self::SetInfo('pages', $id, $page);
+    }
+    #endregion
+
+    #region news
+    /* NewsEntry or null */ public static function GetNewsEntryInfo($id)
+    {
+        return self::GetInfo('news', $id, new NewsEntry());
+    }
+
+    /* bool */ public static function SetNewsEntryInfo($id, $newsEntry)
+    {
+        return self::SetInfo('news', $id, $newsEntry);
+    }
+
+    /* bool */ public static function AddNewsEntry($author, $message)
+    {
+        self::CheckConnection();
+
+        $author = self::Sanitize($author);
+        $message = self::Sanitize($message);
+
+        if(self::Query("INSERT INTO news (`author`, `message`) VALUES ('$author', '$message')"))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    /* array of NewsEntries */ public static function GetNewsEntries($start, $count)
+    {
+        self::CheckConnection();
+
+        $start = self::Sanitize($start);
+        $count = self::Sanitize($count);
+
+        $result = self::Query("SELECT id FROM news ORDER BY created DESC LIMIT $start,$count");
+        $entries = array();
+
+        while($row = self::FetchRow($result))
+        {
+            $id = (int)$row['id'];
+            $entries[] = self::GetNewsEntryInfo($id);
+        }
+
+        return $entries;
+    }
+
+    /* unsigned int */ public static function GetNumNewsEntries()
+    {
+        self::CheckConnection();
+
+        return self::NumRows(self::Query("SELECT id FROM news"));
+    }
+    #endregion
+    /* list of items */ public static function GetPage($pageid)
+    {
         self::CheckConnection();
  
-         $pageid = self::Sanitize($pageid);
+        $pageid = self::Sanitize($pageid);
         $id = -1;
 
         $lookup = array(
             // news
-            "SELECT * FROM news ORDER BY created DESC" => 1,
+            '1' => "SELECT * FROM news ORDER BY created DESC",
             // help
-            "SELECT * FROM pages WHERE `id`='2'" => 2,
+            '2' => "SELECT * FROM pages WHERE `id`='2'",
             // contact
-            "SELECT * FROM pages WHERE `id`='3'" => 3,
+            '3' => "SELECT * FROM pages WHERE `id`='3'",
             // bans
-            "SELECT * FROM bans ORDER BY created DESC" => 4
+            '4' => "SELECT * FROM bans ORDER BY created DESC"
         );
+
+        $pageSQL = $lookup[$pageid];
+        $result = self::Query($pageSQL);
+        $data = self::FetchRow($result);
         
-        $page = array_keys($lookup, $pageid);
-        $result = self::Query($page[0]);        
-        $data = mysql_fetch_assoc($result);
-        
-        if($data['type'] == '2'){
+        if($data['type'] == '2')
+        {
             return $data['text'];
-        } else {
+        }
+        else {
             $result = self::Query($page[0]);
-            while($row = mysql_fetch_assoc($result))
+            while($row = self::FetchRow($result))
             {
             ?>
         <div id="item">
@@ -394,13 +484,13 @@ class MySQL
             <?php
             }
         }
-  }
+    }
 
-  /* list of items */ public static function GetPageName($idea)
-  {
+    /* list of items */ public static function GetPageName($idea)
+    {
         self::CheckConnection();
  
-         $idea = self::Sanitize($idea);
+        $idea = self::Sanitize($idea);
         $id = -1;
 
         $lookup = array(
@@ -412,13 +502,13 @@ class MySQL
 
         $result = self::Query("SELECT name FROM pages WHERE id='{$lookup[$idea]}' LIMIT 1");
 
-        if(mysql_num_rows($result) == 0)
+        if(self::NumRows($result) == 0)
         {
             return 'Unknown';
         }
         else
         {
-            $row = mysql_fetch_assoc($result);
+            $row = self::FetchRow($result);
             return $row['name'];
         }
     }

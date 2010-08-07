@@ -51,7 +51,7 @@ class Player
         $this->PublicEmail = $row['pubemail'];
         $this->Team = (int)$row['team'];
 
-        return self;
+        return $this;
     }
 
     /* array of strings */ public function ToSQLRow()
