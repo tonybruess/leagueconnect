@@ -24,7 +24,7 @@ if(CurrentPlayer::HasPerm(Permissions::ViewMail))
 {
     echo "            <li><a href='?p=mail'";
 
-    if($page == $name)
+    if($page == 'mail')
     {
         echo ' class="active"';
     }
