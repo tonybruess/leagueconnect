@@ -1,23 +1,76 @@
     <div id="menu">
         <ul>
-            <li><a href="index.php"<?php if($page == 'index') echo ' class="active"';?>>Home</a></li>
-<?php if(CurrentPlayer::HasPerm(Permissions::ViewMail)){ ?>            <li><a href="?p=mail"<?php if($page == 'mail'){ echo ' class="active"'; } elseif (hasMail()) { echo ' class="new"'; }?>>Mail</a></li>
-<?php } if(!isset($_SESSION['callsign'])){ ?>            <li><a href="http://my.bzflag.org/weblogin.php?url=http%3A%2F%2F<?php echo urlencode($_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']).'/authenticate.php');?>%3Ftoken%3D%25TOKEN%25%26username%3D%25USERNAME%25">Login</a></li>
-<?php } ?>
-            <li><a href="?p=news"<?php if($page == 'news') echo ' class="active"';?>><?php echo MySQL::getPageName("News");?></a></li>
-            <li><a href="?p=matches"<?php if($page == 'matches') echo ' class="active"';?>>Matches</a></li>
-            <li><a href="?p=teams"<?php if($page == 'teams') echo ' class="active"';?>>Teams</a></li>
-            <li><a href="?p=players"<?php if($page == 'players') echo ' class="active"';?>>Players</a></li>
-            <li><a href="?p=help"<?php if($page == 'help') echo ' class="active"';?>><?php echo MySQL::getPageName("Help");?></a></li>
-            <li><a href="?p=contact"<?php if($page == 'contact') echo ' class="active"';?>><?php echo MySQL::getPageName("Contact");?></a></li>
-            <li><a href="?p=bans"<?php if($page == 'bans') echo ' class="active"';?>><?php echo MySQL::getPageName("Bans");?></a></li>
-<?php if(isset($_SESSION['callsign'])){ ?>            <li><a href="?p=logout">Logout</a></li> 
-<?php } if(CurrentPlayer::HasPerm(Permissions::EditPages)){ ?>            <li><a href="?p=editpages"<?php if($page == 'editpages') echo ' class="active"';?>>Edit Pages</a></li>
-<?php } if(CurrentPlayer::HasPerm(Permissions::EnterMatch)){ ?>            <li><a href="?p=entermatch"<?php if($page == 'entermatch') echo ' class="active"';?>>Match Manager</a></li>
-<?php } if(CurrentPlayer::HasPerm(8)){ ?>            <li><a href="?p=usermanager"<?php if($page == 'usermanager') echo ' class="active"';?>>User Manager</a></li>
-<?php } if(CurrentPlayer::HasPerm(Permissions::EditTeams)){ ?>            <li><a href="?p=teammanager"<?php if($page == 'teammanager') echo ' class="active"';?>>Team Manager</a></li>
-<?php } if(CurrentPlayer::HasPerm(Permissions::ViewLogs)){ ?>            <li><a href="?p=logs"<?php if($page == 'logs') echo ' class="active"';?>>Logs</a></li>
-<?php } ?>
+<?php
+
+require_once('include/database.php');
+require_once('classes/permissions.php');
+require_once('include/bbcode.php');
+
+function PrintMenuEntry($name, $title, $perm = null)
+{
+    global $page;
+    
+    if($perm != null && !CurrentPlayer::HasPerm($perm)) // No permission
+    {
+        return;
+    }
+
+    echo "            <li><a href='?p=$name".($page == $name ? ' class="active"' : '')."'>".$title.'</a></li>'."\n";
+}
+
+PrintMenuEntry('index', 'Home');
+
+if(CurrentPlayer::HasPerm(Permissions::ViewMail))
+{
+    echo "            <li><a href='?p=mail'";
+
+    if($page == $name)
+    {
+        echo ' class="active"';
+    }
+    else if(hasMail())
+    {
+        echo ' class="new"';
+    }
+
+    echo '>Mail</a></li>'."\n";
+}
+
+if(!isset($_SESSION['callsign']))
+{
+    $authPage = urlencode('http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']).'/authenticate.php?token=%TOKEN%&username=%USERNAME%');
+    echo "            <li><a href='http://my.bzflag.org/weblogin.php?url=$authPage'>Login</a></li>\n";
+}
+
+PrintMenuEntry('news', 'News');
+PrintMenuEntry('matches', 'Matches');
+PrintMenuEntry('teams', 'Teams');
+PrintMenuEntry('players', 'Players');
+PrintMenuEntry('help', 'Help');
+PrintMenuEntry('contact', 'Contact');
+PrintMenuEntry('bans', 'Bans');
+
+if(isset($_SESSION['callsign']))
+{
+    echo '            <li><a href="?p=logout">Logout</a></li>'."\n";
+}
+
+PrintMenuEntry('editpages', 'Edit Pages', Permissions::EditPages);
+PrintMenuEntry('entermatch', 'Enter Match', Permissions::EnterMatch);
+PrintMenuEntry('usermanager', 'User Manager', Permissions::ViewPlayers);
+PrintMenuEntry('teammanager', 'Team Manager', Permissions::ViewTeams);
+PrintMenuEntry('logs', 'Logs', Permissions::ViewLogs);
+
+/*
+$names = MySQL::GetPageNames();
+
+foreach($names as $name)
+{
+    PrintMenuEntry(urlencode($name), $name);
+}
+*/
+
+?>
         </ul>
     </div>
     <div id="body">

@@ -1,4 +1,4 @@
-        <h2><?php echo MySQL::getPageName("Help") ?></h2>
+        <h2><?php echo MySQL::GetPageName("Help") ?></h2>
         <?php
         echo FormatToBBCode(MySQL::GetPage(2));
         if(CurrentPlayer::HasPerm(Permissions::EditPages))
