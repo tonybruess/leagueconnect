@@ -1,75 +1,100 @@
         <h2>News</h2>
-        <p>[<a href="?p=news">View Entries</a>]<?php if(CurrentPlayer::HasPerm(Permissions::AddPages)){?> - [<a href="?p=news&op=new">New Entry</a>]<?php } ?></p>
-        <?php
-        if($_GET['op'] == 'new' && CurrentPlayer::HasPerm(Permissions::AddPages))
-        {
-            if($_POST)
-            {
-                $date = $_POST['date'] . ' ' . $_POST['time'];
+        <p>
+            [<a href="?p=news">View Entries</a>]
+            <?php if(CurrentPlayer::HasPerm(Permissions::AddPages)){?> - [<a href="?p=news&op=new">New Entry</a>]<?php } ?>
+        </p>
 
-                if(MySQL::AddEntry($_POST['author'],$_POST['message'],$date,1))
-                    echo "Posted new entry successfully.";
+        <?php
+
+        $action = @$_GET['action'];
+
+        switch($action)
+        {
+            case 'new':
+            {
+                if(CurrentPlayer::HasPerm(Permissions::AddPages))
+                {
+                    if(isset($_POST['message']))
+                    {
+                        if(MySQL::AddNewsEntry(CurrentPlayer::$Name, $_POST['message']))
+                        {
+                            echo 'Posted new entry successfully.';
+                        }
+                    }
+                }
             }
+            break;
+
+            case 'edit':
+            {
+                if(CurrentPlayer::HasPerm(Permissions::EditPages))
+                {
+                    if(isset($_GET['id'], $_POST['date'], $_POST['time'], $_POST['author'], $_POST['message']))
+                    {
+                        $date = $_POST['date'].' '.$_POST['time'];
+
+                        if(MySQL::UpdateEntry($_POST['author'], $_POST['message'], $date, 1, $_POST['id']))
+                        {
+                            echo 'Updated entry successfully.';
+                        }
+                    }
+                }
+            }
+            break;
+
+            default:
+            {
+            }
+            break;
+        }
+
+        if(($action == 'new' && CurrentPlayer::HasPerm(Permissions::AddPages))
+        || ($action == 'edit' && CurrentPlayer::HasPerm(Permissions::EditPages)))
+        {
             ?>
 
             <form method="POST">
-            Author:
-            <input type="text" name="author" value="<?php echo CurrentPlayer::$Name ?>">
-            <br><br>
-            Message:
-            <br>
-            <script type="text/javascript" src="global/bbeditor/ed.js"></script>
-            <script>AddBBCodeToolbar('message'); </script>
-            <textarea cols=50 rows=10 name="message" id="message"></textarea>
-            <br><br>
-            Date: <input type="text" name="date" value="<?php echo date("Y-m-d") ?>" maxlength="10" style="width: 70px;">
-            <br><br>
-            Time: <input type="text" name="time" value="<?php echo date("H:i:s") ?>" maxlength="8" style="width: 50px;">
-            <br><br>
-            Page: <?php echo MySQL::GetPageName("News"); ?>
-            <br><br>
-            <input type="submit" value="Save">
+                Message:
+                <br>
+                <script type="text/javascript" src="global/bbeditor/ed.js"></script>
+                <script type="text/javascript">AddBBCodeToolbar('message'); </script>
+                <textarea cols=80 rows=20 name="message" id="message"></textarea>
+                <br><br>
+                <input type="submit" value="Save">
             </form>
 
             <?php
         }
-        elseif($_GET['op'] == 'edit' && $_GET['i'] && CurrentPlayer::HasPerm(Permissions::EditPages))
-        {
-            $id = MySQL::Sanitize($_GET['i']);
-            if($_POST)
-            {
-                $date = $_POST['date'] . ' ' . $_POST['time'];
-                
-                if(MySQL::UpdateEntry($_POST['author'],$_POST['message'],$date,1,$_POST['id']))
-                    echo 'Updated entry successfully';
-            }
-            
-            $entry = mysql_fetch_assoc(MySQL::Query("SELECT * FROM news WHERE id='$id' LIMIT 1"));
-            $date = explode(' ',$entry['created']);
-        ?>
-            <form method="POST">
-            Author:
-            <input type="text" name="author" value="<?php echo $entry['author'] ?>">
-            <br><br>
-            Message:
-            <br>
-            <script type="text/javascript" src="global/bbeditor/ed.js"></script>
-            <script>AddBBCodeToolbar('message'); </script>
-            <textarea cols=50 rows=10 name="message" id="message"><?php echo $entry['message'] ?></textarea>
-            <br><br>
-            Date: <input type="text" name="date" value="<?php echo $date[0]; ?>" maxlength="10" style="width: 70px;">
-            <br><br>
-            Time: <input type="text" name="time" value="<?php echo $date[1]; ?>" maxlength="8" style="width: 50px;">
-            <br><br>
-            Page: <?php echo MySQL::GetPageName("News"); ?>
-            <br><br>
-            <input type="hidden" name="id" value="<?php echo $entry['id'] ?>">
-            <input type="submit" value="Save">
-            </form>
-        <?php
-        }
         else
         {
-            MySQL::GetPage(1);
+            // Display the page
+            $start = (isset($_GET['start']) ? $_GET['start'] : 0);
+
+            $entries = MySQL::GetNewsEntries($start, 10);
+
+            foreach($entries as $entry)
+            {
+                ?>
+
+                <div id="item">
+                    <div id="header">
+                        <div id="author">
+                            By: <?php echo $entry->Author; ?>
+                        </div>
+                        <div id="time">
+                            <?php echo date('l F jS g:i A', $entry->Created); ?>
+                        </div>
+                    </div>
+                    <div id="message">
+                        <?php echo FormatToBBCode($entry->Message); ?>
+                        <?php if(CurrentPlayer::HasPerm(Permissions::EditPages)){ ?>
+                        <br><br>
+                        [<a href="?p=news&action=edit&id=<?php echo $entry->ID; ?>">Edit</a>]
+                        <?php } ?>
+                    </div>
+                </div>
+
+                <?php
+            }
         }
         ?>
