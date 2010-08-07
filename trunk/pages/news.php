@@ -1,3 +1,10 @@
+<?php
+
+require_once('include/bbcode.php');
+require_once('include/database.php');
+
+?>
+
         <h2>News</h2>
         <p>
             [<a href="?p=news">View Entries</a>]

@@ -386,6 +386,23 @@ class MySQL
     {
         return self::SetInfo('pages', $id, $page);
     }
+
+    /* array of strings */ public static function GetPageNames()
+    {
+        self::CheckConnection();
+
+        $result = self::Query('SELECT id FROM pages');
+        $names = array();
+
+        while($row = self::FetchRow($result))
+        {
+            $id = (int)$row['id'];
+            $page = self::GetPageInfo($id);
+            $names[] = $page->Name;
+        }
+
+        return $names;
+    }
     #endregion
 
     #region news
@@ -442,6 +459,9 @@ class MySQL
         return self::NumRows(self::Query("SELECT id FROM news"));
     }
     #endregion
+
+    #region pages
+    /* Page or null */
     /* list of items */ public static function GetPage($pageid)
     {
         self::CheckConnection();
