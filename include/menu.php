@@ -46,8 +46,8 @@ PrintMenuEntry('news', 'News');
 PrintMenuEntry('matches', 'Matches');
 PrintMenuEntry('teams', 'Teams');
 PrintMenuEntry('players', 'Players');
-PrintMenuEntry('help', 'Help');
-PrintMenuEntry('contact', 'Contact');
+PrintMenuEntry('help', MySQL::GetPageName('Help'));
+PrintMenuEntry('contact', MySQL::GetPageName('Contact'));
 PrintMenuEntry('bans', 'Bans');
 
 if(isset($_SESSION['callsign']))
