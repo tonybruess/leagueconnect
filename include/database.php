@@ -99,7 +99,7 @@ class Database
 
     /* PDOStatement or null */ private static function Query($sql) // After $sql should be a list of params
     {
-        $numArgs = func_get_args();
+        $numArgs = func_num_args();
         $params = array();
 
         for($i = 1; $i < $numArgs; $i++)
