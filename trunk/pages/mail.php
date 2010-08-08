@@ -119,7 +119,7 @@ switch($_GET['op'])
         <?php
         }
         if(!$messages)
-            echo '<tr><td colspan='3'><strong>No messages to display</strong></td></tr>';
+            echo '<tr><td colspan=\'3\'><strong>No messages to display</strong></td></tr>';
         ?>
         </table>
         <?php
@@ -143,7 +143,7 @@ switch($_GET['op'])
         <?php
         }
         if(!$messages)
-            echo '<tr><td colspan='3'><strong>No messages to display</strong></td></tr>';
+            echo '<tr><td colspan=\'3\'><strong>No messages to display</strong></td></tr>';
         ?>
         </table>
         <?php
