@@ -89,7 +89,7 @@ class MySQL
         }
     }
 
-    /* unsigned int */ private static function NumRows($result)
+    /* unsigned int */ public static function NumRows($result)
     {
         if(!$result)
         {
@@ -101,7 +101,7 @@ class MySQL
         }
     }
 
-    /* array or false */ private static function FetchRow($result)
+    /* array or false */ public static function FetchRow($result)
     {
         if(!$result)
         {
@@ -461,50 +461,6 @@ class MySQL
     #endregion
 
     #region pages
-    /* Page or null */
-    /* list of items */ public static function GetPage($pageid)
-    {
-        self::CheckConnection();
- 
-        $pageid = self::Sanitize($pageid);
-        $id = -1;
-
-        $lookup = array(
-            // news
-            '1' => "SELECT * FROM news ORDER BY created DESC",
-            // help
-            '2' => "SELECT * FROM pages WHERE `id`='2'",
-            // contact
-            '3' => "SELECT * FROM pages WHERE `id`='3'",
-            // bans
-            '4' => "SELECT * FROM bans ORDER BY created DESC"
-        );
-
-        $pageSQL = $lookup[$pageid];
-        $result = self::Query($pageSQL);
-        $data = self::FetchRow($result);
-        
-        if($data['type'] == '2')
-        {
-            return $data['text'];
-        }
-        else {
-            $result = self::Query($page[0]);
-            while($row = self::FetchRow($result))
-            {
-            ?>
-        <div id="item">
-            <div id="header">
-                <div id="author">By: <?php echo $row['author'] ?></div>
-                <div id="time"><?php echo $row['created'] ?></div>
-            </div>
-            <div id="data"><?php echo FormatToBBCode($row['message']); if(CurrentPlayer::HasPerm(Permissions::EditPages)){ ?><br><br>[<a href="?p=news&op=edit&i=<?php echo $row['id'] ?>">Edit</a>]<?php } ?></div>
-        </div>
-        <br><br>
-            <?php
-            }
-        }
-    }
 
     /* list of items */ public static function GetPageName($idea)
     {
@@ -562,7 +518,7 @@ class MySQL
         }
     }
     
-    /* bool */ public static function UpdateEntry($author, $message, $date, $page, $messageid)
+    /* bool */ public static function UpdateEntry($author, $message, $page, $messageid)
     {
         self::CheckConnection();
         
@@ -574,9 +530,9 @@ class MySQL
 
         $lookup = array(
             // news
-            "UPDATE news SET `author`='$author', `message`='$message', `created`='$date'" => 1,
+            "UPDATE news SET `author`='$author', `message`='$message'" => 1,
             // bans
-            "UPDATE bans SET `author`='$author', `message`='$message', `created`='$date'" => 4,
+            "UPDATE bans SET `author`='$author', `message`='$message'" => 4,
         );
         
         $query = array_keys($lookup, $page);
@@ -589,6 +545,15 @@ class MySQL
         {
             return false;
         }
+    }
+    
+    /* array */ public static function FetchEntry($id, $page)
+    {
+    	self::CheckConnection();
+    	
+    	$id = MySQL::Sanitize($id);
+    	
+    	return self::FetchRow(self::Query("SELECT * FROM $page WHERE `id`='$id'"));
     }
     #endregion 
 }
