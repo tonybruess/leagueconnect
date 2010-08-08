@@ -17,9 +17,7 @@ class Logging
              . "\n"
              . "Trace:\n"
              . $e->getTraceAsString()
-             . "\n\n\n-----------------------------\n"
-             . "\n"
-             . "\n";
+             . "\n\n-----------------------------\n\n";
 
         file_put_contents(Config::ErrorLogFile, $msg, FILE_APPEND);
     }

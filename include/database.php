@@ -128,7 +128,7 @@ class Database
         else
         {
             // Log the error and return null
-            $error = self::$Connection->errorInfo();
+            $error = $result->errorInfo();
 
             Logging::LogError("SQL: $sql", 'Error:', $error[0], $error[1], $error[2]);
 
