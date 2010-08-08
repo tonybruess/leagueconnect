@@ -15,11 +15,7 @@ require_once('classes/message.php');
 
 class Database
 {
-    const Server = DatabaseSettings::Server;
-    const User = DatabaseSettings::User;
-    const Password = DatabaseSettings::Password;
-    const Database = DatabaseSettings::Database;
-    
+    private static $Connection = null;
     public static $Connected = false;
     public static $ConnectionError = '';
     public static $Errors = array();
@@ -32,22 +28,69 @@ class Database
             return true;
         }
 
-        if(!Database_connect(self::Server, self::User, self::Password))
+        try
         {
-            self::$ConnectionError = Database_error();
-            return false;
+            $server = DatabaseSettings::Server;
+            $user = DatabaseSettings::User;
+            $password = DatabaseSettings::Password;
+            $database = DatabaseSettings::Database;
+            $databasePath = DatabaseSettings::DatabasePath;
+
+            switch(DatabaseSettings::Type)
+            {
+                case DatabaseType::MySQL:
+                {
+                    self::$Connection = new PDO("mysql:host=$server;dbname=$database", $user, $password);
+                }
+                break;
+
+                case DatabaseType::SQLite:
+                {
+                    self::$Connection = new PDO("sqlite:$databasePath");
+                }
+                break;
+
+                case DatabaseType::PostgreSQL:
+                {
+                    self::$Connection = new PDO("pgsql:host=$server;dbname=$database", $user, $password);
+                }
+                break;
+
+                case DatabaseType::Oracle:
+                {
+                    self::$Connection = new PDO("OCI:dbname=$database", $user, $password);
+                }
+
+                case DatabaseType::Informix:
+                {
+                    self::$Connection = new PDO("informix:DSN=$database", $user, $password);
+                }
+                break;
+
+                case DatabaseType::MSAccess:
+                {
+                    self::$Connection = new PDO("obdc:Driver={Microsoft Access Driver (*.mdb)};Dbq=$database;Uid=Admin");
+                }
+                break;
+
+                default:
+                {
+                    die('Unknown database type '.DatabaseSettings::Type);
+                }
+            }
         }
-        
-        if(!Database_select_db(self::Database))
+        catch(PDOException $e)
         {
-            self::$ConnectionError = Database_error();
-            return false;
+            self::$ConnectionError = $e->getMessage();
+            Logging::LogError(self::$ConnectionError);
+
+            die('Error connecting to database, see your error logfile for more information.');
         }
 
 /*
-        if(!Database_query('set time_zone = utc;'))
+        if(!self::Query('set time_zone = utc;'))
         {
-            die('Server Owner: Run "Database_tzinfo_to_sql /usr/share/zoneinfo|Database -u root -p" on your server to enable setting the timezone to UTC.');
+            die('Server Owner: Run "mysql_tzinfo_to_sql /usr/share/zoneinfo|Database -u root -p" on your server to enable setting the timezone to UTC.');
         }
 */        
         return true;
@@ -55,7 +98,7 @@ class Database
 
     /* resource or false */ private static function Query($sql)
     {
-        $result = Database_query($sql);
+        $result = mysql_query($sql);
 
         if($result)
         {
@@ -64,16 +107,9 @@ class Database
         else
         {
             // Log the error and return false
-            $error = 'Database Error: ' . Database_error() . "\n" . "SQL: $sql\n" . "-------\n";
+            Logging::LogError("SQL: $sql", 'Error: '.mysql_error());
 
-            if(!file_exists(Config::ErrorLogFile))
-            {
-                file_put_contents(Config::ErrorLogFile, '');
-            }
-
-            file_put_contents(Config::ErrorLogFile, $error, FILE_APPEND);
-
-            throw new Exception('Database Error: '.Database_error());
+            echo 'There was a database error, see the error log for more information.';
             return false;
         }
     }
@@ -86,7 +122,7 @@ class Database
         }
         else
         {
-            return Database_num_rows($result);
+            return mysql_num_rows($result);
         }
     }
 
@@ -98,15 +134,20 @@ class Database
         }
         else
         {
-            return Database_fetch_assoc($result);
+            return mysql_fetch_assoc($result);
         }
+    }
+
+    /* PDOStatement */ private static function Prepare($sql)
+    {
+        return self::$Connection->prepare($sql);
     }
     
     /* string */ public static function Sanitize($str)
     {
-        if(function_exists('Database_real_escape_string'))
+        if(function_exists('mysql_real_escape_string'))
         {
-            $str = Database_real_escape_string($str);
+            $str = mysql_real_escape_string($str);
         }
         else
         {

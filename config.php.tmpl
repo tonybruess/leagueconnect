@@ -3,13 +3,27 @@
  * Configuration settings for LeagueConnect
  */
 
+// DO NOT EDIT
+class DatabaseType
+{
+    const MySQL = 'MySQL';
+    const SQLite = 'SQLite';
+    const PostgreSQL = 'PostgreSQL';
+    const Informix = 'Informix';
+    const Oracle = 'Oracle';
+    const MSAccess = 'MSAccess';
+}
+// START EDITING HERE
+
 // Database Connection Settings
 class DatabaseSettings
 {
+    const Type = DatabaseType::MySQL;
     const Server = 'localhost';
     const User = 'leagueconnect';
     const Password = 'leagueconnect';
     const Database = 'leagueconnect';
+    const DatabasePath = '/var/www/leagueconnect/database.sdb';
 }
 
 class Config
