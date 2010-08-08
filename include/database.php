@@ -9,7 +9,7 @@ require_once('classes/player.php');
 require_once('classes/team.php');
 require_once('classes/page.php');
 require_once('classes/ban.php');
-require_once('classes/news-entry.php');
+require_once('classes/entry.php');
 
 class MySQL
 {
@@ -405,62 +405,45 @@ class MySQL
     }
     #endregion
 
-    #region news
-    /* NewsEntry or null */ public static function GetNewsEntryInfo($id)
+    #region news and bans
+    /* NewsEntry or null */ public static function GetEntryInfo($id, $page)
     {
-        return self::GetInfo('news', $id, new NewsEntry());
+        return self::GetInfo($page, $id, new Entry());
     }
 
-    /* bool */ public static function SetNewsEntryInfo($id, $newsEntry)
+    /* bool */ public static function SetEntryInfo($id, $newsEntry, $page)
     {
-        return self::SetInfo('news', $id, $newsEntry);
+        return self::SetInfo($page, $id, $newsEntry);
     }
 
-    /* bool */ public static function AddNewsEntry($author, $message)
-    {
-        self::CheckConnection();
-
-        $author = self::Sanitize($author);
-        $message = self::Sanitize($message);
-
-        if(self::Query("INSERT INTO news (`author`, `message`) VALUES ('$author', '$message')"))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    /* array of NewsEntries */ public static function GetNewsEntries($start, $count)
+    /* array of NewsEntries */ public static function GetEntries($start, $count, $page)
     {
         self::CheckConnection();
 
         $start = self::Sanitize($start);
         $count = self::Sanitize($count);
 
-        $result = self::Query("SELECT id FROM news ORDER BY created DESC LIMIT $start,$count");
+        $result = self::Query("SELECT id FROM $page ORDER BY created DESC LIMIT $start,$count");
         $entries = array();
 
         while($row = self::FetchRow($result))
         {
             $id = (int)$row['id'];
-            $entries[] = self::GetNewsEntryInfo($id);
+            $entries[] = self::GetEntryInfo($id, $page);
         }
 
         return $entries;
     }
 
-    /* unsigned int */ public static function GetNumNewsEntries()
+    /* unsigned int */ public static function GetNumEntries($page)
     {
         self::CheckConnection();
 
-        return self::NumRows(self::Query("SELECT id FROM news"));
+        return self::NumRows(self::Query("SELECT id FROM $page"));
     }
     #endregion
 
-    #region pages
+   #region pages
 
     /* list of items */ public static function GetPageName($idea)
     {
@@ -489,26 +472,15 @@ class MySQL
         }
     }
     
-    /* bool */ public static function AddEntry($author, $message, $date, $page)
+    /* bool */ public static function AddEntry($author, $message, $page)
     {
         self::CheckConnection();
         
         $author = self::Sanitize($author);
         $message = self::Sanitize($message);
         $date = self::Sanitize($date);
-        $id = -1;
 
-        $lookup = array(
-            // news
-            "INSERT INTO news SET `author`='$author', `message`='$message', `created`='$date'" => 1,
-            // bans
-            "INSERT INTO bans SET `author`='$author', `message`='$message', `created`='$date'" => 4,
-        );
-        
-        $query = array_keys($lookup, $page);
-        
-        
-        if(self::Query($query[0]))
+        if(self::Query("INSERT INTO $page SET `author`='$author', `message`='$message', `created`=NOW()"))
         {
             return true;
         }
@@ -526,18 +498,8 @@ class MySQL
         $message = self::Sanitize($message);
         $date = self::Sanitize($date);
         $messageid = self::Sanitize($messageid);
-        $id = -1;
-
-        $lookup = array(
-            // news
-            "UPDATE news SET `author`='$author', `message`='$message'" => 1,
-            // bans
-            "UPDATE bans SET `author`='$author', `message`='$message'" => 4,
-        );
-        
-        $query = array_keys($lookup, $page);
-        
-        if(self::Query($query[0] . " WHERE `id` ='$messageid'"))
+ 
+        if(self::Query("UPDATE $page SET `author`='$author', `message`='$message' WHERE `id` ='$messageid'"))
         {
             return true;
         }

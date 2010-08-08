@@ -1,75 +1,118 @@
-        <h2>Bans</h2>
-        <p>[<a href="?p=bans">View Entries</a>]<?php if(CurrentPlayer::HasPerm(Permissions::AddPages)){?> - [<a href="?p=bans&op=new">New Entry</a>]<?php } ?></p>
-        <?php
-        if($_GET['op'] == 'new' && CurrentPlayer::HasPerm(Permissions::AddPages))
-        {
-            if($_POST)
-            {
-                $date = $_POST['date'] . ' ' . $_POST['time'];
+<?php
 
-                if(MySQL::AddEntry($_POST['author'],$_POST['message'],$date,4))
-                    echo "Posted new entry successfully.";
+require_once('include/bbcode.php');
+require_once('include/database.php');
+
+?>
+
+        <h2>Bans</h2>
+        <p>
+            [<a href="?p=bans">View Entries</a>]
+            <?php if(CurrentPlayer::HasPerm(Permissions::AddPages)){?> - [<a href="?p=bans&action=new">New Entry</a>]<?php } ?>
+        </p>
+
+        <?php
+
+        $action = @$_GET['action'];
+
+        switch($action)
+        {
+            case 'new':
+            {
+                if(CurrentPlayer::HasPerm(Permissions::AddPages))
+                {
+                    if(isset($_POST['message']))
+                    {
+                        if(MySQL::AddEntry(CurrentPlayer::$Name, $_POST['message'], 'bans'))
+                        {
+                            echo 'Posted new entry successfully.';
+                        }
+                    }
+                }
             }
-            ?>
+            break;
+
+            case 'edit':
+            {
+                if(CurrentPlayer::HasPerm(Permissions::EditPages))
+                {
+                    if(isset($_GET['id'], $_POST['author'], $_POST['message']))
+                    {
+                        $date = $_POST['date'].' '.$_POST['time'];
+
+                        if(MySQL::UpdateEntry($_POST['author'], $_POST['message'], 'bans', $_POST['id']))
+                        {
+                            echo 'Updated entry successfully.';
+                        }
+                    }
+                }
+            }
+            break;
+
+            default:
+            {
+            }
+            break;
+        }
+        if(($action == 'new' && CurrentPlayer::HasPerm(Permissions::AddPages))
+        || ($action == 'edit' && CurrentPlayer::HasPerm(Permissions::EditPages)))
+        {
+        	if($action == 'edit')
+        	{
+ 		        $entry = MySQL::FetchEntry($_GET['id'], 'bans');	
+         	}
+        	?>
 
             <form method="POST">
-            Author:
-            <input type="text" name="author" value="<?php echo CurrentPlayer::$Name ?>">
-            <br><br>
-            Message:
-            <br>
-            <script type="text/javascript" src="global/bbeditor/ed.js"></script>
-            <script>AddBBCodeToolbar('message'); </script>
-            <textarea cols=50 rows=10 name="message" id="message"></textarea>
-            <br><br>
-            Date: <input type="text" name="date" value="<?php echo date("Y-m-d") ?>" maxlength="10" style="width: 70px;">
-            <br><br>
-            Time: <input type="text" name="time" value="<?php echo date("H:i:s") ?>" maxlength="8" style="width: 50px;">
-            <br><br>
-            Page: <?php echo MySQL::GetPageName("Bans"); ?>
-            <br><br>
-            <input type="submit" value="Save">
+                Author: <input type="text" name="author" value="<?php
+                if($action == 'edit')
+                    echo $entry['author'];
+                else
+                    echo CurrentPlayer::$Name;
+                ?>">
+                <br>
+                Message:
+                <br>
+                <script type="text/javascript" src="global/bbeditor/ed.js"></script>
+                <script type="text/javascript">AddBBCodeToolbar('message'); </script>
+                <textarea cols=80 rows=20 name="message" id="message"><?php if($action == 'edit') echo $entry['message'];?></textarea>
+                <input type="hidden" name="id" value="<?php echo $entry['id']; ?>">
+                <br><br>
+                <input type="submit" value="Save">
             </form>
 
             <?php
         }
-        elseif($_GET['op'] == 'edit' && $_GET['i'] && CurrentPlayer::HasPerm(Permissions::EditPages))
-        {
-            $id = MySQL::Sanitize($_GET['i']);
-            if($_POST)
-            {
-                $date = $_POST['date'] . ' ' . $_POST['time'];
-                
-                if(MySQL::UpdateEntry($_POST['author'],$_POST['message'],$date,4,$_POST['id']))
-                    echo 'Updated entry successfully';
-            }
-            
-            $entry = mysql_fetch_assoc(MySQL::Query("SELECT * FROM bans WHERE id='$id' LIMIT 1"));
-            $date = explode(' ',$entry['created']);
-        ?>
-            <form method="POST">
-            Author:
-            <input type="text" name="author" value="<?php echo $entry['author'] ?>">
-            <br><br>
-            Message:
-            <br>
-            <script type="text/javascript" src="global/bbeditor/ed.js"></script>
-            <script>AddBBCodeToolbar('message'); </script>
-            <textarea cols=50 rows=10 name="message" id="message"><?php echo $entry['message'] ?></textarea>
-            <br><br>
-            Date: <input type="text" name="date" value="<?php echo $date[0]; ?>" maxlength="10" style="width: 70px;">
-            <br><br>
-            Time: <input type="text" name="time" value="<?php echo $date[1]; ?>" maxlength="8" style="width: 50px;">
-            <br><br>
-            Page: <?php echo MySQL::GetPageName("Bans"); ?>
-            <br><br>
-            <input type="hidden" name="id" value="<?php echo $entry['id'] ?>">
-            <input type="submit" value="Save">
-            </form>
-        <?php
-        }
         else
         {
-            MySQL::GetPage(4);
+            // Display the page
+            $start = (isset($_GET['start']) ? $_GET['start'] : 0);
+
+            $entries = MySQL::GetEntries($start, 10, 'bans');
+
+            foreach($entries as $entry)
+            {
+                ?>
+
+                <div id="item">
+                    <div id="header">
+                        <div id="author">
+                            By: <?php echo $entry->Author; ?>
+                        </div>
+                        <div id="time">
+                            <?php echo date('l F jS g:i A', $entry->Created); ?>
+                        </div>
+                    </div>
+                    <div id="data">
+                        <?php echo FormatToBBCode($entry->Message); ?>
+                        <?php if(CurrentPlayer::HasPerm(Permissions::EditPages)){ ?>
+                        <br><br>
+                        [<a href="?p=bans&action=edit&id=<?php echo $entry->ID; ?>">Edit</a>]
+                        <?php } ?>
+                    </div>
+                </div>
+				<br>
+                <?php
+            }
         }
         ?>

@@ -97,14 +97,9 @@ CREATE TABLE news (
 DROP TABLE IF EXISTS bans;
 CREATE TABLE bans (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, -- Unique identifier for the entry
-    `player` VARCHAR ( 225 ), -- Name of banned player
-    `banner` VARCHAR ( 225 ), -- Callsign of banner
-    `bzid` INT UNSIGNED, -- BZID of banned player, NULL if none
-    `duration` INT UNSIGNED, -- Duration of ban (in minutes), 0 = forever
-    `ipaddress` VARCHAR ( 15 ), -- IP address of banned player, NULL if none
-    `hostmask` VARCHAR ( 225 ), -- Hostmask for ban, NULL if none
-    `reason` TEXT, -- Reason for ban
-    `created` TIMESTAMP NOT NULL DEFAULT NOW() -- Time of ban
+    `author` VARCHAR ( 255 ), -- Name of the page
+    `message` TEXT, -- Message to be displayed
+    `created` TIMESTAMP NOT NULL DEFAULT NOW() -- When the message was posted
 );
 
 -- basic setup
