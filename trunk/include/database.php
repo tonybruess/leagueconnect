@@ -109,7 +109,7 @@ class Database
 
         $result = self::$Connection->prepare($sql);
 
-        if($statement->execute($params))
+        if($result->execute($params))
         {
             return $result;
         }
