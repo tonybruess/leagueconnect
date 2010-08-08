@@ -8,7 +8,7 @@ require_once('include/database.php');
         <h2>News</h2>
         <p>
             [<a href="?p=news">View Entries</a>]
-            <?php if(CurrentPlayer::HasPerm(Permissions::AddPages)){?> - [<a href="?p=news&op=new">New Entry</a>]<?php } ?>
+            <?php if(CurrentPlayer::HasPerm(Permissions::AddPages)){?> - [<a href="?p=news&action=new">New Entry</a>]<?php } ?>
         </p>
 
         <?php
@@ -36,11 +36,11 @@ require_once('include/database.php');
             {
                 if(CurrentPlayer::HasPerm(Permissions::EditPages))
                 {
-                    if(isset($_GET['id'], $_POST['date'], $_POST['time'], $_POST['author'], $_POST['message']))
+                    if(isset($_GET['id'], $_POST['author'], $_POST['message']))
                     {
                         $date = $_POST['date'].' '.$_POST['time'];
 
-                        if(MySQL::UpdateEntry($_POST['author'], $_POST['message'], $date, 1, $_POST['id']))
+                        if(MySQL::UpdateEntry($_POST['author'], $_POST['message'], 1, $_POST['id']))
                         {
                             echo 'Updated entry successfully.';
                         }
@@ -54,18 +54,29 @@ require_once('include/database.php');
             }
             break;
         }
-
         if(($action == 'new' && CurrentPlayer::HasPerm(Permissions::AddPages))
         || ($action == 'edit' && CurrentPlayer::HasPerm(Permissions::EditPages)))
         {
-            ?>
+        	if($action == 'edit')
+        	{
+ 		        $entry = MySQL::FetchEntry($_GET['id'], 'news');	
+         	}
+        	?>
 
             <form method="POST">
+                Author: <input type="text" name="author" value="<?php
+                if($action == 'edit')
+                    echo $entry['author'];
+                else
+                    echo CurrentPlayer::$Name;
+                ?>">
+                <br>
                 Message:
                 <br>
                 <script type="text/javascript" src="global/bbeditor/ed.js"></script>
                 <script type="text/javascript">AddBBCodeToolbar('message'); </script>
-                <textarea cols=80 rows=20 name="message" id="message"></textarea>
+                <textarea cols=80 rows=20 name="message" id="message"><?php if($action == 'edit') echo $entry['message'];?></textarea>
+                <input type="hidden" name="id" value="<?php echo $entry['id']; ?>">
                 <br><br>
                 <input type="submit" value="Save">
             </form>
@@ -92,7 +103,7 @@ require_once('include/database.php');
                             <?php echo date('l F jS g:i A', $entry->Created); ?>
                         </div>
                     </div>
-                    <div id="message">
+                    <div id="data">
                         <?php echo FormatToBBCode($entry->Message); ?>
                         <?php if(CurrentPlayer::HasPerm(Permissions::EditPages)){ ?>
                         <br><br>
