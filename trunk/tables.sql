@@ -73,9 +73,9 @@ CREATE TABLE messages (
     `from` INT( 11 ) NOT NULL , -- Player ID who sent the message
     `to` INT( 11 ) NOT NULL , -- Player ID of the recepient
     `read` BOOLEAN NOT NULL DEFAULT FALSE, -- TRUE if read, FALSE otherwise
-    `from_deleted` BOOLEAN NOT NULL DEFAULT FALSE, -- TRUE if the player who sent the message deleted it, FALSE otherwise
-    `to_deleted` BOOLEAN NOT NULL DEFAULT FALSE, -- TRUE if the player who received the message deleted it, FALSE otherwise
-    `created` TIMESTAMP NOT NULL -- Time the message was created
+    `sender_deleted` BOOLEAN NOT NULL DEFAULT FALSE, -- TRUE if the player who sent the message deleted it, FALSE otherwise
+    `recipient_deleted` BOOLEAN NOT NULL DEFAULT FALSE, -- TRUE if the player who received the message deleted it, FALSE otherwise
+    `created` TIMESTAMP NOT NULL DEFAULT NOW() -- Time the message was created
  );
 
 DROP TABLE IF EXISTS pages;
