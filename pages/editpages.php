@@ -6,14 +6,12 @@ if(!CurrentPlayer::HasPerm(Permissions::EditPages)){
 }
 ?>
 <?php
-if($_GET['i']){
-    if($_POST){
-        $name = MySQL::Sanitize($_POST['name']);
-        $text = MySQL::Sanitize($_POST['text']);
-        $id = MySQL::Sanitize($_POST['id']);
-        if(MySQL::Query("UPDATE pages SET `name`='$name', `content`='$text' WHERE `id`='$id'"))
+if($_GET['i'])
+{
+    if($_POST)
+    {
+         if(MySQL::UpdatePageContent($name, $text, $id))
             echo "Updated Successfully";
-        echo mysql_error();
     }
     $i = MySQL::Sanitize($_GET['i']);
     $query = MySQL::Query("SELECT * FROM pages WHERE `id`='$i' LIMIT 1");

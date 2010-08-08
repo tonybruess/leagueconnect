@@ -441,35 +441,7 @@ class MySQL
 
         return self::NumRows(self::Query("SELECT id FROM $page"));
     }
-    #endregion
 
-   #region pages
-
-    /* list of items */ public static function GetPageName($idea)
-    {
-        self::CheckConnection();
- 
-        $idea = self::Sanitize($idea);
-        $id = -1;
-
-        $lookup = array(
-            'Help' => 1,
-            'Contact' => 2,
-        );
-
-        $result = self::Query("SELECT name FROM pages WHERE id='{$lookup[$idea]}' LIMIT 1");
-
-        if(self::NumRows($result) == 0)
-        {
-            return 'Unknown';
-        }
-        else
-        {
-            $row = self::FetchRow($result);
-            return $row['name'];
-        }
-    }
-    
     /* bool */ public static function AddEntry($author, $message, $page)
     {
         self::CheckConnection();
@@ -509,34 +481,75 @@ class MySQL
     
     /* array */ public static function FetchEntry($id, $page)
     {
-    	self::CheckConnection();
-    	
-    	$id = MySQL::Sanitize($id);
-    	
-    	return self::FetchRow(self::Query("SELECT * FROM $page WHERE `id`='$id'"));
+        self::CheckConnection();
+        
+        $id = MySQL::Sanitize($id);
+        
+        return self::FetchRow(self::Query("SELECT * FROM $page WHERE `id`='$id'"));
     }
+    
+    #endregion
+    
+    #region pagecontent
     
     /* text */ public static function GetPageContents($pageid)
     {
         self::CheckConnection();
- 
+        
         $pageid = self::Sanitize($pageid);
         $id = -1;
-
+        
         $lookup = array(
             // help
             "SELECT content FROM pages WHERE `id`='1'" => 1,
             // contact
             "SELECT content FROM pages WHERE `id`='2'" => 2,
-        );
+            );
         
         $page = array_keys($lookup, $pageid);
-        $result = self::Query($page[0]);		
+        $result = self::Query($page[0]);        
         $data = mysql_fetch_assoc($result);
-
+        
         return $data['content'];
     }
-    #endregion 
+
+    /* list of items */ public static function GetPageName($idea)
+    {
+        self::CheckConnection();
+        
+        $idea = self::Sanitize($idea);
+        $id = -1;
+        
+        $lookup = array(
+            'Help' => 1,
+            'Contact' => 2,
+        );
+        
+        $result = self::Query("SELECT name FROM pages WHERE id='{$lookup[$idea]}' LIMIT 1");
+        
+        if(self::NumRows($result) == 0)
+        {
+            return 'Unknown';
+        }
+        else
+        {
+            $row = self::FetchRow($result);
+            return $row['name'];
+        }
+    }
+    
+    /* bool */ public static function UpdatePage($name, $text, $id)
+    {
+        self::CheckConnection();
+        
+        $name = self::Sanitize($name);
+        $text = self::Sanitize($text);
+        $id = self::Sanitize($id);
+        
+        return self::Query("UPDATE pages SET `name`='$name', `content`='$text' WHERE `id`='$id'") ? true : false;
+    }
+    
+    #endregion
 }
 
 // FIXME: Only call Connect when needed
