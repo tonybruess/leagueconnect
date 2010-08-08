@@ -14,9 +14,12 @@ class Logging
 
         $msg = date('l F jS, Y g:i:sA') . "\n"
              . $error . "\n"
-             . "Backtrace:\n"
+             . "\n"
+             . "Trace:\n"
              . $e->getTraceAsString()
-             . "----------\n";
+             . "\n\n\n-----------------------------\n"
+             . "\n"
+             . "\n";
 
         file_put_contents(Config::ErrorLogFile, $msg, FILE_APPEND);
     }
