@@ -647,7 +647,7 @@ class Database
             $message->RecipientDeleted = true;
         }
 
-        return self::SetMessageInfo($id, $message)
+        return self::SetMessageInfo($id, $message);
     }
     
     
