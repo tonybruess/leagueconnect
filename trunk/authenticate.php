@@ -72,7 +72,7 @@ else
 
         // Set Player ID
         $_SESSION['player'] = Database::GetPlayerIDByBZID($bzid);
-        //header("Location: index.php");
+        header("Location: index.php");
     }
     else
     {

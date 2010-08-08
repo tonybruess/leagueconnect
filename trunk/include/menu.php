@@ -28,7 +28,7 @@ if(CurrentPlayer::HasPerm(Permissions::ViewMail))
     {
         echo ' class="active"';
     }
-    else if(hasMail())
+    else if(Database::hasMail())
     {
         echo ' class="new"';
     }

@@ -6,6 +6,7 @@
 
 require_once('config.php');
 require_once('include/session.php');
+require_once('include/logging.php');
 require_once('classes/player.php');
 require_once('classes/team.php');
 require_once('classes/page.php');
@@ -272,8 +273,6 @@ class Database
     
     /* void */ public static function CheckGroups($groups)
     {
-        self::CheckConnection();
-        
         foreach($groups as $group)
         {
 
@@ -362,6 +361,40 @@ class Database
 
         return $ids;
     }
+    
+    /* void */ public static function IDToPlayer($id)
+    {
+        if (is_numeric($id))
+        {
+            $q = self::Query("SELECT name FROM players WHERE id = ".$id);
+            while ($r = self::Query($q, Database_ASSOC))
+                $name = $r['name'];
+                
+            if($name)
+               return $name;
+            else
+                return "CTF League System";
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    /* void */ public static function PlayerToID($username)
+    {
+        $result = self::Query("SELECT id FROM players WHERE `name` = '".$username."' LIMIT 1");
+        if(self::NumRows($result))
+        {
+            $row = self::GetRow($result);
+            return $row[0];
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     #endregion
 
     #region teams table
@@ -722,6 +755,24 @@ class Database
         return $messages;
     }
     
+    #endregion
+    
+    #region common
+    
+    /* void */ public static function rowClass($i)
+    {
+        if ( ( $i % 2) != 0)
+            return 'rowOdd';
+        else
+            return 'rowEven';
+    }
+
+    /* bool */ public static function hasMail()
+    {
+        $result = Database::GetRow(Database::Query("SELECT * FROM messages WHERE `to`=".CurrentPlayer::$ID." AND `read`='0' AND `to_deleted`='0'"));
+        
+        return $result ? true : false;
+}
     #endregion
 }
 
