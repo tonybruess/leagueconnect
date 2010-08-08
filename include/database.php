@@ -5,6 +5,7 @@
  */
 
 require_once('config.php');
+require_once('include/session.php');
 require_once('classes/player.php');
 require_once('classes/team.php');
 require_once('classes/page.php');
@@ -230,6 +231,50 @@ class MySQL
     #endregion
 
     #region players
+    
+    /* void */ public static function GetGroupNames()
+    {
+        self::CheckConnection();
+        
+        $groups = array();
+        $result = self::Query("SELECT name FROM groups");
+        
+        while ($group = self::GetRow($result)) {
+            $groups[] = $group['name'];
+        }
+        
+        return $groups;
+
+    }
+    
+    /* void */ public static function CheckGroups($groups)
+    {
+        self::CheckConnection();
+        
+        foreach($groups as $group)
+        {
+
+            $role = self::GetRow(self::Query("SELECT role FROM groups WHERE `name`='$group'"));
+            $permdata = self::GetRow(self::Query("SELECT permissions FROM roles WHERE `id`='" . $role['role'] . "'"));
+            $perm = str_split($permdata['permissions']);
+            
+            if ($perm[1] == '0')
+            {
+                session_destroy();
+                header('Location: ?p=error&error=3');
+            }
+            else
+            {
+                $i = 0;
+                foreach($perm as $p) {
+                    if (!$_SESSION['perm'][$i])
+                        $_SESSION['perm'][$i] = $perm[$i];
+                    $i++;
+                }
+            }
+        }
+    }
+    
     /* void */ public static function AddPlayer($name, $bzid)
     {
         self::CheckConnection();
@@ -387,6 +432,28 @@ class MySQL
         }
 
         return $teams;
+    }
+    
+    /* void */ public static function GenerateTeamButton($teamid, $leaderid)
+    {
+        self::CheckConnection();
+        
+        
+        if (!self::IsTeamMember(CurrentPlayer::$ID) && !self::IsTeamLeader(CurrentPlayer::$ID))
+        {
+            $action = 'join"';
+            $action_value = $teamid;
+            $button_value = 'Join';
+        }
+        elseif (self::IsTeamMember(CurrentPlayer::$ID, $teamid) || self::IsTeamLeader(CurrentPlayer::$ID, $teamid))
+        {
+            $action = 'abandon';
+            $action_value = $teamid;
+            $button_value = 'Abandon';   
+        }
+
+        return '<form method="GET"><input type="hidden" name="p" value="teams"><input type="hidden" name="' . $action . '" value="' . $action_value . '"><input type="submit" value="' . $button_value . '"></form>';
+    
     }
     #endregion
    
@@ -567,6 +634,17 @@ class MySQL
     
     #region messages
 
+    /* void */ public static function NumberOfNewMessages()
+    {
+        self::CheckConnection();
+        
+        $result = self::Query("SELECT id FROM messages WHERE `read`='0' AND `to`='".CurrentPlayer::$ID."' AND `to_deleted`='0'");
+        
+        $count = self::NumRows($result);
+        
+        return $count == '1' ? $count . ' new message' : $count . ' new messages';
+    }
+   
     /* Message or null */ public static function GetMessageInfo($id)
     {
         return self::GetInfo('messages', $id, new Message());

@@ -10,7 +10,7 @@ if($_GET['i'])
 {
     if($_POST)
     {
-         if(MySQL::UpdatePageContent($name, $text, $id))
+         if(MySQL::UpdatePage($name, $text, $id))
             echo "Updated Successfully";
     }
     $i = MySQL::Sanitize($_GET['i']);

@@ -11,7 +11,7 @@ switch(@$_POST['action'])
         {
             echo 'Team name unavailable.';
         }
-        else if(MySQL::IsTeamMember(CurrentPlayer::$ID))
+        elseif(MySQL::IsTeamMember(CurrentPlayer::$ID) || MySQL::IsTeamLeader(CurrentPlayer::$ID))
         {
             echo 'You must leave your current team before creating a new one.';
         }
@@ -22,6 +22,19 @@ switch(@$_POST['action'])
         break;
 
     case 'edit':
+        break;
+    
+    case 'join':
+        $team = $_GET['team'];
+        if(MySQL::IsTeamMember(CurrentPlayer::$ID))
+        {
+            echo 'You want to abandon this team';
+        }
+        elseif(MySQL::IsTeamLeader(CurrentPlayer::$ID,$team))
+        {
+            echo 'You can not leave your team because you are the leader';
+        }
+        
         break;
 
     case 'delete':
@@ -36,12 +49,14 @@ switch(@$_POST['action'])
 ?>
 
 <table border="0" cellspacing="2" cellpadding="3">
-<th>Name</th>
-<th>Leader</th>
-<th>#</th>
-<th>Score</th>
-<th>Join</th>
-<th>Activity</th>
+<tr>
+  <th>Name</th>
+  <th>Leader</th>
+  <th>#</th>
+  <th>Score</th>
+  <th>Join</th>
+  <th>Activity</th>
+</tr>
 <?php
 
 $teams = MySQL::GetTeamInfoList();
@@ -59,12 +74,7 @@ foreach($teams as $team)
     <td><?php echo $leader->Name; ?></td>
     <td><?php echo count($players); ?></td>
     <td><?php echo $team->Rank; ?></td>
-    <td>
-        <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-            <input type="hidden" name="jointeam" value="<?php echo $team->ID; ?>">
-            <input type="submit" value="<?php if(CurrentPlayer::$ID == $leader->ID){ echo 'Edit'; } else { echo 'Join'; } ?>" <?php if($team->Closed){ echo 'disabled'; } ?> >
-        </form>
-    </td>
+<td><?php echo MySQL::GenerateTeamButton($team->ID, $team->Leader); ?></td>
     <td>&nbsp;</td>
 </tr>
 
@@ -88,7 +98,7 @@ else
 {
 ?>
 
-    <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+    <form method="POST">
     <input type="hidden" name="action" value="add">
     Name: <input type="text" name="newteam">
     <input type="submit" value="Create">
