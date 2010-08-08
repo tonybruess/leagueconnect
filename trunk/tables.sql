@@ -69,7 +69,7 @@ DROP TABLE IF EXISTS messages;
 CREATE TABLE messages (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, -- Unique identifier for this message
     `subject` VARCHAR( 255 ) NULL , -- Subject of the message
-    `message` TEXT NOT NULL , -- Contents of the message
+    `contents` TEXT NOT NULL , -- Contents of the message
     `from` INT( 11 ) NOT NULL , -- Player ID who sent the message
     `to` INT( 11 ) NOT NULL , -- Player ID of the recepient
     `read` BOOLEAN NOT NULL DEFAULT FALSE, -- TRUE if read, FALSE otherwise
