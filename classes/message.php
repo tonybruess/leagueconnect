@@ -47,4 +47,14 @@ class Message
         return $row;
     }
 }
+
+class MessageType
+{
+    const All = 1; // Bit 1
+    const FromMe = 2; // Bit 2
+    const ToMe = 4; // Bit 3
+    const UnRead = 8; // Bit 4
+    const Read = 16; // Bit 5
+}
+
 ?>
