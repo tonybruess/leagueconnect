@@ -203,14 +203,28 @@ class MySQL
 
         $sql = implode(',', $sqlParts);
 
-        if(self::Query("UPDATE $table SET $sql WHERE `id`='$id' LIMIT 1"))
+        if($id == '') // null id, insert it
         {
-            self::$Cache[$table][$id] = $row; // Update the cache
-            return true;
+            if(self::Query("INSERT INTO $table SET $sql"))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
-        else
+        else // update
         {
-            return false;
+            if(self::Query("UPDATE $table SET $sql WHERE `id`='$id' LIMIT 1"))
+            {
+                self::$Cache[$table][$id] = $row; // Update the cache
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
     #endregion
@@ -552,6 +566,16 @@ class MySQL
     #endregion
     
     #region messages
+
+    /* Message or null */ public static function GetMessageInfo($id)
+    {
+        return self::GetInfo('messages', $id, new Message());
+    }
+
+    /* bool */ public static function SetMessageInfo($id, $message)
+    {
+        return self::GetInfo('messages', $id, $message);
+    }
     
     /* void */ public static function MarkMessageRead($message)
     {
@@ -586,18 +610,24 @@ class MySQL
     }
     
     
-    /* bool */ public static function sendmessage($to, $subject, $message)
+    /* bool */ public static function SendMessage($to, $subject, $contents)
     {
         self::CheckConnection();
 
-        $to = self::sanitize($to);
-        $subject = self::sanitize($subject);
-        $message = self::sanitize($message);
+        $message = new Message();
+        $message->To = $to;
+        $message->From = $from;
+        $message->Subject = $subject;
+        $message->Contents = $contents;
 
-        if($to == CurrentPlayer::$ID)
+        if($message->To == $message->From)
+        {
             return false;
+        }
         else
-            return self::Query("INSERT INTO messages SET `to` = '$to', `from` = '$uid', `subject` = '$subject', `message` = '$message', `created` = NOW()") ? true : false;   
+        {
+            return self::SetMessageInfo(null, $message);
+        }
     }
     
     /* void */ public static function GetMessage($id)
