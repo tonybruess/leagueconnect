@@ -551,7 +551,7 @@ class MySQL
     
     #endregion
     
-    #region mail
+    #region messages
     
     /* void */ public static function MarkMessageRead($message)
     {
@@ -579,7 +579,7 @@ class MySQL
         else
         {
             // To Deleted
-            $sql = "`to_deleted` = '1' ";
+            $sql .= "`to_deleted` = '1' ";
         }
        
         return self::Query($sql . "WHERE `id` = '$messageid' LIMIT 1") ? true : false;
@@ -619,14 +619,15 @@ class MySQL
     {
         self::CheckConnection();   
         
-        switch($type):
+        switch($type)
+        {
             case 'sent':
-                $q = "SELECT * FROM messages WHERE `from` = '".CurrentPlayer::$ID."' &&  `from_deleted` = '0'";
+                $q = "SELECT * FROM messages WHERE `from` = '".CurrentPlayer::$ID."' &&  `from_deleted` = FALSE";
                 break;
             default:
-                $q = "SELECT * FROM messages WHERE `to` = '".CurrentPlayer::$ID."' &&  `to_deleted` = '0'";
+                $q = "SELECT * FROM messages WHERE `to` = '".CurrentPlayer::$ID."' &&  `to_deleted` = FALSE";
                 break;
-        endswitch;
+        }
         
         $id = self::Sanitize($id);
         $result = self::Query($q);
