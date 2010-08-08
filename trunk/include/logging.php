@@ -19,6 +19,6 @@ class Logging
     }
 }
 
-file_put_contents(Config::ErrorLogFile, '');
+file_put_contents(Config::ErrorLogFile, '', FILE_APPEND);
 
 ?>
