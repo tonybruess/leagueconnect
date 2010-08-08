@@ -97,51 +97,68 @@ class Database
         return true;
     }
 
-    /* resource or false */ private static function Query($sql)
+    /* PDOStatement or null */ private static function Query($sql) // After $sql should be a list of params
     {
-        $result = mysql_query($sql);
+        $numArgs = func_get_args();
+        $params = array();
 
-        if($result)
+        for($i = 1; $i < $numArgs; $i++)
+        {
+            $params[] = func_get_arg($i);
+        }
+
+        $result = self::$Connection->prepare($sql);
+
+        if($statement->execute($params))
         {
             return $result;
         }
         else
         {
-            // Log the error and return false
-            Logging::LogError("SQL: $sql", 'Error: '.mysql_error());
+            // Log the error and return null
+            $error = self::$Connection->errorInfo();
+
+            Logging::LogError("SQL: $sql", 'Error:', $error[0], $error[1], $error[2]);
 
             echo 'There was a database error, see the error log for more information.';
-            return false;
+            return null;
         }
     }
 
     /* unsigned int */ private static function NumRows($result)
     {
-        if(!$result)
+        if($result == null)
         {
             return 0;
         }
         else
         {
-            return mysql_num_rows($result);
+            return $result->rowCount();
         }
     }
 
     /* array or false */ private static function GetRow($result)
     {
-        if(!$result)
+        if($result == null)
         {
             return false;
         }
         else
         {
-            return mysql_fetch_assoc($result);
+            return $result->fetch();
         }
     }
 
-    /* PDOStatement */ private static function Prepare($sql)
+    /* array or false */ private static function GetRows($result)
     {
-        return self::$Connection->prepare($sql);
+        if($result == null)
+        {
+            return false;
+        }
+        else
+        {
+            return $result->fetchAll();
+        }
     }
     
     /* string */ public static function Sanitize($str)
