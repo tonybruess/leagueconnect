@@ -155,7 +155,7 @@ class MySQL
         {
             $result = self::Query("SELECT * FROM $table WHERE `id` = '$id' LIMIT 1");
 
-            if(!self::NumRows($result))
+            if(self::NumRows($result) == 0)
             {
                 return null;
             }
