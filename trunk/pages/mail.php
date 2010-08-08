@@ -11,6 +11,7 @@ require_once("include/bbcode.php");
 <script type="text/javascript" src="global/bbeditor/ed.js"></script>  
 <?php
     $uid = CurrentPlayer::$ID;
+
     function read($message) {
         $sql = "UPDATE messages SET `read` = TRUE WHERE `id` = '$message' LIMIT 1";
         return (@mysql_query($sql)) ? true:false;
@@ -40,14 +41,14 @@ require_once("include/bbcode.php");
         if($to == $uid)
             return false;
         else
-            $sql = "INSERT INTO messages SET `to` = '$to', `from` = '$uid', `subject` = '$subject', `message` = '$message', `created` = '$ts'";
+            $sql = "INSERT INTO messages SET `to` = '$to', `from` = '$uid', `subject` = '$subject', `message` = '$message', `created` = NOW()";
             return (@mysql_query($sql)) ? true:false;
     }
         
     // check if a new message had been sent
     if(isset($_POST['newmessage'])) {
         // error while sending message?
-        if($_POST['to'] !== "" && $_POST['subject'] !== "" && $_POST['message'] !== ""){
+        if($_POST['to']&& $_POST['subject'] && $_POST['message']){
             $toclean = MySQL::sanitize($_POST['to']);
             $subclean = MySQL::sanitize($_POST['subject']);
             $mesclean = MySQL::sanitize($_POST['message']);
@@ -125,7 +126,7 @@ if(!isset($_GET['op']) || $_GET['op'] == 'new') {
     // fetch the data
         $message = mysql_fetch_assoc($result);
     }
-    if($message['from'] !== $uid)
+    if($message['from'] != $uid)
          read($message['id']);
 ?>
     <table border="0" cellspacing="2" cellpadding="3">
@@ -149,9 +150,7 @@ if(!isset($_GET['op']) || $_GET['op'] == 'new') {
     <br>
     <?php if($message['from'] > 0){ ?>
     <form name='reply' method='post' action='<?php echo $_SERVER['PHP_SELF']."?p=mail&op=compose"; ?>'>
-        <input type='hidden' name='from' value='<?php echo $message['from']; ?>'>
-        <input type='hidden' name='subject' value='Re: <?php echo $message['subject']; ?>'>
-        <input type='hidden' name='message' value='[quote]<?php echo $message['message']; ?>[/quote]'>
+        <input type='hidden' name='id' value='<?php echo $message['id']; ?>'>
         <input type='submit' name='reply' value='Reply'>
     </form>
     <br>
@@ -162,8 +161,11 @@ if(!isset($_GET['op']) || $_GET['op'] == 'new') {
     </form>
 <?php
 } elseif($_GET['op'] == 'compose' ) {
-    if($_POST['reply'])
-        $reply = 1;
+    if($_POST['reply']){
+    	$reply = true;
+    	$idclean = MySQL::Sanitize($_POST['id']);
+    	$message = mysql_fetch_assoc(MySQL::Query("SELECT * FROM messages WHERE `id`='$idclean' AND `to`='$uid'"));
+    }
 ?>
     <form name="new" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?p=mail&op=compose">
         <br><strong>To:</strong>
@@ -173,16 +175,16 @@ if(!isset($_GET['op']) || $_GET['op'] == 'new') {
         $result = mysql_query($query) or die(mysql_error());
         while($row = mysql_fetch_array($result)){
             echo '<option value="'.$row['id'].'"';
-            if($row['id'] == $_POST['from'] || $row['id'] == $_POST['to']) echo " selected";
+            if($row['id'] == $message['from'] || $row['id'] == $message['to']) echo " selected";
             echo '>'.$row['name'].'</option>';
         }
         ?>
         </select><br><br>
         <strong>Subject:</strong>
-        <input type='text' name='subject' value='<?php if($fail || $reply) echo $_POST['subject'];?>'><br><br>
+        <input type='text' name='subject' value='<?php if($fail || $reply) echo 'Re: ' . $message['subject'];?>'><br><br>
         <strong>Message:</strong><br>
         <script>AddBBCodeToolbar('message'); </script>
-        <textarea cols="60" rows="20" name='message' id='message'><?php if($fail || $reply) echo $_POST['message']; ?></textarea><br><br>
+        <textarea cols="60" rows="20" name='message' id='message'><?php if($fail || $reply) echo '[quote]' . $message['message'] . '[/quote]'; ?></textarea><br><br>
         <input type='submit' name='newmessage' value='Send'>
     </form>
 <?php
