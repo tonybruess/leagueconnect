@@ -160,20 +160,6 @@ class Database
             return $result->fetchAll();
         }
     }
-    
-    /* string */ public static function Sanitize($str)
-    {
-        if(function_exists('mysql_real_escape_string'))
-        {
-            $str = mysql_real_escape_string($str);
-        }
-        else
-        {
-            die('Please upgrade your version of PHP to at least 4.3.0');
-        }
-        
-        return $str;
-    }
 
     /*
      * The following function are interfaces for accessing the Database database
