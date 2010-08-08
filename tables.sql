@@ -53,7 +53,7 @@ DROP TABLE IF EXISTS teams;
 CREATE TABLE teams (
     `id` INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT, -- Unique identifier for this team
     `name` VARCHAR(128) NOT NULL, -- Name of the team
-    `created` TIMESTAMP NOT NULL, -- Date the team was created
+    `created` TIMESTAMP NOT NULL DEFAULT NOW(), -- Date the team was created
     `leader` INT UNSIGNED NOT NULL, -- Player ID of the leader of the team
     `coleaders` TEXT DEFAULT "", -- List of player IDs for the co-leaders
     `activity` INT DEFAULT 0, -- Activity?

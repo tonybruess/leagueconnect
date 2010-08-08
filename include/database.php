@@ -287,11 +287,11 @@ class Database
     {
         foreach($groups as $group)
         {
-            $role = self::GetRow(self::Query("SELECT role FROM groups WHERE `name`='$group'"));
-            $permdata = self::GetRow(self::Query("SELECT permissions FROM roles WHERE `id`='" . $role['role'] . "'"));
+            $role = self::GetRow(self::Query("SELECT role FROM groups WHERE `name`='?'", $group));
+            $permdata = self::GetRow(self::Query("SELECT permissions FROM roles WHERE `id`='?'", $role['role']));
             $perm = str_split($permdata['permissions']);
             
-            if ($perm[1] == '0')
+            if($perm[1] == '0')
             {
                 session_destroy();
                 header('Location: ?p=error&error=3');
@@ -299,36 +299,45 @@ class Database
             else
             {
                 $i = 0;
-                foreach($perm as $p) {
-                    if (!$_SESSION['perm'][$i])
+                foreach($perm as $p)
+                {
+                    if (!isset($_SESSION['perm'][$i]))
+                    {
                         $_SESSION['perm'][$i] = $perm[$i];
+                    }
+
                     $i++;
                 }
             }
         }
     }
+
+    #endregion
+
+    #region players
+    /* Player or null */ public static function GetPlayerInfo($id)
+    {
+        return self::GetInfo('players', $id, new Player());
+    }
+
+    /* bool */ public static function SetPlayerInfo($id, $player)
+    {
+        return self::SetInfo('players', $id, $player);
+    }
     
     /* void */ public static function AddPlayer($name, $bzid)
     {
-        $name = self::Sanitize($name);
-        $bzid = self::Sanitize($bzid);
-
-        self::Query("INSERT INTO players (`name`, `bzid`, `firstlogin`, `lastlogin`) VALUES ('$name', '$bzid', NOW(), NOW())");
+        self::Query("INSERT INTO players (`name`, `bzid`, `firstlogin`, `lastlogin`) VALUES ('?', '?', NOW(), NOW())", $name, $bzid);
     }
 
     /* void */ public static function PlayerLogin($name, $bzid)
     {
-        $name = self::Sanitize($name);
-        $bzid = self::Sanitize($bzid);
-
-        self::Query("UPDATE players SET `name`='$name', `lastlogin`=NOW() WHERE `bzid`='$bzid'");
+        self::Query("UPDATE players SET `name`='?', `lastlogin`=NOW() WHERE `bzid`='?'", $name, $bzid);
     }
 
     /* unsigned int */ public static function GetPlayerIDByBZID($bzid)
     {
-        $bzid = self::Sanitize($bzid);
-
-        $result = self::Query("SELECT id FROM players WHERE `bzid`='$bzid'");
+        $result = self::Query("SELECT id FROM players WHERE `bzid`='?'", $bzid);
 
         if(self::NumRows($result) == 0)
         {
@@ -343,26 +352,12 @@ class Database
 
     /* bool */ public static function PlayerExists($bzid)
     {
-        $bzid = self::Sanitize($bzid);
-
-        return self::NumRows(self::Query("SELECT id FROM players WHERE `bzid`='$bzid' LIMIT 1")) != 0;
-    }
-
-    /* Player or null */ public static function GetPlayerInfo($id)
-    {
-        return self::GetInfo('players', $id, new Player());
-    }
-
-    /* bool */ public static function SetPlayerInfo($id, $player)
-    {
-        return self::SetInfo('players', $id, $player);
+        return self::NumRows(self::Query("SELECT id FROM players WHERE `bzid`='?' LIMIT 1", $bzid)) != 0;
     }
 
     /* array of ints */ public static function GetPlayersByTeam($team)
     {
-        $team = self::Sanitize($team);
-
-        $result = self::Query("SELECT id FROM players WHERE `team`='$team'");
+        $result = self::Query("SELECT id FROM players WHERE `team`='?'", $team);
         $ids = array();
 
         while($row = self::GetRow($result))
@@ -372,60 +367,24 @@ class Database
 
         return $ids;
     }
-    
-    /* void */ public static function IDToPlayer($id)
-    {
-        if (is_numeric($id))
-        {
-            $q = self::Query("SELECT name FROM players WHERE id = ".$id);
-            while ($r = self::Query($q, Database_ASSOC))
-                $name = $r['name'];
-                
-            if($name)
-               return $name;
-            else
-                return "CTF League System";
-        }
-        else
-        {
-            return false;
-        }
-    }
 
-    /* void */ public static function PlayerToID($username)
+    /* Player */ public static function GetPlayerByName($name)
     {
-        $result = self::Query("SELECT id FROM players WHERE `name` = '".$username."' LIMIT 1");
-        if(self::NumRows($result))
+        $result = self::Query("SELECT id FROM players WHERE `name`='?' LIMIT 1", $name);
+
+        if(self::NumRows($result) == 0)
         {
-            $row = self::GetRow($result);
-            return $row[0];
+            return null;
         }
         else
         {
-            return false;
+            return GetPlayerInfo($result['id']);
         }
     }
 
     #endregion
 
-    #region teams table
-
-    /* void */ public static function AddTeam($name, $leader)
-    {
-        $name = self::Sanitize($name);
-        $leader = self::Sanitize($leader);
-
-        self::Query("INSERT INTO teams (`name`, `created`, `leader`) VALUES ('$name', NOW(), '$leader')");
-        $team_id = self::GetRow(self::Query("SELECT id FROM teams WHERE `name`='$name'"));
-        self::Query("UPDATE players SET `team`='".$team_id['id']."' WHERE `id`='$leader'");
-    }
-
-    /* bool */ public static function TeamExists($name)
-    {
-        $name = self::Sanitize($name);
-
-        return self::NumRows(self::Query("SELECT id FROM teams WHERE `name`='$name' LIMIT 1")) != 0;
-    }
+    #region teams
 
     /* Team or null */ public static function GetTeamInfo($id)
     {
@@ -436,34 +395,43 @@ class Database
     {
         return self::SetInfo('teams', $id, $team);
     }
+
+    /* void */ public static function AddTeam($name, $leader)
+    {
+        self::Query("INSERT INTO teams SET `name`='?', `leader`='?'", $name, $leader);
+
+        $result = self::GetRow(self::Query("SELECT id FROM teams WHERE `name`='?'", $name));
+        $teamID = $result['id'];
+
+        self::Query("UPDATE players SET `team`='?' WHERE `id`='?'", $teamID, $leader);
+    }
+
+    /* bool */ public static function TeamExists($name)
+    {
+        return self::NumRows(self::Query("SELECT id FROM teams WHERE `name`='?' LIMIT 1", $name)) != 0;
+    }
     
     /* bool */ public static function IsTeamLeader($player, $team=null)
     {
-        $player = self::Sanitize($player);
-        $team = self::Sanitize($team);
-
-        if($team == '')
+        if($team == null)
         {
-            return self::NumRows(self::Query("SELECT id FROM teams WHERE `leader`='$player' LIMIT 1")) != 0;
+            return self::NumRows(self::Query("SELECT id FROM teams WHERE `leader`='?' LIMIT 1", $player)) != 0;
         }
         else
         {
-            return self::NumRows(self::Query("SELECT id FROM teams WHERE `leader`='$player' && `id`='$team' LIMIT 1")) != 0;
+            return self::NumRows(self::Query("SELECT id FROM teams WHERE `leader`='?' AND `id`='?' LIMIT 1", $player, $team)) != 0;
         }
     }
 
     /* bool */ public static function IsTeamMember($player, $team=null)
     {
-        $player = self::Sanitize($player);
-        $team = self::Sanitize($team);
-
-        if($team == '')
+        if($team == null)
         {
-            return self::NumRows(self::Query("SELECT id FROM players WHERE `id`='$player' && `team`!=NULL")) != 0;
+            return self::NumRows(self::Query("SELECT id FROM players WHERE `id`='?' AND `team`!=NULL", $player)) != 0;
         }
         else
         {
-            return self::NumRows(self::Query("SELECT id FROM players WHERE `id`='$player' && `team`='$team'")) != 0;
+            return self::NumRows(self::Query("SELECT id FROM players WHERE `id`='?' && `team`='?'", $player, $team)) != 0;
         }
     }
 
@@ -541,10 +509,10 @@ class Database
 
     /* array of NewsEntries */ public static function GetEntries($start, $count, $page)
     {
-        $start = self::Sanitize($start);
-        $count = self::Sanitize($count);
+        if(!is_numeric($start) || !is_numeric($count))
+            return null;
 
-        $result = self::Query("SELECT id FROM $page ORDER BY created DESC LIMIT $start,$count");
+        $result = self::Query("SELECT id FROM ? ORDER BY created DESC LIMIT ?,?", $page, $start, $count);
         $entries = array();
 
         while($row = self::GetRow($result))
@@ -558,16 +526,12 @@ class Database
 
     /* unsigned int */ public static function GetNumEntries($page)
     {
-        return self::NumRows(self::Query("SELECT id FROM $page"));
+        return self::NumRows(self::Query("SELECT id FROM ?", $page));
     }
 
     /* bool */ public static function AddEntry($author, $message, $page)
     {
-        $author = self::Sanitize($author);
-        $message = self::Sanitize($message);
-        $date = self::Sanitize($date);
-
-        if(self::Query("INSERT INTO $page SET `author`='$author', `message`='$message', `created`=NOW()"))
+        if(self::Query("INSERT INTO ? SET `author`='?', `message`='?'", $page, $author, $message))
         {
             return true;
         }
@@ -579,12 +543,7 @@ class Database
     
     /* bool */ public static function UpdateEntry($author, $message, $page, $messageid)
     {
-        $author = self::Sanitize($author);
-        $message = self::Sanitize($message);
-        $date = self::Sanitize($date);
-        $messageid = self::Sanitize($messageid);
- 
-        if(self::Query("UPDATE $page SET `author`='$author', `message`='$message' WHERE `id` ='$messageid'"))
+        if(self::Query("UPDATE ? SET `author`='?', `message`='?' WHERE `id` ='?'", $page, $author, $message, $messageid))
         {
             return true;
         }
@@ -596,10 +555,7 @@ class Database
     
     /* array */ public static function FetchEntry($id, $page)
     {
-        $id = Database::Sanitize($id);
-        $page = Database::Sanitize($page);
-        
-        return self::GetRow(self::Query("SELECT * FROM $page WHERE `id`='$id'"));
+        return self::GetRow(self::Query("SELECT * FROM ? WHERE `id`='?'", $page, $id));
     }
     
     #endregion
@@ -608,7 +564,6 @@ class Database
     
     /* text */ public static function GetPageContents($pageid)
     {
-        $pageid = self::Sanitize($pageid);
         $id = -1;
         
         $lookup = array(
@@ -620,22 +575,21 @@ class Database
         
         $page = array_keys($lookup, $pageid);
         $result = self::Query($page[0]);        
-        $data = Database_fetch_assoc($result);
+        $data = self::GetRow($result);
         
         return $data['content'];
     }
 
     /* list of items */ public static function GetPageName($idea)
     {
-        $idea = self::Sanitize($idea);
         $id = -1;
         
         $lookup = array(
-            'Help' => 1,
-            'Contact' => 2,
+            1 => 'Help',
+            2 => 'Contact'
         );
         
-        $result = self::Query("SELECT name FROM pages WHERE id='{$lookup[$idea]}' LIMIT 1");
+        $result = self::Query("SELECT name FROM pages WHERE id='?' LIMIT 1", $lookup[idea]);
         
         if(self::NumRows($result) == 0)
         {
@@ -650,26 +604,13 @@ class Database
     
     /* bool */ public static function UpdatePage($name, $text, $id)
     {
-        $name = self::Sanitize($name);
-        $text = self::Sanitize($text);
-        $id = self::Sanitize($id);
-        
-        return self::Query("UPDATE pages SET `name`='$name', `content`='$text' WHERE `id`='$id'") ? true : false;
+        return self::Query("UPDATE pages SET `name`='?', `content`='?' WHERE `id`='?'", $name, $text, $id) ? true : false;
     }
     
     #endregion
     
     #region messages
 
-    /* void */ public static function NumberOfNewMessages()
-    {
-        $result = self::Query("SELECT id FROM messages WHERE `read`='0' AND `to`='".CurrentPlayer::$ID."' AND `to_deleted`='0'");
-        
-        $count = self::NumRows($result);
-        
-        return $count == '1' ? $count . ' new message' : $count . ' new messages';
-    }
-   
     /* Message or null */ public static function GetMessageInfo($id)
     {
         return self::GetInfo('messages', $id, new Message());
@@ -679,33 +620,34 @@ class Database
     {
         return self::GetInfo('messages', $id, $message);
     }
-    
-    /* void */ public static function MarkMessageRead($message)
+
+    /* unsigned int */ public static function NumberOfNewMessages()
     {
-        return self::Query("UPDATE messages SET `read` = TRUE WHERE `id` = '$message' LIMIT 1") ? true : false;
+        return self::NumRows(self::Query("SELECT id FROM messages WHERE `read`=FALSE AND `to`='?' AND `to_deleted`=FALSE", CurrentPlayer::$ID));
     }
     
-    /* void */ public static function deleted($messageid)
+    /* bool */ public static function MarkMessageRead($message)
     {
-        $messageclean = Database::Sanitize($messageid);
-        $sql = 'UPDATE messages SET ';
+        return self::Query("UPDATE messages SET `read`=TRUE WHERE `id` = '?' LIMIT 1", $message) ? true : false;
+    }
+    
+    /* bool */ public static function Delete($id)
+    {
+        $message = self::GetMessageInfo($id);
 
-        $result = self::Query("SELECT * FROM messages WHERE `id` = '$messageclean' && (`from` = '".CurrentPlayer::$ID."' || `to` = '".CurrentPlayer::$ID."') LIMIT 1");
-        $message = self::GetRow($result);
-
-        if($message['from'] == $uid)
+        if($message->From == CurrentPlayer::$ID)
         {
-            // From Deleted
-            $sql .= "`from_deleted` = '1' " ;
+            // Sender deleted it
+            $message->SenderDeleted = true;
         }
         
         else
         {
-            // To Deleted
-            $sql .= "`to_deleted` = '1' ";
+            // Recipient deleted it
+            $message->RecipientDeleted = true;
         }
-       
-        return self::Query($sql . "WHERE `id` = '$messageid' LIMIT 1") ? true : false;
+
+        return self::SetMessageInfo($id, $message)
     }
     
     
@@ -755,7 +697,7 @@ class Database
 
         $sqlRequirements = implode(' || ', $requirements);
 
-        $result = self::Query("SELECT id FROM messages WHERE $sqlRequirements");
+        $result = self::Query("SELECT id FROM messages WHERE $sqlRequirements AND recipient_deleted=FALSE");
         $messages = array();
 
         while($row = self::GetRow($result))
@@ -765,25 +707,12 @@ class Database
 
         return $messages;
     }
-    
-    #endregion
-    
-    #region common
-    
-    /* void */ public static function rowClass($i)
-    {
-        if ( ( $i % 2) != 0)
-            return 'rowOdd';
-        else
-            return 'rowEven';
-    }
 
-    /* bool */ public static function hasMail()
+    /* bool */ public static function HasUnreadMessages()
     {
-        $result = Database::GetRow(Database::Query("SELECT * FROM messages WHERE `to`=".CurrentPlayer::$ID." AND `read`='0' AND `to_deleted`='0'"));
-        
-        return $result ? true : false;
-}
+        return count(self::GetMessages(MessageType::UnRead)) != 0;
+    }
+    
     #endregion
 }
 
