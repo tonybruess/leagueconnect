@@ -38,7 +38,7 @@ require_once('./include/database.php');
         return @$_SESSION['perm'][$perm];
     }
 
-    // Get data from MySQL database
+    // Get data from Database database
     /* bool */ public static function UpdateInfo($userid = null)
     {
         if(self::$upToDate)
@@ -58,8 +58,8 @@ require_once('./include/database.php');
         {
             try
             {
-                // Copy the MySQL player to the current player
-                $player = MySQL::GetPlayerInfo($id);
+                // Copy the Database player to the current player
+                $player = Database::GetPlayerInfo($id);
 
                 self::$ID = $player->ID;
                 self::$Name = $player->Name;

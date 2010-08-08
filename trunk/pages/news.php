@@ -23,7 +23,7 @@ require_once('include/database.php');
                 {
                     if(isset($_POST['message']))
                     {
-                        if(MySQL::AddEntry(CurrentPlayer::$Name, $_POST['message'], 'news'))
+                        if(Database::AddEntry(CurrentPlayer::$Name, $_POST['message'], 'news'))
                         {
                             echo 'Posted new entry successfully.';
                         }
@@ -40,7 +40,7 @@ require_once('include/database.php');
                     {
                         $date = $_POST['date'].' '.$_POST['time'];
 
-                        if(MySQL::UpdateEntry($_POST['author'], $_POST['message'], 'news', $_POST['id']))
+                        if(Database::UpdateEntry($_POST['author'], $_POST['message'], 'news', $_POST['id']))
                         {
                             echo 'Updated entry successfully.';
                         }
@@ -59,7 +59,7 @@ require_once('include/database.php');
         {
         	if($action == 'edit')
         	{
- 		        $entry = MySQL::FetchEntry($_GET['id'], 'news');	
+ 		        $entry = Database::FetchEntry($_GET['id'], 'news');	
          	}
         	?>
 
@@ -88,7 +88,7 @@ require_once('include/database.php');
             // Display the page
             $start = (isset($_GET['start']) ? $_GET['start'] : 0);
 
-            $entries = MySQL::GetEntries($start, 10, 'news');
+            $entries = Database::GetEntries($start, 10, 'news');
 
             foreach($entries as $entry)
             {

@@ -44,7 +44,7 @@ else
     $fuser = $_GET['username'];
     $ftoken = $_GET['token'];
     
-    $groups = MySQL::GetGroupNames();
+    $groups = Database::GetGroupNames();
     $result = validate_token($_GET['token'], $_GET['username'], $groups);
 
     if (count($result['groups']) > 0)
@@ -56,22 +56,22 @@ else
         $_SESSION['groups'] = $result['groups'];
         $bzid = $result['bzid'];
         
-        MySQL::CheckGroups($result['groups']);
+        Database::CheckGroups($result['groups']);
         
         // Do we have this user?
-        if(MySQL::PlayerExists($bzid))
+        if(Database::PlayerExists($bzid))
         {
             // Update login data
-            MySQL::PlayerLogin($fuser, $bzid);
+            Database::PlayerLogin($fuser, $bzid);
         }
         else
         {
             // Add player to database
-            MySQL::AddPlayer($fuser, $bzid);
+            Database::AddPlayer($fuser, $bzid);
         }
 
         // Set Player ID
-        $_SESSION['player'] = MySQL::GetPlayerIDByBZID($bzid);
+        $_SESSION['player'] = Database::GetPlayerIDByBZID($bzid);
         //header("Location: index.php");
     }
     else

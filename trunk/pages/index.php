@@ -9,6 +9,6 @@ require_once('./include/current-player.php');
         <br><br>
         You are logged in as <?php echo CurrentPlayer::$Name . "\n"; ?>
         <br><br>
-        You have <?php echo MySQL::NumberOfNewMessages() ?>
+        You have <?php echo Database::NumberOfNewMessages() ?>
         
 <?php } ?>

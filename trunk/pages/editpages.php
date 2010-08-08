@@ -10,12 +10,12 @@ if($_GET['i'])
 {
     if($_POST)
     {
-         if(MySQL::UpdatePage($name, $text, $id))
+         if(Database::UpdatePage($name, $text, $id))
             echo "Updated Successfully";
     }
-    $i = MySQL::Sanitize($_GET['i']);
-    $query = MySQL::Query("SELECT * FROM pages WHERE `id`='$i' LIMIT 1");
-    $page = mysql_fetch_assoc($query);
+    $i = Database::Sanitize($_GET['i']);
+    $query = Database::Query("SELECT * FROM pages WHERE `id`='$i' LIMIT 1");
+    $page = Database_fetch_assoc($query);
 ?>
         <h2>Editing <?php echo $page['name']?></h2>
         <form method="POST">
@@ -41,9 +41,9 @@ if($_GET['i'])
             <td>Edit</td>
         </tr>
         <?php
-        $query = MySQL::Query("SELECT * FROM pages");
+        $query = Database::Query("SELECT * FROM pages");
         
-        while($row = mysql_fetch_assoc($query)){
+        while($row = Database_fetch_assoc($query)){
         ?>
         <tr>
             <td><?php echo $row['name'] ?></td>

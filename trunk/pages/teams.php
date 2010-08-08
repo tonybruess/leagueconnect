@@ -7,17 +7,17 @@ switch(@$_POST['action'])
         // Add a new team
         $team = $_POST['newteam'];
 
-        if(MySQL::TeamExists($team))
+        if(Database::TeamExists($team))
         {
             echo 'Team name unavailable.';
         }
-        elseif(MySQL::IsTeamMember(CurrentPlayer::$ID) || MySQL::IsTeamLeader(CurrentPlayer::$ID))
+        elseif(Database::IsTeamMember(CurrentPlayer::$ID) || Database::IsTeamLeader(CurrentPlayer::$ID))
         {
             echo 'You must leave your current team before creating a new one.';
         }
         else
         {
-            MySQL::AddTeam($team, CurrentPlayer::$ID);
+            Database::AddTeam($team, CurrentPlayer::$ID);
         }
         break;
 
@@ -26,11 +26,11 @@ switch(@$_POST['action'])
     
     case 'join':
         $team = $_GET['team'];
-        if(MySQL::IsTeamMember(CurrentPlayer::$ID))
+        if(Database::IsTeamMember(CurrentPlayer::$ID))
         {
             echo 'You want to abandon this team';
         }
-        elseif(MySQL::IsTeamLeader(CurrentPlayer::$ID,$team))
+        elseif(Database::IsTeamLeader(CurrentPlayer::$ID,$team))
         {
             echo 'You can not leave your team because you are the leader';
         }
@@ -59,13 +59,13 @@ switch(@$_POST['action'])
 </tr>
 <?php
 
-$teams = MySQL::GetTeamInfoList();
+$teams = Database::GetTeamInfoList();
 $i = 0;
 
 foreach($teams as $team)
 {
-    $players = MySQL::GetPlayersByTeam($team->ID);
-    $leader = MySQL::GetPlayerInfo($team->Leader);
+    $players = Database::GetPlayersByTeam($team->ID);
+    $leader = Database::GetPlayerInfo($team->Leader);
 
 ?>
 
@@ -74,7 +74,7 @@ foreach($teams as $team)
     <td><?php echo $leader->Name; ?></td>
     <td><?php echo count($players); ?></td>
     <td><?php echo $team->Rank; ?></td>
-<td><?php echo MySQL::GenerateTeamButton($team->ID, $team->Leader); ?></td>
+<td><?php echo Database::GenerateTeamButton($team->ID, $team->Leader); ?></td>
     <td>&nbsp;</td>
 </tr>
 
@@ -90,7 +90,7 @@ foreach($teams as $team)
 
 <?php
 
-if(MySQL::IsTeamMember(CurrentPlayer::$ID))
+if(Database::IsTeamMember(CurrentPlayer::$ID))
 {
     echo 'You must leave your current team before creating a new one.';
 }
