@@ -11,7 +11,7 @@ class Logging
     {
         $error = implode("\n", func_get_args());
 
-        $msg = date('l F jS, Y at g:i:sA') . "\n"
+        $msg = date('l F jS, Y g:i:sA') . "\n"
              . $error . "\n"
              . "----------\n";
 
