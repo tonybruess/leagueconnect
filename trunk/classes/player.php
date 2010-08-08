@@ -9,9 +9,6 @@ class Player
     public /* string */ $Name = null;
     public /* unsigned int */ $BZID = null;
     public /* unsigned int */ $Team = null;
-    public /* bool */ $NewMail = null;
-    public /* bool */ $NewNews = null;
-    public /* bool */ $NewMatch = null;
     public /* string */ $Comment = null;
     public /* datetime */ $FirstLogin = null;
     public /* datetime */ $LastLogin = null;
@@ -45,9 +42,6 @@ class Player
         $this->Location = $row['location'];
         $this->MSN = $row['msn'];
         $this->Name = $row['name'];
-        $this->NewMail = $row['newmail'];
-        $this->NewMatch = $row['newmatch'];
-        $this->NewNews = $row['newnews'];
         $this->PublicEmail = $row['pubemail'];
         $this->Team = (int)$row['team'];
 
@@ -73,9 +67,6 @@ class Player
         $row['location'] = $this->Location;
         $row['msn'] = $this->MSN;
         $row['name'] = $this->Name;
-        $row['newmail'] = ($this->NewMail ? 1 : 0);
-        $row['newnews'] = ($this->NewNews ? 1 : 0);
-        $row['newmatch'] = ($this->NewMatch ? 1 : 0);
         $row['pubemail'] = $this->PublicEmail;
         $row['team'] = $this->Team;
 
