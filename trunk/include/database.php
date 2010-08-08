@@ -453,10 +453,8 @@ class MySQL
         $id = -1;
 
         $lookup = array(
-            'News' => 1,
-            'Help' => 2,
-            'Contact' => 3,
-            'Bans' => 4
+            'Help' => 1,
+            'Contact' => 2,
         );
 
         $result = self::Query("SELECT name FROM pages WHERE id='{$lookup[$idea]}' LIMIT 1");
@@ -516,6 +514,27 @@ class MySQL
     	$id = MySQL::Sanitize($id);
     	
     	return self::FetchRow(self::Query("SELECT * FROM $page WHERE `id`='$id'"));
+    }
+    
+    /* text */ public static function GetPageContents($pageid)
+    {
+        self::CheckConnection();
+ 
+        $pageid = self::Sanitize($pageid);
+        $id = -1;
+
+        $lookup = array(
+            // help
+            "SELECT content FROM pages WHERE `id`='1'" => 1,
+            // contact
+            "SELECT content FROM pages WHERE `id`='2'" => 2,
+        );
+        
+        $page = array_keys($lookup, $pageid);
+        $result = self::Query($page[0]);		
+        $data = mysql_fetch_assoc($result);
+
+        return $data['content'];
     }
     #endregion 
 }

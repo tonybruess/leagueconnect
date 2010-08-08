@@ -11,7 +11,7 @@ if($_GET['i']){
         $name = MySQL::Sanitize($_POST['name']);
         $text = MySQL::Sanitize($_POST['text']);
         $id = MySQL::Sanitize($_POST['id']);
-        if(mysql_query("UPDATE pages SET `name`='$name', `text`='$text' WHERE `id`='$id'"))
+        if(MySQL::Query("UPDATE pages SET `name`='$name', `content`='$text' WHERE `id`='$id'"))
             echo "Updated Successfully";
         echo mysql_error();
     }
@@ -23,14 +23,12 @@ if($_GET['i']){
         <form method="POST">
         Name: <input type="text" name="name" value="<?php echo $page['name'] ?>">
         <br><br>
-        <?php if($page['type'] == '2'){ ?>
         Text:
         <br>
         <script type="text/javascript" src="global/bbeditor/ed.js"></script>
         <script>AddBBCodeToolbar('text'); </script>
-        <textarea name="text" cols=50 rows=10 id="text"><?php echo $page['text']; ?></textarea>
+        <textarea name="text" cols=50 rows=10 id="text"><?php echo $page['content']; ?></textarea>
         <br><br>
-        <?php } ?>
         <input type="hidden" name="id" value="<?php echo $page['id']; ?>">
         <input type="submit" value="Save">
         </form>

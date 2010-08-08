@@ -1,6 +1,6 @@
         <h2><?php echo MySQL::GetPageName("Help") ?></h2>
         <?php
-        echo FormatToBBCode(MySQL::GetPage(2));
+        echo FormatToBBCode(MySQL::GetPageContents(1));
         if(CurrentPlayer::HasPerm(Permissions::EditPages))
-            echo '<br><br>[<a href="?p=editpages&i=2">Edit</a>]';
+            echo '<br><br>[<a href="?p=editpages&i=1">Edit</a>]';
         ?>
