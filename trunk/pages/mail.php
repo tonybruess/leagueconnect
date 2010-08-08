@@ -104,19 +104,25 @@ switch($_GET['op'])
         
     case 'sent':
             
-            ?>
-<table border="0" cellspacing="2" cellpadding="3">
-<tr><td>To</td><td>Subject</td><td>Date</td></tr>
-<?php
-    while($message = MySQL::FetchRow(MySQL::Query("SELECT * FROM messages WHERE `from` = '".CurrentPlayer::$ID."' &&  `to_deleted` = '0'"))) {
-        $unread = false;
-        if($message['read']=='0')
-            $unread = true;
         ?>
-<tr><td><?php echo getPlayerName($message['to']); ?></td><td><a href='?p=mail&op=view&mid=<?php echo $message['id']; ?>'<?php if($unread) echo 'style="color: red;"'; ?>><?php echo $message['subject'] ?></a></td><td><?php echo strftime("%B %e, %G at %I:%M %p", strtotime($message['created'])); ?></td></tr>
-<?php } ?>
-</table>
-<?php
+        <table border="0" cellspacing="2" cellpadding="3">
+        <tr><td>To</td><td>Subject</td><td>Date</td></tr>
+        <?php
+        $messages = MySQL::FetchMessages('sent');
+        foreach($messages as $message)
+        {
+            $unread = false;
+            if(!$message['read'])
+                $unread = true;
+        ?>
+        <tr><td><?php echo getPlayerName($message['to']); ?></td><td><a href='?p=mail&op=view&mid=<?php echo $message['id']; ?>'<?php if($unread) echo 'style="color: red;"'; ?>><?php echo $message['subject'] ?></a></td><td><?php echo strftime("%B %e, %G at %I:%M %p", strtotime($message['created'])); ?></td></tr>
+        <?php
+        }
+        if(!$messages)
+            echo '<tr><td colspan='3'><strong>No messages to display</strong></td></tr>';
+        ?>
+        </table>
+        <?php
     
     break; 
         
@@ -126,15 +132,22 @@ switch($_GET['op'])
         <table border="0" cellspacing="2" cellpadding="3">
         <tr><td>To</td><td>Subject</td><td>Date</td></tr>
         <?php
-        while($message = MySQL::FetchRow(MySQL::Query("SELECT * FROM messages WHERE `to` = '".CurrentPlayer::$ID."' &&  `to_deleted` = '0'"))) {
+        $messages = MySQL::FetchMessages();
+        foreach($messages as $message)
+        {
             $unread = false;
-            if($message['read']=='0')
-                $unread = true;
-            ?>
+            if(!$message['read'])
+                    $unread = true;
+        ?>
         <tr><td><?php echo getPlayerName($message['to']); ?></td><td><a href='?p=mail&op=view&mid=<?php echo $message['id']; ?>'<?php if($unread) echo 'style="color: red;"'; ?>><?php echo $message['subject'] ?></a></td><td><?php echo strftime("%B %e, %G at %I:%M %p", strtotime($message['created'])); ?></td></tr>
-        <?php } ?>
+        <?php
+        }
+        if(!$messages)
+            echo '<tr><td colspan='3'><strong>No messages to display</strong></td></tr>';
+        ?>
         </table>
-<?php
+        <?php
+    
     break;
 }
 ?>

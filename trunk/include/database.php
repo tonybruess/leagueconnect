@@ -609,6 +609,33 @@ class MySQL
         return $message;
     
     }
+
+    /* void */ public static function FetchMessages($type)
+    {
+        self::CheckConnection();   
+        
+        switch($type):
+            case 'sent':
+                $q = "SELECT * FROM messages WHERE `from` = '".CurrentPlayer::$ID."' &&  `from_deleted` = '0'";
+                break;
+            default:
+                $q = "SELECT * FROM messages WHERE `to` = '".CurrentPlayer::$ID."' &&  `to_deleted` = '0'";
+                break;
+        endswitch;
+        
+        $id = self::Sanitize($id);
+        $result = self::Query($q);
+        $messages = array();
+        
+        while($row = self::FetchRow($result))
+        {
+            $id = (int)$row['id'];
+            $messages[] = self::FetchRow(self::Query("SELECT * FROM messages WHERE `id`='$id'"));
+        }
+        
+        return $messages ? $messages : false;
+    }
+    
     #endregion
 }
 
