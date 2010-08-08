@@ -10,7 +10,8 @@ require_once('classes/player.php');
 require_once('classes/team.php');
 require_once('classes/page.php');
 require_once('classes/ban.php');
-require_once('classes/entry.php');
+require_once('classes/news-entry.php');
+require_once('classes/message.php');
 
 class MySQL
 {
@@ -707,53 +708,52 @@ class MySQL
             return self::SetMessageInfo(null, $message);
         }
     }
-    
-    /* void */ public static function GetMessage($id)
-    {
-        self::CheckConnection();   
-        
-        $id = self::Sanitize($id);
-        
-        $message = self::GetRow(self::Query("SELECT * FROM messages WHERE `id` = '$id' && (`from` = '".CurrentPlayer::$ID."' || `to` = '".CurrentPlayer::$ID."') LIMIT 1"));
-    
-        if($message['from'] != CurrentPlayer::$ID)
-            self::MarkMessageRead($id);
 
-        return $message;
-    
-    }
-
-    /* void */ public static function FetchMessages($type)
+    /* array of Messages */ public static function GetMessages($type=MessageType::All)
     {
-        self::CheckConnection();   
-        
-        switch($type)
+        self::CheckConnection();
+
+        $requirements = array();
+
+        $ToMe = "`to`='".CurrentPlayer::$ID."'";
+        $FromMe = "`from`=".CurrentPlayer::$ID."'";
+        $Read = "`read`=TRUE";
+        $UnRead = "`read`=FALSE";
+
+        if($type & MessageType::Read)
         {
-            case 'sent':
-                $q = "SELECT * FROM messages WHERE `from` = '".CurrentPlayer::$ID."' &&  `from_deleted` = FALSE";
-                break;
-            default:
-                $q = "SELECT * FROM messages WHERE `to` = '".CurrentPlayer::$ID."' &&  `to_deleted` = FALSE";
-                break;
+            $requirements[] = "($ToMe || $Read)";
         }
-        
-        $id = self::Sanitize($id);
-        $result = self::Query($q);
+        if($type & MessageType::UnRead)
+        {
+            $requirements[] = "($ToMe || $UnRead)";
+        }
+        if($type & MessageType::FromMe)
+        {
+            $requirements[] = $FromMe;
+        }
+        if($type & MessageType::ToMe || $type & MessageType::All)
+        {
+            $requirements[] = $ToMe;
+        }
+
+        $sqlRequirements = implode(' || ', $requirements);
+
+        $result = self::Query("SELECT id FROM messages WHERE $sqlRequirements");
         $messages = array();
-        
+
         while($row = self::GetRow($result))
         {
-            $id = (int)$row['id'];
-            $messages[] = self::GetRow(self::Query("SELECT * FROM messages WHERE `id`='$id'"));
+            $messages[] = self::GetMessageInfo($row['id']);
         }
-        
-        return $messages ? $messages : false;
+
+        return $messages;
     }
     
     #endregion
 }
 
-// FIXME: Only call Connect when needed
+// Connect to the database
 if(!MySQL::Connect())
 {
     die(MySQL::$ConnectionError);
