@@ -53,19 +53,6 @@ class MySQL
         return true;
     }
 
-    /* bool */ public static function CheckConnection()
-    {
-        if(!self::Connect())
-        {
-            die(self::$ConnectionError);
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-    }
-
     /* resource or false */ private static function Query($sql)
     {
         $result = mysql_query($sql);
@@ -139,8 +126,6 @@ class MySQL
 
     /* cls or null */ private static function GetInfo($table, $id, &$cls) // cls is the class that corresponds to each row
     {
-        self::CheckConnection();
-
         $table = self::Sanitize($table);
         $id = self::Sanitize($id);
 
@@ -173,8 +158,6 @@ class MySQL
 
     /* bool */ private static function SetInfo($table, $id, $cls)
     {
-        self::CheckConnection();
-
         $table = self::Sanitize($table);
         $id = self::Sanitize($id);
 
@@ -235,17 +218,15 @@ class MySQL
     
     /* void */ public static function GetGroupNames()
     {
-        self::CheckConnection();
-        
         $groups = array();
         $result = self::Query("SELECT name FROM groups");
         
-        while ($group = self::GetRow($result)) {
+        while ($group = self::GetRow($result))
+        {
             $groups[] = $group['name'];
         }
         
         return $groups;
-
     }
     
     /* void */ public static function CheckGroups($groups)
@@ -278,8 +259,6 @@ class MySQL
     
     /* void */ public static function AddPlayer($name, $bzid)
     {
-        self::CheckConnection();
-
         $name = self::Sanitize($name);
         $bzid = self::Sanitize($bzid);
 
@@ -288,8 +267,6 @@ class MySQL
 
     /* void */ public static function PlayerLogin($name, $bzid)
     {
-        self::CheckConnection();
-
         $name = self::Sanitize($name);
         $bzid = self::Sanitize($bzid);
 
@@ -298,8 +275,6 @@ class MySQL
 
     /* unsigned int */ public static function GetPlayerIDByBZID($bzid)
     {
-        self::CheckConnection();
-
         $bzid = self::Sanitize($bzid);
 
         $result = self::Query("SELECT id FROM players WHERE `bzid`='$bzid'");
@@ -317,8 +292,6 @@ class MySQL
 
     /* bool */ public static function PlayerExists($bzid)
     {
-        self::CheckConnection();
-
         $bzid = self::Sanitize($bzid);
 
         return self::NumRows(self::Query("SELECT id FROM players WHERE `bzid`='$bzid' LIMIT 1")) != 0;
@@ -336,8 +309,6 @@ class MySQL
 
     /* array of ints */ public static function GetPlayersByTeam($team)
     {
-        self::CheckConnection();
-
         $team = self::Sanitize($team);
 
         $result = self::Query("SELECT id FROM players WHERE `team`='$team'");
@@ -356,8 +327,6 @@ class MySQL
 
     /* void */ public static function AddTeam($name, $leader)
     {
-        self::CheckConnection();
-
         $name = self::Sanitize($name);
         $leader = self::Sanitize($leader);
 
@@ -368,8 +337,6 @@ class MySQL
 
     /* bool */ public static function TeamExists($name)
     {
-        self::CheckConnection();
-
         $name = self::Sanitize($name);
 
         return self::NumRows(self::Query("SELECT id FROM teams WHERE `name`='$name' LIMIT 1")) != 0;
@@ -387,8 +354,6 @@ class MySQL
     
     /* bool */ public static function IsTeamLeader($player, $team=null)
     {
-        self::CheckConnection();
-
         $player = self::Sanitize($player);
         $team = self::Sanitize($team);
 
@@ -404,8 +369,6 @@ class MySQL
 
     /* bool */ public static function IsTeamMember($player, $team=null)
     {
-        self::CheckConnection();
-
         $player = self::Sanitize($player);
         $team = self::Sanitize($team);
 
@@ -421,8 +384,6 @@ class MySQL
 
     /* array of Teams */ public static function GetTeamInfoList()
     {
-        self::CheckConnection();
-
         $result = self::Query('SELECT id FROM teams');
         $teams = array();
 
@@ -437,9 +398,6 @@ class MySQL
     
     /* void */ public static function GenerateTeamButton($teamid, $leaderid)
     {
-        self::CheckConnection();
-        
-        
         if (!self::IsTeamMember(CurrentPlayer::$ID) && !self::IsTeamLeader(CurrentPlayer::$ID))
         {
             $action = 'join"';
@@ -471,8 +429,6 @@ class MySQL
 
     /* array of strings */ public static function GetPageNames()
     {
-        self::CheckConnection();
-
         $result = self::Query('SELECT id FROM pages');
         $names = array();
 
@@ -500,8 +456,6 @@ class MySQL
 
     /* array of NewsEntries */ public static function GetEntries($start, $count, $page)
     {
-        self::CheckConnection();
-
         $start = self::Sanitize($start);
         $count = self::Sanitize($count);
 
@@ -519,15 +473,11 @@ class MySQL
 
     /* unsigned int */ public static function GetNumEntries($page)
     {
-        self::CheckConnection();
-
         return self::NumRows(self::Query("SELECT id FROM $page"));
     }
 
     /* bool */ public static function AddEntry($author, $message, $page)
     {
-        self::CheckConnection();
-        
         $author = self::Sanitize($author);
         $message = self::Sanitize($message);
         $date = self::Sanitize($date);
@@ -544,8 +494,6 @@ class MySQL
     
     /* bool */ public static function UpdateEntry($author, $message, $page, $messageid)
     {
-        self::CheckConnection();
-        
         $author = self::Sanitize($author);
         $message = self::Sanitize($message);
         $date = self::Sanitize($date);
@@ -563,9 +511,8 @@ class MySQL
     
     /* array */ public static function FetchEntry($id, $page)
     {
-        self::CheckConnection();
-        
         $id = MySQL::Sanitize($id);
+        $page = MySQL::Sanitize($page);
         
         return self::GetRow(self::Query("SELECT * FROM $page WHERE `id`='$id'"));
     }
@@ -576,8 +523,6 @@ class MySQL
     
     /* text */ public static function GetPageContents($pageid)
     {
-        self::CheckConnection();
-        
         $pageid = self::Sanitize($pageid);
         $id = -1;
         
@@ -597,8 +542,6 @@ class MySQL
 
     /* list of items */ public static function GetPageName($idea)
     {
-        self::CheckConnection();
-        
         $idea = self::Sanitize($idea);
         $id = -1;
         
@@ -622,8 +565,6 @@ class MySQL
     
     /* bool */ public static function UpdatePage($name, $text, $id)
     {
-        self::CheckConnection();
-        
         $name = self::Sanitize($name);
         $text = self::Sanitize($text);
         $id = self::Sanitize($id);
@@ -637,8 +578,6 @@ class MySQL
 
     /* void */ public static function NumberOfNewMessages()
     {
-        self::CheckConnection();
-        
         $result = self::Query("SELECT id FROM messages WHERE `read`='0' AND `to`='".CurrentPlayer::$ID."' AND `to_deleted`='0'");
         
         $count = self::NumRows($result);
@@ -658,15 +597,11 @@ class MySQL
     
     /* void */ public static function MarkMessageRead($message)
     {
-        self::CheckConnection();
-
         return self::Query("UPDATE messages SET `read` = TRUE WHERE `id` = '$message' LIMIT 1") ? true : false;
     }
     
     /* void */ public static function deleted($messageid)
     {
-        self::CheckConnection();
-
         $messageclean = MySQL::Sanitize($messageid);
         $sql = 'UPDATE messages SET ';
 
@@ -691,8 +626,6 @@ class MySQL
     
     /* bool */ public static function SendMessage($to, $subject, $contents)
     {
-        self::CheckConnection();
-
         $message = new Message();
         $message->To = $to;
         $message->From = $from;
@@ -711,8 +644,6 @@ class MySQL
 
     /* array of Messages */ public static function GetMessages($type=MessageType::All)
     {
-        self::CheckConnection();
-
         $requirements = array();
 
         $ToMe = "`to`='".CurrentPlayer::$ID."'";
