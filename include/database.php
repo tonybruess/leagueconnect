@@ -585,11 +585,11 @@ class Database
         $id = -1;
         
         $lookup = array(
-            1 => 'Help',
-            2 => 'Contact'
+            'Help' => 1,
+            'Contact' => 2
         );
         
-        $result = self::Query("SELECT name FROM pages WHERE id='?' LIMIT 1", $lookup[idea]);
+        $result = self::Query("SELECT name FROM pages WHERE id='?' LIMIT 1", $lookup[$idea]);
         
         if(self::NumRows($result) == 0)
         {
