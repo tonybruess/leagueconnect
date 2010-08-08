@@ -104,7 +104,19 @@ class Database
 
         for($i = 1; $i < $numArgs; $i++)
         {
-            $params[] = func_get_arg($i);
+            $arg = func_get_arg($i);
+
+            if(is_array($arg))
+            {
+                foreach($arg as $item)
+                {
+                    $params[] = $item;
+                }
+            }
+            else
+            {
+                $params[] = func_get_arg($i);
+            }
         }
 
         $result = self::$Connection->prepare($sql);
@@ -171,9 +183,6 @@ class Database
 
     /* cls or null */ private static function GetInfo($table, $id, &$cls) // cls is the class that corresponds to each row
     {
-        $table = self::Sanitize($table);
-        $id = self::Sanitize($id);
-
         if(!isset(self::$Cache[$table]))
         {
             self::$Cache[$table] = array();
@@ -185,7 +194,7 @@ class Database
         }
         else
         {
-            $result = self::Query("SELECT * FROM $table WHERE `id` = '$id' LIMIT 1");
+            $result = self::Query("SELECT * FROM ? WHERE `id`='?' LIMIT 1", $table, $id);
 
             if(self::NumRows($result) == 0)
             {
@@ -203,9 +212,6 @@ class Database
 
     /* bool */ private static function SetInfo($table, $id, $cls)
     {
-        $table = self::Sanitize($table);
-        $id = self::Sanitize($id);
-
         if(!isset(self::$Cache[$table]))
         {
             self::$Cache[$table] = array();
@@ -214,6 +220,7 @@ class Database
         $row = $cls->ToSQLRow();
         $cached = (isset(self::$Cache[$table][$id]) ? self::$Cache[$table][$id] : array());
         $sqlParts = array();
+        $sqlArgs = array();
 
         foreach($row as $key=>$val)
         {
@@ -222,7 +229,9 @@ class Database
 
             if(!isset($cached[$key]) || $val != $cached[$key]) // Only set if it is different
             {
-                $sqlParts[] = "$key='".self::Sanitize($val)."'";
+                $sqlParts[] = "?='?'";
+                $sqlArgs[] = $key;
+                $sqlArgs[] = $val;
             }
         }
 
@@ -235,7 +244,7 @@ class Database
 
         if($id == '') // null id, insert it
         {
-            if(self::Query("INSERT INTO $table SET $sql"))
+            if(self::Query("INSERT INTO ? SET $sql", $table, $sqlArgs))
             {
                 return true;
             }
@@ -246,7 +255,7 @@ class Database
         }
         else // update
         {
-            if(self::Query("UPDATE $table SET $sql WHERE `id`='$id' LIMIT 1"))
+            if(self::Query("UPDATE ? SET $sql WHERE `id`='?' LIMIT 1", $table, $sqlArgs, $id))
             {
                 self::$Cache[$table][$id] = $row; // Update the cache
                 return true;
@@ -278,7 +287,6 @@ class Database
     {
         foreach($groups as $group)
         {
-
             $role = self::GetRow(self::Query("SELECT role FROM groups WHERE `name`='$group'"));
             $permdata = self::GetRow(self::Query("SELECT permissions FROM roles WHERE `id`='" . $role['role'] . "'"));
             $perm = str_split($permdata['permissions']);
