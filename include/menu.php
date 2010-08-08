@@ -46,8 +46,8 @@ PrintMenuEntry('news', 'News');
 PrintMenuEntry('matches', 'Matches');
 PrintMenuEntry('teams', 'Teams');
 PrintMenuEntry('players', 'Players');
-PrintMenuEntry('help', MySQL::GetPageName('Help'));
-PrintMenuEntry('contact', MySQL::GetPageName('Contact'));
+PrintMenuEntry('help', Database::GetPageName('Help'));
+PrintMenuEntry('contact', Database::GetPageName('Contact'));
 PrintMenuEntry('bans', 'Bans');
 
 if(isset($_SESSION['callsign']))
@@ -62,7 +62,7 @@ PrintMenuEntry('teammanager', 'Team Manager', Permissions::ViewTeams);
 PrintMenuEntry('logs', 'Logs', Permissions::ViewLogs);
 
 /*
-$names = MySQL::GetPageNames();
+$names = Database::GetPageNames();
 
 foreach($names as $name)
 {

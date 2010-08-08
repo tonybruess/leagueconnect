@@ -18,7 +18,7 @@ if(isset($_POST['newmessage']))
     if($_POST['to'] && $_POST['subject'] && $_POST['message'])
     {
 
-        if(MySQL::sendmessage($toclean,$subclean,$mesclean))
+        if(Database::sendmessage($toclean,$subclean,$mesclean))
         {
             echo 'Message successfully sent to ' . getPlayerName($_POST['to']) . '<br>';
         }
@@ -53,7 +53,7 @@ switch($_GET['op'])
 {
     case 'view':
         
-        $message = MySQL::GetMessage($_GET['mid']);
+        $message = Database::GetMessage($_GET['mid']);
         ?>
         <table border="0" cellspacing="2" cellpadding="3">
         <tr><td>From:</td><td><?php echo getPlayerName($message['from']); ?></td></tr>
@@ -76,15 +76,15 @@ switch($_GET['op'])
         if($_POST['reply'])
         {
             $reply = true;
-            $message = MySQL::GetMessage($_POST['id']);
+            $message = Database::GetMessage($_POST['id']);
         }
         ?>
         <form name="new" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?p=mail&op=compose">
         <br><strong>To:</strong>
         <select name="to">
         <option value="" disabled>Select a User</option><?php
-        $result = MySQL::Query("SELECT * FROM players WHERE `id` != '".CurrentPlayer::$ID."' ORDER BY name asc");
-        while($row = mysql_fetch_array($result)){
+        $result = Database::Query("SELECT * FROM players WHERE `id` != '".CurrentPlayer::$ID."' ORDER BY name asc");
+        while($row = Database_fetch_array($result)){
             echo '<option value="'.$row['id'].'"';
             if($row['id'] == $message['from'] || $row['id'] == $message['to']) echo " selected";
             echo '>'.$row['name'].'</option>';
@@ -108,7 +108,7 @@ switch($_GET['op'])
         <table border="0" cellspacing="2" cellpadding="3">
         <tr><td>To</td><td>Subject</td><td>Date</td></tr>
         <?php
-        $messages = MySQL::FetchMessages('sent');
+        $messages = Database::FetchMessages('sent');
         foreach($messages as $message)
         {
             $unread = false;
@@ -132,7 +132,7 @@ switch($_GET['op'])
         <table border="0" cellspacing="2" cellpadding="3">
         <tr><td>To</td><td>Subject</td><td>Date</td></tr>
         <?php
-        $messages = MySQL::FetchMessages();
+        $messages = Database::FetchMessages();
         foreach($messages as $message)
         {
             $unread = false;

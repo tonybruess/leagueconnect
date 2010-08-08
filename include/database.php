@@ -1,7 +1,7 @@
 <?php
 
 /* 
- * MySQL class to work with the MySQL database.
+ * Database class to work with the Database database.
  */
 
 require_once('config.php');
@@ -13,12 +13,12 @@ require_once('classes/ban.php');
 require_once('classes/news-entry.php');
 require_once('classes/message.php');
 
-class MySQL
+class Database
 {
-    const Server = MySQLSettings::Server;
-    const User = MySQLSettings::User;
-    const Password = MySQLSettings::Password;
-    const Database = MySQLSettings::Database;
+    const Server = DatabaseSettings::Server;
+    const User = DatabaseSettings::User;
+    const Password = DatabaseSettings::Password;
+    const Database = DatabaseSettings::Database;
     
     public static $Connected = false;
     public static $ConnectionError = '';
@@ -32,22 +32,22 @@ class MySQL
             return true;
         }
 
-        if(!mysql_connect(self::Server, self::User, self::Password))
+        if(!Database_connect(self::Server, self::User, self::Password))
         {
-            self::$ConnectionError = mysql_error();
+            self::$ConnectionError = Database_error();
             return false;
         }
         
-        if(!mysql_select_db(self::Database))
+        if(!Database_select_db(self::Database))
         {
-            self::$ConnectionError = mysql_error();
+            self::$ConnectionError = Database_error();
             return false;
         }
 
 /*
-        if(!mysql_query('set time_zone = utc;'))
+        if(!Database_query('set time_zone = utc;'))
         {
-            die('Server Owner: Run "mysql_tzinfo_to_sql /usr/share/zoneinfo|mysql -u root -p" on your server to enable setting the timezone to UTC.');
+            die('Server Owner: Run "Database_tzinfo_to_sql /usr/share/zoneinfo|Database -u root -p" on your server to enable setting the timezone to UTC.');
         }
 */        
         return true;
@@ -55,7 +55,7 @@ class MySQL
 
     /* resource or false */ private static function Query($sql)
     {
-        $result = mysql_query($sql);
+        $result = Database_query($sql);
 
         if($result)
         {
@@ -64,7 +64,7 @@ class MySQL
         else
         {
             // Log the error and return false
-            $error = 'MySQL Error: ' . mysql_error() . "\n" . "SQL: $sql\n" . "-------\n";
+            $error = 'Database Error: ' . Database_error() . "\n" . "SQL: $sql\n" . "-------\n";
 
             if(!file_exists(Config::ErrorLogFile))
             {
@@ -73,7 +73,7 @@ class MySQL
 
             file_put_contents(Config::ErrorLogFile, $error, FILE_APPEND);
 
-            throw new Exception('MySQL Error: '.mysql_error());
+            throw new Exception('Database Error: '.Database_error());
             return false;
         }
     }
@@ -86,7 +86,7 @@ class MySQL
         }
         else
         {
-            return mysql_num_rows($result);
+            return Database_num_rows($result);
         }
     }
 
@@ -98,15 +98,15 @@ class MySQL
         }
         else
         {
-            return mysql_fetch_assoc($result);
+            return Database_fetch_assoc($result);
         }
     }
     
     /* string */ public static function Sanitize($str)
     {
-        if(function_exists('mysql_real_escape_string'))
+        if(function_exists('Database_real_escape_string'))
         {
-            $str = mysql_real_escape_string($str);
+            $str = Database_real_escape_string($str);
         }
         else
         {
@@ -117,7 +117,7 @@ class MySQL
     }
 
     /*
-     * The following function are interfaces for accessing the MySQL database
+     * The following function are interfaces for accessing the Database database
      * without having SQL scattered all throughout the code.
      */
 
@@ -511,8 +511,8 @@ class MySQL
     
     /* array */ public static function FetchEntry($id, $page)
     {
-        $id = MySQL::Sanitize($id);
-        $page = MySQL::Sanitize($page);
+        $id = Database::Sanitize($id);
+        $page = Database::Sanitize($page);
         
         return self::GetRow(self::Query("SELECT * FROM $page WHERE `id`='$id'"));
     }
@@ -535,7 +535,7 @@ class MySQL
         
         $page = array_keys($lookup, $pageid);
         $result = self::Query($page[0]);        
-        $data = mysql_fetch_assoc($result);
+        $data = Database_fetch_assoc($result);
         
         return $data['content'];
     }
@@ -602,7 +602,7 @@ class MySQL
     
     /* void */ public static function deleted($messageid)
     {
-        $messageclean = MySQL::Sanitize($messageid);
+        $messageclean = Database::Sanitize($messageid);
         $sql = 'UPDATE messages SET ';
 
         $result = self::Query("SELECT * FROM messages WHERE `id` = '$messageclean' && (`from` = '".CurrentPlayer::$ID."' || `to` = '".CurrentPlayer::$ID."') LIMIT 1");
@@ -685,9 +685,9 @@ class MySQL
 }
 
 // Connect to the database
-if(!MySQL::Connect())
+if(!Database::Connect())
 {
-    die(MySQL::$ConnectionError);
+    die(Database::$ConnectionError);
 }
 
 ?>

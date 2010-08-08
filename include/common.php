@@ -10,8 +10,8 @@ function rowClass($i){
 function getPlayerName($id)
 {
     if (is_numeric($id)) {
-        $q = mysql_query("SELECT name FROM players WHERE id = ".$id);
-        while ($r = mysql_fetch_array($q, MYSQL_ASSOC)) $name = $r['name'];
+        $q = Database_query("SELECT name FROM players WHERE id = ".$id);
+        while ($r = Database_fetch_array($q, Database_ASSOC)) $name = $r['name'];
         if($name)
             return $name;
         else
@@ -21,9 +21,9 @@ function getPlayerName($id)
 
 function getUserId($username) {
         $sql = "SELECT id FROM players WHERE `name` = '".$username."' LIMIT 1";
-        $result = mysql_query($sql);
-        if(mysql_num_rows($result)) {
-            $row = mysql_fetch_row($result);
+        $result = Database_query($sql);
+        if(Database_num_rows($result)) {
+            $row = Database_fetch_row($result);
             return $row[0];
         } else {
             return false;
@@ -32,8 +32,8 @@ function getUserId($username) {
 
 function hasMail() {
     $sql = "SELECT * FROM messages WHERE `to`=".CurrentPlayer::$ID." AND `read`='0' AND `to_deleted`='0'";
-    $result = mysql_query($sql);
-    $result = mysql_fetch_array($result);
+    $result = Database_query($sql);
+    $result = Database_fetch_array($result);
     if($result)
         return true;
     else

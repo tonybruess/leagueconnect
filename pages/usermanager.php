@@ -11,8 +11,8 @@ if(!$_GET['i']){
         <table cellpadding="5">
         <tr><th>Name</th><th>BZID</th><th>Last Login</th><th>Manage</th></tr>
         <?php
-        $q = mysql_query("SELECT * FROM players");
-        while($row = mysql_fetch_assoc($q)){
+        $q = Database_query("SELECT * FROM players");
+        while($row = Database_fetch_assoc($q)){
             echo '<tr>';
             echo '<td>'.$row['name'].'</td>';
             echo '<td>'.$row['bzid'].'</td>';
@@ -24,8 +24,8 @@ if(!$_GET['i']){
         ?>
         </table>
 <?php } else {
-    $id = MySQL::sanitize($_GET['i']);
-    $user = mysql_fetch_array(mysql_query("SELECT * FROM players WHERE `id`='$id'"));
+    $id = Database::sanitize($_GET['i']);
+    $user = Database_fetch_array(Database_query("SELECT * FROM players WHERE `id`='$id'"));
     ?>
     <h2>Managing <?php echo $user['name']; ?></h2>
     <form method="POST">
