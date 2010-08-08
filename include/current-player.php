@@ -12,9 +12,6 @@ require_once('./include/database.php');
     public static /* string */ $Name = 'guest';
     public static /* unsigned int */ $BZID = 0;
     public static /* unsigned int */ $Team = '';
-    public static /* bool */ $NewMail = false;
-    public static /* bool */ $NewNews = false;
-    public static /* bool */ $NewMatch = false;
     public static /* string */ $Comment = '';
     public static /* datetime */ $FirstLogin = 0;
     public static /* datetime */ $LastLogin = 0;
@@ -48,7 +45,7 @@ require_once('./include/database.php');
 
         self::$upToDate = true;
 
-        $id = ($userid != null ? $userid : self::$UserID);
+        $id = ($userid != null ? $userid : self::$ID);
 
         if($id == 0) // Null player
         {
@@ -65,9 +62,6 @@ require_once('./include/database.php');
                 self::$Name = $player->Name;
                 self::$BZID = $player->BZID;
                 self::$Team = $player->Team;
-                self::$NewMail = $player->NewMail;
-                self::$NewNews = $player->NewNews;
-                self::$NewMatch = $player->NewMatch;
                 self::$Comment = $player->Comment;
                 self::$FirstLogin = $player->FirstLogin;
                 self::$LastLogin = $player->LastLogin;
