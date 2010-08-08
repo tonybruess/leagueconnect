@@ -550,6 +550,66 @@ class MySQL
     }
     
     #endregion
+    
+    #region mail
+    
+    /* void */ public static function MarkMessageRead($message)
+    {
+        self::CheckConnection();
+
+        return self::Query("UPDATE messages SET `read` = TRUE WHERE `id` = '$message' LIMIT 1") ? true : false;
+    }
+    
+    /* void */ public static function deleted($messageid)
+    {
+        self::CheckConnection();
+
+        $messageclean = MySQL::Sanitize($messageid);
+        $sql = 'UPDATE messages SET ';
+
+        $result = self::Query("SELECT * FROM messages WHERE `id` = '$messageclean' && (`from` = '".CurrentPlayer::$ID."' || `to` = '".CurrentPlayer::$ID."') LIMIT 1");
+        $message = self::FetchRow($result);
+
+        if($message['from'] == $uid)
+            // From Deleted
+            $sql .= "`from_deleted` = '1' " ;
+        else
+            // To Deleted
+            $sql = "`to_deleted` = '1' ";
+       
+        return self::Query($sql . "WHERE `id` = '$messageid' LIMIT 1") ? true : false;
+    }
+    
+    
+    /* bool */ public static function sendmessage($to, $subject, $message)
+    {
+        self::CheckConnection();
+
+        $to = self::sanitize($to);
+        $subject = self::sanitize($subject);
+        $message = self::sanitize($message);
+
+        if($to == CurrentPlayer::$ID)
+            return false;
+        else
+            return self::Query("INSERT INTO messages SET `to` = '$to', `from` = '$uid', `subject` = '$subject', `message` = '$message', `created` = NOW()") ? true : false;   
+    }
+    
+    /* void */ public static function GetMessage($id)
+    {
+        self::CheckConnection();   
+        
+        $id = self::Sanitize($id);
+        
+        $message = self::FetchRow(self::Query("SELECT * FROM messages WHERE `id` = '$id' && (`from` = '".CurrentPlayer::$ID."' || `to` = '".CurrentPlayer::$ID."') LIMIT 1"));
+    
+        if($message['from'] != CurrentPlayer::$ID)
+            self::MarkMessageRead($id);
+
+        return $message;
+    
+    }
+    #endregion
 }
 
 // FIXME: Only call Connect when needed
