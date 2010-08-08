@@ -64,7 +64,7 @@ class MySQL
         }
     }
 
-    /* resource or false */ public static function Query($sql)
+    /* resource or false */ private static function Query($sql)
     {
         $result = mysql_query($sql);
 
@@ -89,7 +89,7 @@ class MySQL
         }
     }
 
-    /* unsigned int */ public static function NumRows($result)
+    /* unsigned int */ private static function NumRows($result)
     {
         if(!$result)
         {
@@ -101,7 +101,7 @@ class MySQL
         }
     }
 
-    /* array or false */ public static function FetchRow($result)
+    /* array or false */ private static function GetRow($result)
     {
         if(!$result)
         {
@@ -160,7 +160,7 @@ class MySQL
                 return null;
             }
 
-            $row = self::FetchRow($result);
+            $row = self::GetRow($result);
             self::$Cache[$table][$id] = $row;
         }
 
@@ -250,7 +250,7 @@ class MySQL
         }
         else
         {
-            $row = self::FetchRow($result);
+            $row = self::GetRow($result);
             return $row['id'];
         }
     }
@@ -283,7 +283,7 @@ class MySQL
         $result = self::Query("SELECT id FROM players WHERE `team`='$team'");
         $ids = array();
 
-        while($row = self::FetchRow($result))
+        while($row = self::GetRow($result))
         {
             $ids[] = (int)$row['id'];
         }
@@ -302,7 +302,7 @@ class MySQL
         $leader = self::Sanitize($leader);
 
         self::Query("INSERT INTO teams (`name`, `created`, `leader`) VALUES ('$name', NOW(), '$leader')");
-        $team_id = self::FetchRow(self::Query("SELECT id FROM teams WHERE `name`='$name'"));
+        $team_id = self::GetRow(self::Query("SELECT id FROM teams WHERE `name`='$name'"));
         self::Query("UPDATE players SET `team`='".$team_id['id']."' WHERE `id`='$leader'");
     }
 
@@ -366,7 +366,7 @@ class MySQL
         $result = self::Query('SELECT id FROM teams');
         $teams = array();
 
-        while($row = self::FetchRow($result))
+        while($row = self::GetRow($result))
         {
             $id = (int)$row['id'];
             $teams[] = self::GetInfo('teams', $id, new Team());
@@ -394,7 +394,7 @@ class MySQL
         $result = self::Query('SELECT id FROM pages');
         $names = array();
 
-        while($row = self::FetchRow($result))
+        while($row = self::GetRow($result))
         {
             $id = (int)$row['id'];
             $page = self::GetPageInfo($id);
@@ -426,7 +426,7 @@ class MySQL
         $result = self::Query("SELECT id FROM $page ORDER BY created DESC LIMIT $start,$count");
         $entries = array();
 
-        while($row = self::FetchRow($result))
+        while($row = self::GetRow($result))
         {
             $id = (int)$row['id'];
             $entries[] = self::GetEntryInfo($id, $page);
@@ -485,7 +485,7 @@ class MySQL
         
         $id = MySQL::Sanitize($id);
         
-        return self::FetchRow(self::Query("SELECT * FROM $page WHERE `id`='$id'"));
+        return self::GetRow(self::Query("SELECT * FROM $page WHERE `id`='$id'"));
     }
     
     #endregion
@@ -533,7 +533,7 @@ class MySQL
         }
         else
         {
-            $row = self::FetchRow($result);
+            $row = self::GetRow($result);
             return $row['name'];
         }
     }
@@ -568,14 +568,19 @@ class MySQL
         $sql = 'UPDATE messages SET ';
 
         $result = self::Query("SELECT * FROM messages WHERE `id` = '$messageclean' && (`from` = '".CurrentPlayer::$ID."' || `to` = '".CurrentPlayer::$ID."') LIMIT 1");
-        $message = self::FetchRow($result);
+        $message = self::GetRow($result);
 
         if($message['from'] == $uid)
+        {
             // From Deleted
             $sql .= "`from_deleted` = '1' " ;
+        }
+        
         else
+        {
             // To Deleted
             $sql = "`to_deleted` = '1' ";
+        }
        
         return self::Query($sql . "WHERE `id` = '$messageid' LIMIT 1") ? true : false;
     }
@@ -601,7 +606,7 @@ class MySQL
         
         $id = self::Sanitize($id);
         
-        $message = self::FetchRow(self::Query("SELECT * FROM messages WHERE `id` = '$id' && (`from` = '".CurrentPlayer::$ID."' || `to` = '".CurrentPlayer::$ID."') LIMIT 1"));
+        $message = self::GetRow(self::Query("SELECT * FROM messages WHERE `id` = '$id' && (`from` = '".CurrentPlayer::$ID."' || `to` = '".CurrentPlayer::$ID."') LIMIT 1"));
     
         if($message['from'] != CurrentPlayer::$ID)
             self::MarkMessageRead($id);
@@ -627,10 +632,10 @@ class MySQL
         $result = self::Query($q);
         $messages = array();
         
-        while($row = self::FetchRow($result))
+        while($row = self::GetRow($result))
         {
             $id = (int)$row['id'];
-            $messages[] = self::FetchRow(self::Query("SELECT * FROM messages WHERE `id`='$id'"));
+            $messages[] = self::GetRow(self::Query("SELECT * FROM messages WHERE `id`='$id'"));
         }
         
         return $messages ? $messages : false;
