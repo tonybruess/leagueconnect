@@ -1,6 +1,6 @@
 <h2>Teams</h2>
 <?php
-
+require_once('include/common.php');
 switch(@$_POST['action'])
 {
     case 'add':

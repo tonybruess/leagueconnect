@@ -20,7 +20,7 @@ function PrintMenuEntry($name, $title, $perm = null)
 
 PrintMenuEntry('index', 'Home');
 
-if(CurrentPlayer::HasPerm(Permissions::ViewMail))
+if(CurrentPlayer::HasPerm(Permissions::ViewMail) && CurrentPlayer::$ID)
 {
     echo "            <li><a href='?p=mail'";
 
@@ -60,14 +60,14 @@ PrintMenuEntry('entermatch', 'Enter Match', Permissions::EnterMatch);
 PrintMenuEntry('usermanager', 'User Manager', Permissions::ViewPlayers);
 PrintMenuEntry('teammanager', 'Team Manager', Permissions::ViewTeams);
 PrintMenuEntry('logs', 'Logs', Permissions::ViewLogs);
-
+/*
 $names = Database::GetPageNames();
 
 foreach($names as $name)
 {
     PrintMenuEntry(urlencode($name), $name);
 }
-
+*/
 ?>
         </ul>
     </div>
