@@ -14,7 +14,10 @@ class Welcome extends Controller {
             'title' => 'League Connect',
             'username' => 'username'
         );
-		$this->parser->parse('index', $data);
+		$this->parser->parse('header', $data);
+		$this->parser->parse('menu', $data);
+		$this->load->view('pages/home');
+		$this->parser->parse('footer', $data);
 	}
 }
 
