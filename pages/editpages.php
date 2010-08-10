@@ -13,21 +13,20 @@ if($_GET['i'])
          if(Database::UpdatePage($name, $text, $id))
             echo "Updated Successfully";
     }
-    $i = Database::Sanitize($_GET['i']);
-    $query = Database::Query("SELECT * FROM pages WHERE `id`='$i' LIMIT 1");
-    $page = Database_fetch_assoc($query);
+
+    $page = Database::GetPageInfo($_GET['i']);
 ?>
-        <h2>Editing <?php echo $page['name']?></h2>
+        <h2>Editing <?php echo $page->Name; ?></h2>
         <form method="POST">
-        Name: <input type="text" name="name" value="<?php echo $page['name'] ?>">
+        Name: <input type="text" name="name" value="<?php echo $page->Name; ?>">
         <br><br>
         Text:
         <br>
         <script type="text/javascript" src="global/bbeditor/ed.js"></script>
         <script>AddBBCodeToolbar('text'); </script>
-        <textarea name="text" cols=50 rows=10 id="text"><?php echo $page['content']; ?></textarea>
+        <textarea name="text" cols=50 rows=10 id="text"><?php echo $page->Content; ?></textarea>
         <br><br>
-        <input type="hidden" name="id" value="<?php echo $page['id']; ?>">
+        <input type="hidden" name="id" value="<?php echo $page->ID; ?>">
         <input type="submit" value="Save">
         </form>
 <?php
@@ -41,13 +40,14 @@ if($_GET['i'])
             <td>Edit</td>
         </tr>
         <?php
-        $query = Database::Query("SELECT * FROM pages");
-        
-        while($row = Database_fetch_assoc($query)){
+        $pages = Database::GetPages();
+
+        foreach($pages as $page)
+        {
         ?>
         <tr>
-            <td><?php echo $row['name'] ?></td>
-            <td><a href="?p=editpages&i=<?php echo $row['id'] ?>">Edit</a></td>
+            <td><?php echo $page->Name; ?></td>
+            <td><a href="?p=editpages&i=<?php echo $page->ID; ?>">Edit</a></td>
         </tr>
         <?php    
         }

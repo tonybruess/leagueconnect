@@ -494,6 +494,20 @@ class Database
 
         return $names;
     }
+
+    /* array of Pages */ public static function GetPages()
+    {
+        $result = self::Query('SELECT id FROM pages');
+        $pages = array();
+
+        while($row = self::GetRow($result))
+        {
+            $id = (int)$row['id'];
+            $pages[] = self::GetPageInfo($id);
+        }
+
+        return $pages;
+    }
     #endregion
 
     #region news and bans

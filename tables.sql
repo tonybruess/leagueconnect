@@ -1,6 +1,7 @@
 -- WARNING: This will delete all information stored in your leagueconnect database
 -- Be sure to back up your data before running this script.
 -- This needs to be run as root or a user that has DROP, CREATE, and INSERT permissions.
+-- You can load this into MySQL with the following command: mysql -u root -p -D {{database_name}} < tables.sql
 
 DROP TABLE IF EXISTS groups;
 CREATE TABLE groups (
@@ -101,5 +102,6 @@ CREATE TABLE bans (
 -- basic setup
 insert into roles (`name`,`permissions`) VALUES ('Site Admin','11111111111111111111111');
 insert into groups (`name`,`role`,`enabled`) VALUES ('GU.LEAGUE', '1', TRUE);
+insert into groups (`name`,`role`,`enabled`) VALUES ('BZBUREAU.WEBADMIN', '1', TRUE);
 insert into pages (`name`,`content`) VALUES ('Help','Help');
 insert into pages (`name`,`content`) VALUES ('Contact','Contact');
