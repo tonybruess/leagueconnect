@@ -9,22 +9,16 @@ class Welcome extends Controller {
 	
 	function index()
 	{
-		$this->load->library('parser');	
-		$data = array(
-            'title' => 'League Connect',
-            'username' => 'username'
-        );
-		$this->parser->parse('header', $data);
-		$this->parser->parse('menu', $data);
-		if($this->uri->segment(1) && !$this->uri->segment(2))
-			die();
-		if(!$this->uri->segment(2))
-			$this->load->view('pages/home');
-		else
-			$this->load->view('pages/' . $this->uri->segment(2));
-		$this->parser->parse('footer', $data);
+        $data = array(
+                       'title' => 'League Connect',
+                       'username' => 'username',
+                       'page_title' => 'Welcome',
+                       'page_navigation' => array(array('Menu Item','Link')),
+                       'template' => 'pages/index'
+                  );
+        $this->load->view('layout', $data);
 	}
 }
 
-/* End of file welcome.php */
-/* Location: ./system/application/controllers/welcome.php */
+/* End of file index.php */
+/* Location: ./system/application/controllers/index.php */
