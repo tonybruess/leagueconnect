@@ -28,7 +28,7 @@ if(CurrentPlayer::HasPerm(Permissions::ViewMail))
     {
         echo ' class="active"';
     }
-    else if(Database::hasMail())
+    else if(Database::HasUnreadMessages())
     {
         echo ' class="new"';
     }
@@ -61,14 +61,12 @@ PrintMenuEntry('usermanager', 'User Manager', Permissions::ViewPlayers);
 PrintMenuEntry('teammanager', 'Team Manager', Permissions::ViewTeams);
 PrintMenuEntry('logs', 'Logs', Permissions::ViewLogs);
 
-/*
 $names = Database::GetPageNames();
 
 foreach($names as $name)
 {
     PrintMenuEntry(urlencode($name), $name);
 }
-*/
 
 ?>
         </ul>
