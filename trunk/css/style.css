@@ -10,7 +10,7 @@ Light Blue Gray: #adb3bc
 
 html
 {
-	background:url(head.png) repeat-x;
+	background:url(../images/head.png) repeat-x;
 	padding-left:25px;
 	padding-right:25px;
 	background-color:#eaeaea;
@@ -47,7 +47,7 @@ a:focus
 
 #logo
 {
-	background-image:url(tank.png);
+	background-image:url(../images/tank.png);
 	background-repeat:no-repeat;
 	background-position:left center;
 	display:inline-block;
@@ -113,7 +113,7 @@ a:focus
 
 #menu
 {
-	margin-top:1px;
+	margin-top:0px;
 	overflow:hidden;
 	height:30px;
 	width:700px;
@@ -145,14 +145,14 @@ a:focus
 	height:20px;
 	display:block;
 	text-shadow:0 1px 0 #a3aab1;
-	padding:5px 0;
+	padding:6px 0;
 }
 
-#menu a:hover,#menu a:active,#menu a:focus,#menu a.active
+#menu a:active,#menu a:focus,#menu a.active,#menu a:hover
 {
 	color:#f4f4f4;
 	text-shadow:0 1px 0 #363a3d;
-	background:url(indicator.png) bottom center no-repeat;
+	background:url(../images/active.png) top center no-repeat;
 }
 
 #page_title
