@@ -8,4 +8,5 @@
 		Welcome to the beta version of league connect.
 		<br><br>
 		This is currently a work in progress. Please report all bugs <a href="http://code.google.com/p/leagueconnect/issues/entry">here</a>
+		<?php echo $this->uri->segment(0); ?>
 	</div>

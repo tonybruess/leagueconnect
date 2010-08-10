@@ -16,7 +16,10 @@ class Welcome extends Controller {
         );
 		$this->parser->parse('header', $data);
 		$this->parser->parse('menu', $data);
-		$this->load->view('pages/home');
+		if(!$this->uri->segment(2))
+			$this->load->view('pages/home');
+		else
+			$this->load->view('pages/' . $this->uri->segment(2));
 		$this->parser->parse('footer', $data);
 	}
 }
