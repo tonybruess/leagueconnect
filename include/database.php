@@ -499,7 +499,7 @@ class Database
     #region news and bans
     /* NewsEntry or null */ public static function GetEntryInfo($id, $page)
     {
-        return self::GetInfo($page, $id, new Entry());
+        return self::GetInfo($page, $id, new NewsEntry());
     }
 
     /* bool */ public static function SetEntryInfo($id, $newsEntry, $page)

@@ -2,10 +2,6 @@
 -- Be sure to back up your data before running this script.
 -- This needs to be run as root or a user that has DROP, CREATE, and INSERT permissions.
 
-DROP DATABASE IF EXISTS leagueconnect;
-CREATE DATABASE IF NOT EXISTS leagueconnect;
-USE leagueconnect;
-
 DROP TABLE IF EXISTS groups;
 CREATE TABLE groups (
     `id` INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT, -- Unique identifier for this group
