@@ -9,7 +9,12 @@ class Welcome extends Controller {
 	
 	function index()
 	{
-		$this->load->view('index');
+		$this->load->library('parser');	
+		$data = array(
+            'title' => 'League Connect',
+            'username' => 'username'
+        );
+		$this->parser->parse('index', $data);
 	}
 }
 
