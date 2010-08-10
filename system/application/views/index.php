@@ -6,12 +6,12 @@
 </head>
 <body>
 	<div id="top">
-		<div id="logo"><a href="">League Connect Test</a></div>
+		<div id="logo"><a href="">{title}</a></div>
 		<div id="statusbar">
 			<ul>
 				<li><a href='?p=index'>Mail</a></li>
 				<li><a href='?p=index'>Logout</a></li>
-				<li>Logged in as: <a href="#">Test</a></li>
+				<li>Logged in as: <a href="#">{username}</a></li>
 			</ul>
 		</div>
 	</div>
