@@ -12,7 +12,8 @@
         </ul>
     </div>
     <div id="page_navigation">
-        {MenuItems}
-        <a href="/page/show/{Name}">{Name}</a>
-        {/MenuItems}
+        {section name=i loop=$MenuItems}
+        {$Name = $MenuItems[i].Name}
+        <a href="/page/show/{$Name}">{$Name}</a>
+        {/section}
     </div>
