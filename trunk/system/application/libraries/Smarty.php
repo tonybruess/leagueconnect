@@ -6,14 +6,15 @@ class CI_Smarty extends Smarty
 {
     function Smarty()
     {
-        $systemPath = $_SERVER['DOCUMENT_ROOT'].'/system';
-        
-        $this->template_dir = $systemPath.'/application/views/';
-        $this->compile_dir = $systemPath.'/cache/';
     }
 
     public function display($template, $params=array())
     {
+        $systemDir = dirname($_SERVER['SCRIPT_FILENAME']).'/system';
+        $this->setTemplateDir($systemDir.'/application/views/');
+        $this->compile_dir = $systemDir.'/cache/';
+        $this->cache_dir = $systemDir.'/cache/';
+
         if(strpos($template, '.') === false)
         {
             $template .= '.php';
@@ -27,13 +28,23 @@ class CI_Smarty extends Smarty
             }
         }
 
-
-        print $this->template_dir . $template;
-        if(!is_file($this->template_dir . $template))
+        if(!is_file($this->template_dir[0] . $template))
         {
             show_error("Template [$template] cannot be found.");
         }
-        return parent::display($template);
+
+        $result = '';
+        
+        try
+        {
+            $result = parent::display($template);
+        }
+        catch(Exception $e)
+        {
+            show_error($e->getMessage());
+        }
+
+        return $result;
     }
 }
 
