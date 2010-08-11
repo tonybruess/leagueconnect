@@ -51,7 +51,7 @@ $autoload['libraries'] = array('Smarty');
 |	$autoload['helper'] = array('url', 'file');
 */
 
-$autoload['helper'] = array('PageRenderer');
+$autoload['helper'] = array('PageRenderer', 'url');
 
 
 /*
