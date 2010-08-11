@@ -9,9 +9,9 @@ class News extends Controller {
 	
 	function index()
 	{
-		$this->load->view('pages/news');
+		$this->load->view('news');
 	}
 }
 
 /* End of file news.php */
-/* Location: ./system/application/controllers/pages/news.php */
+/* Location: ./system/application/controllers/news.php */
