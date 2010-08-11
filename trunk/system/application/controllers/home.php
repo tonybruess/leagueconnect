@@ -9,9 +9,9 @@ class Home extends Controller {
 	
 	function index()
 	{
-		$this->load->view('pages/home');
+		$this->load->view('home');
 	}
 }
 
 /* End of file home.php */
-/* Location: ./system/application/controllers/pages/home.php */
+/* Location: ./system/application/controllers/home.php */
