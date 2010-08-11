@@ -20,14 +20,13 @@ class PageRenderer
     public static function Render()
     {
         $CI = &get_instance();
-        $CI->load->library('parser');
 
         $headerData = array(
             'Title' => 'League Connect',
             'Username' => 'Guest'
         );
 
-        $CI->parser->parse('header', $headerData);
+        $CI->smarty->display('header', $headerData);
 
         $menuData = array(
             'MenuItems' => array(
@@ -36,11 +35,11 @@ class PageRenderer
             )
         );
 
-        $CI->parser->parse('menu', $menuData);
+        $CI->smarty->display('menu', $menuData);
 
         foreach(self::$views as $view)
         {
-            $CI->parser->parse($view['Name'], $view['Params']);
+            $CI->smarty->display($view['Name'], $view['Params']);
         }
 
         $CI->load->view('footer');
