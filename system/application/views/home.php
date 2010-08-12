@@ -2,7 +2,7 @@
         <h3>Welcome</h3>
     </div>
     <div id="page_navigation">
-        <a href="?p=index">Edit Page</a>
+        <a href='{site_url path="page/edit/home"}'>Edit Page</a>
     </div>
     <div id="page_body">
         Welcome to the beta version of league connect.
