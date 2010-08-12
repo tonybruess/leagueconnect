@@ -2,6 +2,7 @@
 <html>
 <head>
 <title>League Connect Test</title>
+<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Nobile"
 <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
