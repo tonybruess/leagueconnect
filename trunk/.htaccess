@@ -1,0 +1,23 @@
+<IfModule mod_rewrite.c>
+    # Enable the rewrite engine. Requires that mod_rewrite is installed and active.
+    RewriteEngine On
+
+    # Adjust this to match the installation location. Examples:
+    # http://www.example.com/ --------> RewriteBase /
+    # http://www.example.com/test/ ---> RewriteBase /test/
+    RewriteBase /leagueconnect/
+
+    # Allow the viewing of any other files or directories that exist
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+
+    # For things that don't exist, pass them to the bootstrap (index.php)
+    RewriteRule .* index.php/$0 [PT,L]
+</IfModule>
+
+<IfModule !mod_rewrite.c>
+    # If we don't have mod_rewrite installed, all 404's
+    # can be sent to index.php, and everything works as normal.
+
+    ErrorDocument 404 /index.php
+</IfModule>
