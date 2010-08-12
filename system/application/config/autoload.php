@@ -39,7 +39,7 @@
 |	$autoload['libraries'] = array('database', 'session', 'xmlrpc');
 */
 
-$autoload['libraries'] = array('Smarty');
+$autoload['libraries'] = array('Smarty', 'Layout');
 
 
 /*
@@ -51,7 +51,7 @@ $autoload['libraries'] = array('Smarty');
 |	$autoload['helper'] = array('url', 'file');
 */
 
-$autoload['helper'] = array('PageRenderer', 'url');
+$autoload['helper'] = array('url');
 
 
 /*

@@ -9,8 +9,8 @@ class Home extends Controller {
 	
 	function index()
 	{
-            PageRenderer::AddView('home');
-            PageRenderer::Render();
+        $this->layout->add('home');
+        $this->layout->render();
 	}
 }
 

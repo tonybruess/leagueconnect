@@ -1,23 +1,15 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-/* 
- * Helper class for rendering the page.
- */
 
-/**
- * @name PageRenderer
- * @param string
- */
-class PageRenderer
+class CI_Layout
 {
-    private static $views = array();
-    private static $CI;
+    private $views = array();
 
-    public static function AddView($name, $params = array())
+    public function add($view, $params=array())
     {
-        self::$views[] = array('Name' => $name, 'Params' => $params);
+        $this->views[] = array('name' => $view, 'params' => $params);
     }
 
-    public static function Render()
+    public function render()
     {
         $CI = &get_instance();
 
@@ -37,12 +29,13 @@ class PageRenderer
 
         $CI->smarty->display('menu', $menuData);
 
-        foreach(self::$views as $view)
+        foreach($this->views as $view)
         {
-            $CI->smarty->display($view['Name'], $view['Params']);
+            $CI->smarty->display($view['name'], $view['params']);
         }
 
-        $CI->load->view('footer');
+        $CI->smarty->display('footer');
     }
 }
+
 ?>
