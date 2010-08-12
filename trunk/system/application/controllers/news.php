@@ -9,7 +9,8 @@ class News extends Controller {
 	
 	function index()
 	{
-		$this->load->view('news');
+        $this->layout->add('news');
+        $this->layout->render();
 	}
 }
 

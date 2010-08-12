@@ -4,7 +4,7 @@ require_once('system/application/libraries/Smarty/Smarty.class.php');
 
 class CI_Smarty extends Smarty
 {
-    function Smarty()
+    function CI_Smarty()
     {
     }
 
