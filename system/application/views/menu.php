@@ -12,8 +12,7 @@
         </ul>
     </div>
     <div id="page_navigation">
-        {section name=i loop=$MenuItems}
-        {$Name = $MenuItems[i].Name}
-        <a href='{site_url path="page/show/$Name"}'>{$Name}</a>
-        {/section}
+        {foreach from=$MenuItems item=item}
+        <a href='{site_url path="page/show/{$item.Name}"}'>{$item.Name}</a>
+        {/foreach}
     </div>
