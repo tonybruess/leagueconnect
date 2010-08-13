@@ -1,7 +1,7 @@
 <?php
 
-class Home extends Controller {
-
+class Home extends Controller
+{
 	function Home()
 	{
 		parent::Controller();	
@@ -9,8 +9,7 @@ class Home extends Controller {
 	
 	function index()
 	{
-        $this->layout->add('home');
-        $this->layout->render();
+        $this->layout->render('home');
 	}
 }
 
