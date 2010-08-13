@@ -1,7 +1,7 @@
 <?php
 
-class News extends Controller {
-
+class News extends Controller
+{
 	function News()
 	{
 		parent::Controller();	
@@ -9,8 +9,7 @@ class News extends Controller {
 	
 	function index()
 	{
-        $this->layout->add('news');
-        $this->layout->render();
+        $this->layout->render('news');
 	}
 }
 

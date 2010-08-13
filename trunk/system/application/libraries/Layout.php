@@ -9,8 +9,13 @@ class CI_Layout
         $this->views[] = array('name' => $view, 'params' => $params);
     }
 
-    public function render()
+    public function render($view=null, $params=array();)
     {
+        if($view != null)
+        {
+            $this->add($view, $params);
+        }
+        
         $CI = &get_instance();
 
         $headerData = array(
