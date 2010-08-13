@@ -11,6 +11,7 @@ class CI_Smarty extends Smarty
     public function display($template, $params=array())
     {
         $systemDir = dirname($_SERVER['SCRIPT_FILENAME']).'/system';
+        $this->plugins_dir = $systemDir.'/application/libraries/Smarty/plugins';
         $this->setTemplateDir($systemDir.'/application/views/');
         $this->compile_dir = $systemDir.'/cache/';
         $this->cache_dir = $systemDir.'/cache/';
