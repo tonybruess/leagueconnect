@@ -5,32 +5,28 @@ class Bans extends Controller
 	function Bans()
 	{
 		parent::Controller();
+        $this->load->scaffolding('bans');
 	}
 
 	function index()
 	{
-        $this->load->model('bans_model');
-
-        $data = array(
-            'canAddNew' => true,
-            'canEdit' => true,
-            'entries' => $this->bans_model->getBans()
-        );
-
-        $this->layout->render('showbans', $data);
+        $this->show();
 	}
 
     function show($start=null)
     {
         $this->load->model('bans_model');
 
+        $entries = $this->bans_model->getBans(($start == null ? 0 : $start));
+
         $data = array(
             'canAddEntry' => true,
-            'canEdit' => true,
-            'entries' => $this->bans_model->getBans(($start == null ? 0 : $start))
+            'canEdit' => true
         );
 
-        $this->layout->render('showbans', $data);
+        $this->layout->add('bans/header.php', array('canAddEntry' => true));
+        $this->layout->add('bans/show.php', array('entries' => (array)$entries));
+        $this->layout->render();
     }
 }
 
