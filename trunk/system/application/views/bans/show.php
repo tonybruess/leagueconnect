@@ -14,11 +14,11 @@
                     </div>
                     <div id="data">
                         {$entry.message|bbcode2html}
-                        {if $canEdit == true}
+                        {has_perm perm='EditPages'}
                             <br>
                             <br>
                             [<a href='{site_url path="bans/edit/{$entry.id}"}'>Edit</a>]
-                        {/if}
+                        {/has_perm}
                     </div>
                 </div>
                 <br>
