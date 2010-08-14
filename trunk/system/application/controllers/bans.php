@@ -25,7 +25,7 @@ class Bans extends Controller
         );
 
         $this->layout->add('bans/header.php', array('canAddEntry' => true));
-        $this->layout->add('bans/show.php', array('entries' => (array)$entries));
+        $this->layout->add('bans/show.php', array('entries' => ObjectToArray($entries)));
         $this->layout->render();
     }
 }

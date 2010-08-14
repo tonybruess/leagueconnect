@@ -11,7 +11,7 @@ class Bans_Model extends Model
 
     function &getBans($start=0, $step=20)
     {
-        $this->Bans = $this->db->get('bans')->result_array();//, $start, $start + $step)->result();
+        $this->Bans = $this->db->get('bans')->result();//, $start, $start + $step)->result();
         return $this->Bans;
     }
 

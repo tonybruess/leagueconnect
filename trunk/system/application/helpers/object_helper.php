@@ -10,7 +10,7 @@
  *
  */
 
-function objectToArray( $object )
+function ObjectToArray( $object )
 {
     if( !is_object( $object ) && !is_array( $object ) )
     {
