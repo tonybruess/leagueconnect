@@ -3,5 +3,5 @@
         </div>
         <div id="page_navigation">
             <a href='{site_url path="bans"}'>View Entries</a>
-            {if $canAddEntry == true} | <a href='{site_url path="bans/add"}'>New Entry</a>{/if}
+            {has_perm perm='AddPages'}<a href='{site_url path="bans/add"}'>New Entry</a>{/has_perm}
         </div>
