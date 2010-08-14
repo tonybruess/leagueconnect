@@ -39,7 +39,7 @@
 |	$autoload['libraries'] = array('database', 'session', 'xmlrpc');
 */
 
-$autoload['libraries'] = array('Smarty', 'Layout');
+$autoload['libraries'] = array('Smarty', 'Layout', 'database');
 
 
 /*
