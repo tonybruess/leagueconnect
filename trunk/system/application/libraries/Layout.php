@@ -9,7 +9,7 @@ class CI_Layout
         $this->views[] = array('name' => $view, 'params' => $params);
     }
 
-    public function render($view=null, $params=array();)
+    public function render($view=null, $params=array())
     {
         if($view != null)
         {
