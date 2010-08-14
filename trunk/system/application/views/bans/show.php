@@ -1,3 +1,4 @@
+        {$message}
         {if {$entries|@count} == 0}
             <div>No entries to display.</div>
         {else}
