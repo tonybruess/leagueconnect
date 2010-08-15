@@ -11,7 +11,11 @@
         <div id="statusbar">
             <ul>
                 <li><a href='{site_url}'>Mail</a></li>
+                {if {has_perm perm='Login'}}
                 <li><a href='{site_url path="logout"}'>Logout</a></li>
+                {else}
+                <li><a href='http://my.bzflag.org/weblogin.php?url={site_url path="auth/auth"}/%TOKEN%/%USERNAME%'>Login</a></li>
+                {/if}
                 <li>Logged in as: <a href="#">{$Username}</a></li>
             </ul>
         </div>
