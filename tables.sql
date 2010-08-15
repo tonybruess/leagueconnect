@@ -37,7 +37,7 @@ DROP TABLE IF EXISTS roles;
 CREATE TABLE roles (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, -- Unique identifier for this role
     `name` VARCHAR(256) NOT NULL, -- Name of the role
-    `permissions` VARCHAR(100) NOT NULL -- Permissions granted to this role
+    `permissions` INT(64) UNSIGNED NOT NULL -- Permissions granted to this role
 );
 
 DROP TABLE IF EXISTS settings;
@@ -100,7 +100,7 @@ CREATE TABLE bans (
 );
 
 DROP TABLE IF EXISTS ci_sessions;
-CREATE TABLE ci_session (
+CREATE TABLE ci_sessions (
     `session_id` VARCHAR(40) DEFAULT '0' NOT NULL PRIMARY KEY,
     `ip_address` VARCHAR(16) DEFAULT '0' NOT NULL,
     `user_agent` VARCHAR(50) NOT NULL,
@@ -109,7 +109,7 @@ CREATE TABLE ci_session (
 );
 
 -- basic setup
-insert into roles (`name`,`permissions`) VALUES ('Site Admin','11111111111111111111111');
+insert into roles (`name`,`permissions`) VALUES ('Site Admin', 0xFFFFF);
 insert into groups (`name`,`role`,`enabled`) VALUES ('GU.LEAGUE', '1', TRUE);
 insert into groups (`name`,`role`,`enabled`) VALUES ('BZBUREAU.WEBADMIN', '1', TRUE);
 insert into pages (`name`,`content`) VALUES ('Help','Help');
