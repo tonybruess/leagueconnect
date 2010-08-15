@@ -12,8 +12,10 @@ class Auth extends Controller
         $this->load->model('groups_model');
 
         $groups = $this->groups_model->getGroupNames();
+        print_r($groups);
         $result = $this->validate_token($token, $username, $groups);
-
+        var_dump($result);
+        print_r($result);
         if(count($result['groups']) > 0)
         {
             $this->session->set_userdata('callsign', $username);
@@ -42,7 +44,7 @@ class Auth extends Controller
         }
         else
         {
-            header('Location: '.site_url('error/show/4'));
+            //header('Location: '.site_url('error/show/4'));
         }
     }
 
@@ -63,6 +65,7 @@ class Auth extends Controller
             $listserver['reply'] = explode("\n", $listserver['reply']);
             foreach($listserver['reply'] as $line)
             {
+                print $line."\n";
                 if (substr($line, 0, strlen('TOKGOOD: ')) == 'TOKGOOD: ')
                 {
                     if (strpos($line, ':', strlen('TOKGOOD: ')) == FALSE) continue;
@@ -74,6 +77,7 @@ class Auth extends Controller
             }
             if (isset($listserver['bzid']) && is_numeric($listserver['bzid']))
             {
+                $return = array();
                 $return['username'] = $listserver['username'];
                 $return['bzid'] = $listserver['bzid'];
                 if (isset($listserver['groups']) && sizeof($listserver['groups']) > 0)
