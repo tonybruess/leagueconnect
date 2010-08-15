@@ -32,7 +32,7 @@ class Groups_Model extends Model
 
         foreach($groups as $group)
         {
-            $role = $this->db->select('role')->get('groups')->where('name', $group)->row();
+            $role = $this->db->select('role')->where('name', $group)->get('groups')->row();
             $perms = $this->db->select('permissions')->get('roles')->where('id', $role['role']);
             $perms = (int)$perms;
 
