@@ -99,6 +99,15 @@ CREATE TABLE bans (
     `created` TIMESTAMP NOT NULL DEFAULT NOW() -- When the message was posted
 );
 
+DROP TABLE IF EXISTS ci_sessions;
+CREATE TABLE ci_session (
+    `session_id` VARCHAR(40) DEFAULT '0' NOT NULL PRIMARY KEY,
+    `ip_address` VARCHAR(16) DEFAULT '0' NOT NULL,
+    `user_agent` VARCHAR(50) NOT NULL,
+    `last_activity` INT(10) unsigned DEFAULT 0 NOT NULL,
+    `user_data` TEXT NOT NULL
+);
+
 -- basic setup
 insert into roles (`name`,`permissions`) VALUES ('Site Admin','11111111111111111111111');
 insert into groups (`name`,`role`,`enabled`) VALUES ('GU.LEAGUE', '1', TRUE);
