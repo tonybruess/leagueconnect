@@ -9,7 +9,16 @@ class Groups_Model extends Model
 
     function getGroupNames()
     {
-        return $this->db->select('name')->from('groups')->get()->result();
+        $result = $this->db->select('name')->from('groups')->get()->result();
+
+        $name = array();
+
+        foreach($result as $obj)
+        {
+            $name[] = $obj->name;
+        }
+        
+        return $name;
     }
 
     function getGroup($id)
