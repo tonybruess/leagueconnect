@@ -7,7 +7,7 @@ class Auth extends Controller
         header('Location: '.site_url('home'));
     }
 
-    function auth($token, $username)
+    function check($token, $username)
     {
         $this->load->model('groups_model');
 
