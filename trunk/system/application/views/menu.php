@@ -11,8 +11,3 @@
             <li><a href='{site_url path="control-panel"}'>Control Panel</a></li>
         </ul>
     </div>
-    <div id="page_navigation">
-        {foreach from=$MenuItems item=item}
-        <a href='{site_url path="page/show/{$item.Name}"}'>{$item.Name}</a>
-        {/foreach}
-    </div>
