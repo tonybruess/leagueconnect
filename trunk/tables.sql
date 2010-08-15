@@ -17,7 +17,7 @@ CREATE TABLE players (
     `name` VARCHAR(30), -- Callsign
     `bzid` INT UNSIGNED, -- BZFlag callsign unique identifier
     `team` INT UNSIGNED, -- ID of the team this player is a member of
-    `comment` TEXT, -- Comment?
+    `comment` TEXT DEFAULT "", -- Comment?
     `firstlogin` TIMESTAMP, -- Time when the player first logged in
     `lastlogin` TIMESTAMP,  -- Time when the player last logged in
     `country` VARCHAR(50), -- Country of residence
@@ -29,8 +29,8 @@ CREATE TABLE players (
     `altNicks` TEXT, -- Alternative nicknames
     `ircnick` VARCHAR(30), -- IRC nickname
     `pubemail` VARCHAR(320), -- Public Email
-    `banned` BOOLEAN, -- TRUE if banned, FALSE if not
-    `deleted` BOOLEAN -- TRUE if deleted, FALSE if not
+    `banned` BOOLEAN DEFAULT FALSE, -- TRUE if banned, FALSE if not
+    `deleted` BOOLEAN DEFAULT FALSE -- TRUE if deleted, FALSE if not
 );
 
 DROP TABLE IF EXISTS roles;
