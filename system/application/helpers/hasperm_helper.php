@@ -53,13 +53,25 @@ function HasPerm($perm)
 
     $perms = $CI->session->userdata('perms');
     $perms = (int)$perms;
+    $permID = -1;
 
-    if(!isset(Permissions::$Array[$perm]))
+    if(is_numeric($perm))
     {
-        throw new Exception("Unknown permission $perm");
+        $permID = $perm;
+    }
+    else
+    {
+        if(!isset(Permissions::$Array[$perm]))
+        {
+            throw new Exception("Unknown permission $perm");
+        }
+        else
+        {
+            $permID = Permissions::$Array[$perm];
+        }
     }
 
-    if($perms & (1 << Permissions::$Array[$perm]) == 1)
+    if($perms & (1 << $permID) == 1)
         return true;
 
     else
