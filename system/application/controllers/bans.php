@@ -35,7 +35,7 @@ class Bans extends Controller
 
         $message = $this->input->post('message');
 
-        if($message !== false)
+        if($message != false)
         {
             $this->bans_model->update($id, $message);
 
@@ -55,13 +55,25 @@ class Bans extends Controller
 
     function add()
     {
-        $author = $this->input->post('author');
         $message = $this->input->post('message');
 
-        if($author == false || $message == false)
+        if($message == false)
         {
             $this->layout->add('bans/header.php');
             $this->layout->add('bans/edit.php');
+            $this->layout->render();
+        }
+        else
+        {
+            $author = $this->session->userdata('callsign');
+            
+            // Add the ban
+            $this->load->model('bans_model');
+            $this->bans_model->insert($author, $message);
+            $entries = $this->bans_model->getBansArray();
+            
+            $this->layout->add('bans/header.php');
+            $this->layout->add('bans/show.php', array('entries' => $entries, 'message' => 'Successfully added the ban.'));
             $this->layout->render();
         }
     }
