@@ -12,10 +12,8 @@ class Auth extends Controller
         $this->load->model('groups_model');
 
         $groups = $this->groups_model->getGroupNames();
-        print_r($groups);
         $result = $this->validate_token($token, $username, $groups, false);
-        var_dump($result);
-        print_r($result);
+
         if(count($result['groups']) > 0)
         {
             $this->session->set_userdata('callsign', $username);

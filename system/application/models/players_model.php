@@ -21,21 +21,28 @@ class Players_Model extends Model
 
     function playerExists($bzid)
     {
-        $num = $this->db->get('players')->where('bzid', $bzid)->count_all_results();
+        $num = $this->db->where('bzid', $bzid)->get('players');
 
-        return $num != 0;
+        return $this->db->count_all_results() != 0;
     }
 
     function login($callsign, $bzid)
     {
         if($this->playerExists($bzid))
         {
-            $this->db->update('lastLogin', time());
+            $this->db->update('players', array('lastLogin' => time()));
         }
         else
         {
             $this->add($callsign, $bzid);
         }
+    }
+
+    function getIDByBZID($bzid)
+    {
+        $result = $this->db->select('id')->where('bzid', $bzid)->get('players')->result();
+
+        return $result->id;
     }
 }
 

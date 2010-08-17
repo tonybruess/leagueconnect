@@ -71,7 +71,7 @@ function HasPerm($perm)
         }
     }
 
-    if($perms & (1 << $permID) == 1)
+    if($perms & (1 << $permID) == (1 << $permID))
         return true;
 
     else
