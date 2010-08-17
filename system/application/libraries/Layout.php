@@ -18,9 +18,14 @@ class CI_Layout
         
         $CI = &get_instance();
 
+        $username = $CI->session->userdata('callsign');
+
+        if($username == false)
+            $username = 'Guest';
+
         $headerData = array(
             'Title' => 'League Connect',
-            'Username' => 'Guest'
+            'Username' => $username
         );
 
         $CI->smarty->display('header', $headerData);
