@@ -34,7 +34,7 @@ class Groups_Model extends Model
         {
             $role = $this->db->select('role')->where('name', $group)->get('groups')->row();
             $perms = $this->db->select('permissions')->where('id', $role->role)->get('roles');
-            $perms = (int)$perms;
+            $perms = (int)($perms->permissions);
 
             $totalPerms |= $perms;
         }
