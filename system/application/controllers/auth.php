@@ -13,7 +13,7 @@ class Auth extends Controller
 
         $groups = $this->groups_model->getGroupNames();
         print_r($groups);
-        $result = $this->validate_token($token, $username, $groups);
+        $result = $this->validate_token($token, $username, $groups, false);
         var_dump($result);
         print_r($result);
         if(count($result['groups']) > 0)
@@ -44,7 +44,7 @@ class Auth extends Controller
         }
         else
         {
-            //header('Location: '.site_url('error/show/4'));
+            header('Location: '.site_url('error/show/4'));
         }
     }
 
@@ -65,7 +65,6 @@ class Auth extends Controller
             $listserver['reply'] = explode("\n", $listserver['reply']);
             foreach($listserver['reply'] as $line)
             {
-                print $line."\n";
                 if (substr($line, 0, strlen('TOKGOOD: ')) == 'TOKGOOD: ')
                 {
                     if (strpos($line, ':', strlen('TOKGOOD: ')) == FALSE) continue;
